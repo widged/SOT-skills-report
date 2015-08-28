@@ -1,0 +1,48 @@
+var jsonp_companions = function(asyncReturn) {
+
+	var d = [
+		{"family": "Alliaceae"     , "name": "chive"      , "size":1, "companions":[]},
+		{"family": "Alliaceae"     , "name": "leek"       , "size":1, "companions":["onion","celery","carrot"]},
+		{"family": "Alliaceae"     , "name": "onion"      , "size":1, "companions":["beet", "strawberry", "tomato", "lettuce", "bean"]},
+		{"family": "Amaranthaceae" , "name": "beet"       , "size":1, "companions":["onion", "kohlrabi"]},
+		{"family": "Amaranthaceae" , "name": "spinach"    , "size":1, "companions":["strawberry"]},
+		{"family": "Apiaceae"      , "name": "carrot"     , "size":1, "companions":["pea", "lettuce", "chive", "onion", "leek", "rosemary", "sage", "tomato"]},
+		{"family": "Apiaceae"      , "name": "celery"     , "size":1, "companions":["leek", "tomato", "bean-bush", "cauliflower", "cabbage"]},
+		{"family": "Apiaceae"      , "name": "dill"       , "size":1, "companions":["cabbage","carrot"]},
+		{"family": "Apiaceae"      , "name": "parsley"    , "size":1, "companions":["tomato","asparagus"]},
+		{"family": "Asteraceae"    , "name": "lettuce"    , "size":1, "companions":[]},
+		{"family": "Asteraceae"    , "name": "chamomile"  , "size":1, "companions":["cabbage","onion"]},
+		{"family": "Asteraceae"    , "name": "marigold"   , "size":1, "companions":[]},
+		{"family": "Asteraceae"    , "name": "sunflower"  , "size":1, "companions":["cucumber"]},
+		{"family": "Brassicaceae"  , "name": "cabbage"    , "size":1, "companions":["potato", "celery", "dill", "chamomile", "sage", "thyme", "mint", "pennyroyal", "rosemary", "lavender", "beet", "onion"]},
+		{"family": "Brassicaceae"  , "name": "cauliflower", "size":1, "companions":[]},
+		{"family": "Brassicaceae"  , "name": "horseradish", "size":1, "companions":["potato", "plum"]},
+		{"family": "Brassicaceae"  , "name": "kohlrabi"   , "size":1, "companions":[]},
+		{"family": "Brassicaceae"  , "name": "radish"     , "size":1, "companions":["pea", "nasturtium", "lettuce", "cucumber"]},
+		{"family": "Cucurbitaceae" , "name": "cucumber"   , "size":1, "companions":["bean", "corn", "pea", "radish", "sunflower"]},
+		{"family": "Cucurbitaceae" , "name": "pumpkin"    , "size":1, "companions":["corn"]},
+		{"family": "Cucurbitaceae" , "name": "squash"     , "size":1, "companions":["nasturtium", "corn"]},
+		{"family": "Fabaceae"      , "name": "bean"       , "size":1, "companions":["potato", "carrot", "cucumber", "cauliflower", "cabbage"]},
+		{"family": "Fabaceae"      , "name": "bean-bush"  , "size":1, "companions":["sunflower", "cucumber", "potato", "corn", "celery"]},
+		{"family": "Fabaceae"      , "name": "bean-lima"  , "size":1, "companions":[]},
+		{"family": "Fabaceae"      , "name": "pea"        , "size":1, "companions":["squash"]},
+		{"family": "Poaceae"       , "name": "corn"       , "size":1, "companions":["potato","pea","bean","cucumber","pumpkin","squash"]},
+		{"family": "Solanaceae"    , "name": "eggplant"   , "size":1, "companions":["bean"]},
+		{"family": "Solanaceae"    , "name": "potato"     , "size":1, "companions":["horseradish", "bean", "corn", "cabbage", "marigold", "bean-lima", "eggplant"]},
+		{"family": "Solanaceae"    , "name": "tomato"     , "size":1, "companions":["chive","onion", "parsley", "asparagus", "marigold", "nasturtium", "carrot", "bean"]},
+		{"family": "Other"         , "name": "asparagus"  , "size":1, "companions":["tomato","parsley","basil"]},
+		{"family": "Tropaeolaceae" , "name": "nasturtium" , "size":1, "companions":["cucumber","squash","tomato", "radish","cabbage"]},
+		{"family": "Lamiaceae"     , "name": "basil"      , "size":1, "companions":["tomato"]},
+		{"family": "Lamiaceae"     , "name": "lavender"   , "size":1, "companions":[]},
+		{"family": "Lamiaceae"     , "name": "mint"       , "size":1, "companions":["cabbage","tomato"]},
+		{"family": "Lamiaceae"     , "name": "pennyroyal" , "size":1, "companions":[]},
+		{"family": "Lamiaceae"     , "name": "rosemary"   , "size":1, "companions":["carrot", "bean", "cabbage", "sage"]},
+		{"family": "Lamiaceae"     , "name": "sage"       , "size":1, "companions":["rosemary", "carrot", "cabbage", "pea", "bean"]},
+		{"family": "Lamiaceae"     , "name": "thyme"      , "size":1, "companions":["cabbage"]},
+		{"family": "Boraginaceae"  , "name": "borage"     , "size":1, "companions":["tomato","squash","strawberry"]},
+		{"family": "Fruit"         , "name": "plum"       , "size":1, "companions":[]},
+		{"family": "Fruit"         , "name": "strawberry" , "size":1, "companions":["bean-bush", "spinach", "borage", "lettuce"]}
+		];
+	asyncReturn(d);
+	return d;
+}

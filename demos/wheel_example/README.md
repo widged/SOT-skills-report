@@ -1,0 +1,1 @@
+Derived from the chord diagram example bundled with the d3.js library - https://github.com/mbostock/d3/wiki/Gallery
