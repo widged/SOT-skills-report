@@ -4,5 +4,5 @@ This github project was created to support and centralize the efforts of the gro
 
 [Group notes](https://docs.google.com/document/d/10ujvjJXDAXYKTz_-oU6z2l22B4H0dNfFn1DTSdHoe3c/edit?pli=1) on Google Docs.
 
-Please ask @widged for the sharing link if you are part of Wellington Data for Good and keen to contribute. 
+Please ask [@widged](https://twitter.com/widged) for the sharing link if you are part of Wellington Data for Good and keen to contribute. 
 
