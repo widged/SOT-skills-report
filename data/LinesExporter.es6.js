@@ -5,7 +5,7 @@ class JsonExporter {
   line(d, fields) {  
     var o = {};
     for (var i = 0, ni = fields.length; i < ni; i++) {
-      o[fields[i]] = d;
+      o[fields[i]] = d[i];
     }
     return o;
    }

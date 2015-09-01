@@ -30,6 +30,7 @@ class CsvInputParser {
         let userids = skillStudents[skilllevel];
         skills.push(exporter.line([skill, level, userids.length, userids.join(';')], skillFields));
     }
+    // skills.sort(function(a, b) { return a[1] < a[2] ? -1 : +1; });
 
     students = exporter.finalize(students, studentFields);
     skills = exporter.finalize(skills, skillFields);
