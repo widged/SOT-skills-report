@@ -1,4 +1,3 @@
-skill	level	user_id
 Android	Paid	190
 Computer Architecture	Academic	190
 Distributed Programming	Practical	190
@@ -1498,7 +1497,6 @@ Embedded Systems	Interested	1426
 Instrumentation and controls	Interested	1426
 Mechatronics	Interested	1426
 Robotics	Interested	1426
-	FALSE	1430
 Data Analysis	Academic	1430
 Project Management	Academic	1430
 Interaction Design	Academic	1430
@@ -4325,7 +4323,6 @@ Systems Administration - Unix / Linux	Interested	2103
 Vmware	Interested	2103
 Agile	Interested	2103
 Project Management	Interested	2103
-	TRUE	2105
 Android	Practical	2105
 Computer Architecture	Academic	2105
 Distributed Programming	Academic	2105
@@ -4956,7 +4953,6 @@ SQLServer DBA	Interested	2160
 Systems Administration - Unix / Linux	Interested	2160
 Systems Administration - Windows	Interested	2160
 Agile	Interested	2160
-	TRUE	2175
 Agile	Practical	2175
 Business Analysis	Practical	2175
 Content Marketing	Academic	2175
@@ -7880,7 +7876,6 @@ HTML	Interested	2549
 Javascript	Interested	2549
 Ruby on Rails	Interested	2549
 SQL Server	Interested	2549
-	TRUE	2551
 Front-end Web Frameworks	Academic	2551
 iOS / iPhone	Academic	2551
 Responsive Web Development	Academic	2551
@@ -11576,7 +11571,6 @@ Sketch	Interested	3029
 Vmware	Interested	3029
 Agile	Interested	3029
 Project Management	Interested	3029
-	TRUE	3035
 Android	Practical	3035
 Computer Architecture	Paid	3035
 Distributed Programming	Practical	3035
@@ -11935,8 +11929,6 @@ Power Electronics	Interested	3094
 Power Systems & Distribution	Interested	3094
 Robotics	Interested	3094
 Project Management	Interested	3094
-	FALSE	3102
-Network Programming	Practical	3102
 Distributed Programming	Practical	3102
 Computer Architecture	Practical	3102
 Java	Academic	3102
@@ -21010,7 +21002,6 @@ Perl	Interested	3711
 PHP	Interested	3711
 Python	Interested	3711
 Agile	Interested	3711
-	TRUE	3712
 AI	Practical	3712
 Android	Practical	3712
 Computer Architecture	Practical	3712
@@ -25770,7 +25761,6 @@ Sketch	Interested	4007
 Robotics	Interested	4007
 Database Administration	Interested	4007
 Information Security	Interested	4007
-	TRUE	4010
 AI	Academic	4010
 Android	Practical	4010
 Computer Architecture	Practical	4010
@@ -28134,7 +28124,6 @@ Security Analysis	Interested	4173
 Switches / Routers	Interested	4173
 Systems Administration - Unix / Linux	Interested	4173
 Systems Administration - Windows	Interested	4173
-	TRUE	4174
 Photoshop	Academic	4174
 Clustering	Academic	4174
 Database Administration	Academic	4174

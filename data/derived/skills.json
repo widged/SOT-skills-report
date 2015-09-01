@@ -7495,11 +7495,6 @@
     "user_id": "1426"
   },
   {
-    "skill": "",
-    "level": "FALSE",
-    "user_id": "1430"
-  },
-  {
     "skill": "Data Analysis",
     "level": "Academic",
     "user_id": "1430"
@@ -21630,11 +21625,6 @@
     "user_id": "2103"
   },
   {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "2105"
-  },
-  {
     "skill": "Android",
     "level": "Practical",
     "user_id": "2105"
@@ -24783,11 +24773,6 @@
     "skill": "Agile",
     "level": "Interested",
     "user_id": "2160"
-  },
-  {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "2175"
   },
   {
     "skill": "Agile",
@@ -39405,11 +39390,6 @@
     "user_id": "2549"
   },
   {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "2551"
-  },
-  {
     "skill": "Front-end Web Frameworks",
     "level": "Academic",
     "user_id": "2551"
@@ -57883,11 +57863,6 @@
     "skill": "Project Management",
     "level": "Interested",
     "user_id": "3029"
-  },
-  {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "3035"
   },
   {
     "skill": "Android",
@@ -59678,16 +59653,6 @@
     "skill": "Project Management",
     "level": "Interested",
     "user_id": "3094"
-  },
-  {
-    "skill": "",
-    "level": "FALSE",
-    "user_id": "3102"
-  },
-  {
-    "skill": "Network Programming",
-    "level": "Practical",
-    "user_id": "3102"
   },
   {
     "skill": "Distributed Programming",
@@ -105055,11 +105020,6 @@
     "user_id": "3711"
   },
   {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "3712"
-  },
-  {
     "skill": "AI",
     "level": "Practical",
     "user_id": "3712"
@@ -128855,11 +128815,6 @@
     "user_id": "4007"
   },
   {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "4010"
-  },
-  {
     "skill": "AI",
     "level": "Academic",
     "user_id": "4010"
@@ -140673,11 +140628,6 @@
     "skill": "Systems Administration - Windows",
     "level": "Interested",
     "user_id": "4173"
-  },
-  {
-    "skill": "",
-    "level": "TRUE",
-    "user_id": "4174"
   },
   {
     "skill": "Photoshop",

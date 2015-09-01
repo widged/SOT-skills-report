@@ -1,4 +1,3 @@
-user_id	school	degree	study_year	final_year
 190	Victoria University of Wellington	BE	5	TRUE
 219	Victoria University of Wellington	BSc	3	TRUE
 603	Wellington Institute of Technology (Weltec)	Bachelor of Information Technology (Level 7) - Information Assurance & Security	3	TRUE
@@ -25,7 +24,7 @@ user_id	school	degree	study_year	final_year
 1422	Victoria University of Wellington	BSc	3	FALSE
 1424	Victoria University of Wellington	BE	4	TRUE
 1426	Victoria University of Wellington	BE	3	FALSE
-1430	Victoria University of Wellington	"Bachelor of Commerce	 Major in Informatino Systems and E-Commerce"	4
+1430	Victoria University of Wellington	Bachelor of Commerce - Major in Informatino Systems and E-Commerce	4	FALSE
 1442	Victoria University of Wellington	BSc	4	TRUE
 1449	Victoria University of Wellington	BE	4	TRUE
 1455	Victoria University of Wellington	BE	4	FALSE
@@ -65,7 +64,7 @@ user_id	school	degree	study_year	final_year
 2069	Auckland University	BSc	3	FALSE
 2071	Auckland University	BE/Bcom	3	FALSE
 2103	Auckland University	BSc	3	TRUE
-2105	Auckland University	"BSc/BCom (compsci	 economics)"	5
+2105	Auckland University	BSc/BCom (compsci; economics)	5	TRUE
 2106	Victoria University of Wellington	BE	3	FALSE
 2108	Victoria University of Wellington	Bachelor of Design Innovation 	4	TRUE
 2110	Victoria University of Wellington	BE	2	FALSE
@@ -77,7 +76,7 @@ user_id	school	degree	study_year	final_year
 2154	University of Canterbury	BE	2	FALSE
 2159	Victoria University of Wellington	BCom (InfoSys)	3	TRUE
 2160	Auckland University	BSc	4	TRUE
-2175	Victoria University of Wellington	"Bachelor of Commerce (BCom) Information Systems and e-Commerce Major	 also Minoring in International Business"	3
+2175	Victoria University of Wellington	Bachelor of Commerce (BCom) Information Systems and e-Commerce Major - also Minoring in International Business	3	TRUE
 2177	Victoria University of Wellington	BSc	3	TRUE
 2180	Victoria University of Wellington	BDI	3	TRUE
 2188	Victoria University of Wellington	BSc	3	FALSE
@@ -133,7 +132,7 @@ user_id	school	degree	study_year	final_year
 2513	Auckland University	BSc	3	FALSE
 2539	Auckland University	BMus	2	FALSE
 2549	Whitireia New Zealand	PGDIT	1	FALSE
-2551	Victoria University of Wellington	"Conjoint degree	 Bachelor in design innovation & Bachelor of commerce in Marketing"	5
+2551	Victoria University of Wellington	Conjoint degree - Bachelor in design innovation & Bachelor of commerce in Marketing	5	TRUE
 2587	Victoria University of Wellington	BE	3	FALSE
 2592	Victoria University of Wellington	BCom (InfoSys)	3	TRUE
 2593	Auckland University	BSc	3	TRUE
@@ -193,7 +192,7 @@ user_id	school	degree	study_year	final_year
 3014	Auckland University	BE/BCom(Econ/Mgmt) Conjoint	3	FALSE
 3027	Auckland University	BSc	4	TRUE
 3029	Victoria University of Wellington	BE	3	FALSE
-3035	Auckland University	"Masters In Engineering Studies 	 Software Engg"	5
+3035	Auckland University	Masters In Engineering Studies - Software Engg	5	TRUE
 3048	Whitireia New Zealand	BE	1	TRUE
 3059	Victoria University of Wellington	BE	3	FALSE
 3070	Unitec Institute of Technology	Graduate Diploma in Computing (Level 7)	1	TRUE
@@ -202,7 +201,7 @@ user_id	school	degree	study_year	final_year
 3090	Whitireia New Zealand	Postgraduate diploma in Information Technology	1	TRUE
 3092	Victoria University of Wellington	BE	2	FALSE
 3094	Victoria University of Wellington	BE	3	FALSE
-3102	"Regent International Education Group	 Auckland"	Diploma in Information Technology	5
+3102	Regent International Education Group (Auckland) - Diploma in Information Technology	5	FALSE	Network Programming/Practical
 3110	WINTEC	Grad Dip in IT level 7	5	TRUE
 3122	Whitireia New Zealand	PG Diploma in IT ( Level 8)	1	TRUE
 3152	Auckland University of Technology	Bachelor of Computer and Information Science	3	FALSE
@@ -350,7 +349,7 @@ user_id	school	degree	study_year	final_year
 3709	Auckland University of Technology	BSc	3	TRUE
 3710	Auckland University of Technology	Bachelor of Engineering Technology	4	TRUE
 3711	Auckland University of Technology	BICT	3	TRUE
-3712	Auckland University of Technology	"Bachelor of Computer and Information Sciences	 Major (Software Development)"	3
+3712	Auckland University of Technology	Bachelor of Computer and Information Sciences - Major (Software Development)	3	TRUE
 3715	Auckland University	BSc	2	FALSE
 3716	Auckland University	BSc/BCom	3	FALSE
 3723	Auckland University of Technology	Bachelor of Computer and Information Sciences	3	TRUE
@@ -426,7 +425,7 @@ user_id	school	degree	study_year	final_year
 3998	Auckland University	BE	2	FALSE
 4003	Victoria University of Wellington	BSc	2	FALSE
 4007	Wellington Institute of Technology (Weltec)	Graduate diploma in information technology	1	TRUE
-4010	Auckland University	"Graduate Diploma in Computer Science	 MSc in Marketing"	5
+4010	Auckland University	Graduate Diploma in Computer Science - MSc in Marketing	5	TRUE
 4018	Victoria University of Wellington	BSc	1	FALSE
 4019	Auckland University of Technology	Bachelor of Creative Technologies	2	FALSE
 4033	Auckland University	BE	4	TRUE
@@ -464,7 +463,7 @@ user_id	school	degree	study_year	final_year
 4143	Auckland University of Technology	Bachelor of Creative Technologies	2	FALSE
 4162	Auckland University	PhD in Engineering	4	TRUE
 4173	Unitec Institute of Technology	Graduate Diploma in Computing(Networking & Data Communication) (Level 7)	1	TRUE
-4174	"Avonmore tertiary institute Takapuna	 Auckland"	DICT	1
+4174	Avonmore tertiary institute Takapuna (Auckland)	DICT	1	TRUE
 4176	Victoria University of Wellington	BE	3	FALSE
 4178	Whitireia New Zealand	Diploma on Advance Network Engineering (Level 7)	5	FALSE
 4188	Auckland University	BSc	3	TRUE

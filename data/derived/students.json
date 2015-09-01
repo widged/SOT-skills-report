@@ -184,9 +184,9 @@
   {
     "user_id": "1430",
     "school": "Victoria University of Wellington",
-    "degree": "\"Bachelor of Commerce",
-    "study_year": " Major in Informatino Systems and E-Commerce\"",
-    "final_year": "4"
+    "degree": "Bachelor of Commerce - Major in Informatino Systems and E-Commerce",
+    "study_year": "4",
+    "final_year": "FALSE"
   },
   {
     "user_id": "1442",
@@ -464,9 +464,9 @@
   {
     "user_id": "2105",
     "school": "Auckland University",
-    "degree": "\"BSc/BCom (compsci",
-    "study_year": " economics)\"",
-    "final_year": "5"
+    "degree": "BSc/BCom (compsci; economics)",
+    "study_year": "5",
+    "final_year": "TRUE"
   },
   {
     "user_id": "2106",
@@ -548,9 +548,9 @@
   {
     "user_id": "2175",
     "school": "Victoria University of Wellington",
-    "degree": "\"Bachelor of Commerce (BCom) Information Systems and e-Commerce Major",
-    "study_year": " also Minoring in International Business\"",
-    "final_year": "3"
+    "degree": "Bachelor of Commerce (BCom) Information Systems and e-Commerce Major - also Minoring in International Business",
+    "study_year": "3",
+    "final_year": "TRUE"
   },
   {
     "user_id": "2177",
@@ -940,9 +940,9 @@
   {
     "user_id": "2551",
     "school": "Victoria University of Wellington",
-    "degree": "\"Conjoint degree",
-    "study_year": " Bachelor in design innovation & Bachelor of commerce in Marketing\"",
-    "final_year": "5"
+    "degree": "Conjoint degree - Bachelor in design innovation & Bachelor of commerce in Marketing",
+    "study_year": "5",
+    "final_year": "TRUE"
   },
   {
     "user_id": "2587",
@@ -1360,9 +1360,9 @@
   {
     "user_id": "3035",
     "school": "Auckland University",
-    "degree": "\"Masters In Engineering Studies ",
-    "study_year": " Software Engg\"",
-    "final_year": "5"
+    "degree": "Masters In Engineering Studies - Software Engg",
+    "study_year": "5",
+    "final_year": "TRUE"
   },
   {
     "user_id": "3048",
@@ -1422,10 +1422,10 @@
   },
   {
     "user_id": "3102",
-    "school": "\"Regent International Education Group",
-    "degree": " Auckland\"",
-    "study_year": "Diploma in Information Technology",
-    "final_year": "5"
+    "school": "Regent International Education Group (Auckland) - Diploma in Information Technology",
+    "degree": "5",
+    "study_year": "FALSE",
+    "final_year": "Network Programming/Practical"
   },
   {
     "user_id": "3110",
@@ -2459,9 +2459,9 @@
   {
     "user_id": "3712",
     "school": "Auckland University of Technology",
-    "degree": "\"Bachelor of Computer and Information Sciences",
-    "study_year": " Major (Software Development)\"",
-    "final_year": "3"
+    "degree": "Bachelor of Computer and Information Sciences - Major (Software Development)",
+    "study_year": "3",
+    "final_year": "TRUE"
   },
   {
     "user_id": "3715",
@@ -2991,9 +2991,9 @@
   {
     "user_id": "4010",
     "school": "Auckland University",
-    "degree": "\"Graduate Diploma in Computer Science",
-    "study_year": " MSc in Marketing\"",
-    "final_year": "5"
+    "degree": "Graduate Diploma in Computer Science - MSc in Marketing",
+    "study_year": "5",
+    "final_year": "TRUE"
   },
   {
     "user_id": "4018",
@@ -3256,10 +3256,10 @@
   },
   {
     "user_id": "4174",
-    "school": "\"Avonmore tertiary institute Takapuna",
-    "degree": " Auckland\"",
-    "study_year": "DICT",
-    "final_year": "1"
+    "school": "Avonmore tertiary institute Takapuna (Auckland)",
+    "degree": "DICT",
+    "study_year": "1",
+    "final_year": "TRUE"
   },
   {
     "user_id": "4176",
