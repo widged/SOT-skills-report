@@ -65,7 +65,10 @@ class ValueSeparatedExporter {
   }
 
   finalize() {
-    let {students, skills, extension} = this.state;
+    let {students, skills, extension, separator} = this.state;
+    students.unshift(`user_id,school,degree,study_year,final_year`.split(',').join(separator));
+    skills.unshift(`skill,level,user_id`.split(',').join(separator));
+
     return {
       students: students.join('\n'), 
       skills: skills.join('\n'),

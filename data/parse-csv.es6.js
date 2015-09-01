@@ -4,5 +4,5 @@
 
 import DataParser from './SotCsvParser.es6.js';
 
-DataParser.parse(DataParser.EXPORT_FORMAT.JSON);
+DataParser.parse(DataParser.EXPORT_FORMAT.TSV);
 
