@@ -15,8 +15,7 @@
 		"category":"Systems / Ops / DBA",
 		"skills": ["Clustering","Database Administration","Distributed Computing / Virtualisation","Firewalls","Information Security","Load Balancers","Network Architecture","Network Engineering","NoSQL","Security Analysis","Switches / Routers","Systems Engineering","Systems Infrastructure"],
 		"tools": ["Mac OSX Admin","MySQL DBA","Oracle DBA","Postgres DBA","SQLServer DBA","Systems Administration - Unix / Linux","Systems Administration - Windows","Vmware"] 
-	}
-	{
+	},{
 		"category":"BA / Digital Marketing",
 		"skills": ["Agile","Business Analysis","Content Marketing","Data Analysis","Digital Marketing","Information Architecture","Project Management","Search Engine Optimisation (SEO)","Statistics" ],
 		"tools": ["Adwords","Google Analytics"] 
