@@ -24,7 +24,7 @@ export default class CsvInputParser {
         let level = p.pop();
         let skill = p.join('/');
         let userids = skillStudents[skilllevel];
-        skills.push([skill, level, userids.length, userids.join(';')]);
+        skills.push([skill, level, userids.length, userids.join(' ')]);
     }
     return {students, skills};
   }
