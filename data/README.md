@@ -2,13 +2,9 @@ Derived data are already provided in the derived folder, in json format.
 They have been generated with:
 
     cd sot-skills-report/data
-    parse-csv.es6.js 
-
-
-If you want to export to a different format, edit `parse-csv.es6.js`
-
-    DataParser.parse(DataParser.EXPORT_FORMAT.TSV);
-    DataParser.parse(DataParser.EXPORT_FORMAT.CSV);
+    parse-csv.es6.js tsv
+    // parse-csv.es6.js csv
+    // parse-csv.es6.js json
 
 
 To explore data, group them in different ways,  you should be able to use excel or open office. Try the `pivot table`  functionality. See [Data Pilots (Pivot Tables) in OpenOffice Calc](http://openoffice.blogs.com/openoffice/2006/11/data_pilots_in_.html) for a tutorial. 

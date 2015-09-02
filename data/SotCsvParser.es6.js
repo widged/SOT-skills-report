@@ -1,9 +1,7 @@
 /* jshint esnext: true */
 
-import fs from 'fs';
-import LinesExporter from './LinesExporter.es6.js';
 
-class CsvInputParser {
+export default class CsvInputParser {
 
   static parseCsv(csv, exporter) {
     let lines = csv.split(/\r?\n/);
@@ -28,32 +26,19 @@ class CsvInputParser {
         let level = p.pop();
         let skill = p.join('/');
         let userids = skillStudents[skilllevel];
-        skills.push(exporter.line([skill, level, userids.length, userids.join(';')], skillFields));
+        skills.push([skill, level, userids.length, userids.join(';')]);
     }
-    // skills.sort(function(a, b) { return a[1] < a[2] ? -1 : +1; });
+//    skills.sort(function(a, b) {  return a[2]-b[2];  }); // sort by count
+    skills.sort(function(a, b) {  // sort by expertise and then skill name
+      var ax = [a[1],a[0]].join('#'), bx = [b[1],b[0]].join('#');
+      return ( ax < bx) ? -1 : (ax > bx) ? +1 : 0;  
+    });
+
+    skills = skills.map((d) => {  return exporter.line(d, skillFields);  });
 
     students = exporter.finalize(students, studentFields);
     skills = exporter.finalize(skills, skillFields);
     return {students, skills};
   }
 }
-
-
-
-export default class DataParser {
-  static parse(ExporterFactory) {
-    let csv = fs.readFileSync('raw/student_skills_for_vis_2015-08-31.csv', "utf8");
-    let {students, skills} = CsvInputParser.parseCsv(csv,  new ExporterFactory());
-    // -- writing out students
-    let studentsOut = `derived/students.${students.ext}`;
-    fs.writeFileSync(studentsOut, students.content);
-    console.log(`[saved] ${studentsOut}` );
-    // -- writing out skills
-    let skillsOut = `derived/skills.${skills.ext}`;
-    fs.writeFileSync(skillsOut, skills.content);
-    console.log(`[saved] ${skillsOut}` );
-  }
-}
-DataParser.EXPORT_FORMAT = {'CSV': LinesExporter.CrudeCsvExporter, 'TSV': LinesExporter.CrudeTsvExporter, 'JSON': LinesExporter.JsonExporter };
-
 
