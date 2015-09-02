@@ -1,0 +1,108 @@
+skill	type	category
+AI	skill	Web / Programming
+Android	skill	Web / Programming
+Computer Architecture	skill	Web / Programming
+Distributed Programming	skill	Web / Programming
+Front-end Web Frameworks	skill	Web / Programming
+iOS / iPhone	skill	Web / Programming
+Linux / Unix	skill	Web / Programming
+Network Programming	skill	Web / Programming
+Nodejs	skill	Web / Programming
+Responsive Web Development	skill	Web / Programming
+SQL	skill	Web / Programming
+Testing	skill	Web / Programming
+Web Development	skill	Web / Programming
+Windows Universal Apps	skill	Web / Programming
+Actionscript / Flash	tool	Web / Programming
+C/C++	tool	Web / Programming
+CSS	tool	Web / Programming
+Docker	tool	Web / Programming
+git	tool	Web / Programming
+HTML	tool	Web / Programming
+Java	tool	Web / Programming
+Javascript	tool	Web / Programming
+MySQL	tool	Web / Programming
+.NET (C# and VB.net)	tool	Web / Programming
+Objective C / Swift	tool	Web / Programming
+Oracle	tool	Web / Programming
+Perl	tool	Web / Programming
+PHP	tool	Web / Programming
+Postgres	tool	Web / Programming
+Puppet	tool	Web / Programming
+Python	tool	Web / Programming
+R	tool	Web / Programming
+Ruby on Rails	tool	Web / Programming
+SQL Server	tool	Web / Programming
+Vagrant	tool	Web / Programming
+3D Modelling	skill	Design
+3D Texturing	skill	Design
+Animation	skill	Design
+Concept Art / Matt	skill	Design
+FX	skill	Design
+Interaction Design	skill	Design
+Motion Graphics / Compositing	skill	Design
+Photography	skill	Design
+Rendering	skill	Design
+Rigging / TD	skill	Design
+Rotoscoping	skill	Design
+Typography	skill	Design
+User Experience	skill	Design
+Video Editing	skill	Design
+After Effects	tool	Design
+CS (Creative Suite)	tool	Design
+Illustrator	tool	Design
+InDesign	tool	Design
+Maya	tool	Design
+Photoshop	tool	Design
+Shake	tool	Design
+Sketch	tool	Design
+3D Printing	skill	Engineering Skills
+Analogue Circuit Design	skill	Engineering Skills
+Analogue Electronics	skill	Engineering Skills
+CAD / CAM	skill	Engineering Skills
+Communications Engineering	skill	Engineering Skills
+Control System Engineering	skill	Engineering Skills
+Digital Circuit Design	skill	Engineering Skills
+Electronic Design	skill	Engineering Skills
+Embedded Systems	skill	Engineering Skills
+Instrumentation and controls	skill	Engineering Skills
+Mechatronics	skill	Engineering Skills
+Micro-controller Programming	skill	Engineering Skills
+PCB Design	skill	Engineering Skills
+Power Electronics	skill	Engineering Skills
+Power Systems & Distribution	skill	Engineering Skills
+Process Design	skill	Engineering Skills
+Robotics	skill	Engineering Skills
+Signal Processing	skill	Engineering Skills
+Clustering	skill	Systems / Ops / DBA
+Database Administration	skill	Systems / Ops / DBA
+Distributed Computing / Virtualisation	skill	Systems / Ops / DBA
+Firewalls	skill	Systems / Ops / DBA
+Information Security	skill	Systems / Ops / DBA
+Load Balancers	skill	Systems / Ops / DBA
+Network Architecture	skill	Systems / Ops / DBA
+Network Engineering	skill	Systems / Ops / DBA
+NoSQL	skill	Systems / Ops / DBA
+Security Analysis	skill	Systems / Ops / DBA
+Switches / Routers	skill	Systems / Ops / DBA
+Systems Engineering	skill	Systems / Ops / DBA
+Systems Infrastructure	skill	Systems / Ops / DBA
+Mac OSX Admin	tool	Systems / Ops / DBA
+MySQL DBA	tool	Systems / Ops / DBA
+Oracle DBA	tool	Systems / Ops / DBA
+Postgres DBA	tool	Systems / Ops / DBA
+SQLServer DBA	tool	Systems / Ops / DBA
+Systems Administration - Unix / Linux	tool	Systems / Ops / DBA
+Systems Administration - Windows	tool	Systems / Ops / DBA
+Vmware	tool	Systems / Ops / DBA
+Agile	skill	BA / Digital Marketing
+Business Analysis	skill	BA / Digital Marketing
+Content Marketing	skill	BA / Digital Marketing
+Data Analysis	skill	BA / Digital Marketing
+Digital Marketing	skill	BA / Digital Marketing
+Information Architecture	skill	BA / Digital Marketing
+Project Management	skill	BA / Digital Marketing
+Search Engine Optimisation (SEO)	skill	BA / Digital Marketing
+Statistics	skill	BA / Digital Marketing
+Adwords	tool	BA / Digital Marketing
+Google Analytics	tool	BA / Digital Marketing

@@ -9,9 +9,14 @@ class JsonExporter {
     }
     return o;
    }
-  finalize(lines) {
+
+  wrap(lines) {
     return {content: JSON.stringify(lines, null, 2), ext: 'json' };
   }
+
+  dump(list, fields) {
+    return this.wrap(list.map((d) => { return  this.line(d, fields); }));
+  } 
 }
 
 class ValueSeparatedExporter {
@@ -30,11 +35,16 @@ class ValueSeparatedExporter {
     return d.join(separator); 
   }
 
-  finalize(lines, fields) {
+  wrap(lines, fields) {
     let {separator, extension} = this.state;
     lines.unshift(fields.join(separator));
     return {content: lines.join('\n'), ext: extension };
   }
+
+  dump(list, fields) {
+    return this.wrap(list.map((d) => { return  this.line(d, fields); }), fields);
+  } 
+
 }
 
 class CrudeTsvExporter extends ValueSeparatedExporter {
@@ -49,5 +59,15 @@ class CrudeCsvExporter extends ValueSeparatedExporter {
   }
 }
 
-export default {CrudeCsvExporter, CrudeTsvExporter, JsonExporter };
+export default class LinesExporter {
+  static getExporter(fmt) {
+    let EXPORT_FORMAT = {
+      'csv': CrudeCsvExporter, 
+      'tsv': CrudeTsvExporter, 
+      'json': JsonExporter 
+    };
+    var ExporterFactory = EXPORT_FORMAT[fmt] || EXPORT_FORMAT.tsv;
+    return new ExporterFactory();
+  }
+}
 

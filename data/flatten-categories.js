@@ -2,11 +2,13 @@
 
 /* jshint esnext: true */
 
+import LinesExporter from './LinesExporter.es6.js';
 import categories from './derived/categories.json';
+import fs from 'fs';
 
 function itemAdder(acc, category, type) {
 	return function(d) {
-		acc.push({skill: d, type, category});
+		acc.push([d, type, category]);
 	};
 }
 
@@ -17,4 +19,6 @@ var flat = categories.reduce((acc, {category, skills, tools}, i) => {
 	return acc;
 }, null);
 
-console.log(flat);
+var exporter = new LinesExporter.getExporter('tsv');
+var lines = exporter.dump(flat, 'skill,type,category'.split(','));
+fs.writeFileSync(`derived/categories-flat.${lines.ext}`, lines.content);

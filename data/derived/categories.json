@@ -9,7 +9,7 @@
 		"tools": ["After Effects","CS (Creative Suite)","Illustrator","InDesign","Maya","Photoshop","Shake","Sketch"] 
 	},{
 	 	"category":"Engineering Skills",
-		"skills": ["3D Printing","Analogue Circuit Design","Analogue Electronics","CAD / CAM","Communications Engineering","Control System Engineering","Digital Circuit Design","Electronic Design","Embedded Systems","Instrumentation and controls","Mechatronics","Micro-controller Programming","PCB Design","Power Electronics","Power Systems &amp; Distribution","Process Design","Robotics","Signal Processing" ],
+		"skills": ["3D Printing","Analogue Circuit Design","Analogue Electronics","CAD / CAM","Communications Engineering","Control System Engineering","Digital Circuit Design","Electronic Design","Embedded Systems","Instrumentation and controls","Mechatronics","Micro-controller Programming","PCB Design","Power Electronics","Power Systems & Distribution","Process Design","Robotics","Signal Processing" ],
 		"tools": [] 
 	},{
 		"category":"Systems / Ops / DBA",
