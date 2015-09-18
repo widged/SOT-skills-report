@@ -1,0 +1,137 @@
+Title:Name,Lookup:Gender,Lookup:Reg Group,Lookup:Class,Achievement:Achievement,Lookup:FSM,Lookup:Ethnicity,Lookup:SEN Status,Lookup:SEN Need,Lookup:Gifted/Talented,Lookup:Home Language,Lookup:First Language,Lookup:EAL,Grade:Yellis Band 06,Grade:TMG GCSE,Grade:Yr 10 Summer Grade Sc,Grade:Yr 10 Exam Result,Grade:Science GCSE + ISA Grade
+Student 1,M,10F,10S-D,0,N,White - British,A,"Behaviour, Emotional and Social Difficulty",,English,English,,B,B,C,B,B
+Student 2,F,10F,10S-B,0,N,White - British,,,,English,English,,B,C,B,B,B
+Student 3,F,10Q,10S-D,0,N,Any other mixed background,A,"Behaviour, Emotional and Social Difficulty",,English,English,,C,C,C,C,C
+Student 4,F,10Z,10S-C,1,N,White - British,,,,English,English,,D,B,C,C,C
+Student 5,F,10Q,10S-C,2,N,White European,,,,Polish,Polish,Y,D,C,C,B,B
+Student 6,F,10R,10S-B,-2,N,White - British,,,,English,English,,A,A,C,C,C
+Student 7,F,10M,10S-A ,0,N,White - British,,,,English,English,,C,C,D,C,C
+Student 8,F,10F,10S-D,1,N,Any other Asian background,A,Autistic Spectrum Disorder,,English,English,,C,C,B,B,B
+Student 9,F,10X,10S-B,0,N,White - British,,,,English,English,,C,C,C,C,C
+Student 10,F,10N,10S-A ,2,N,White European,,,,English,English,,C,A,B,A,A
+Student 11,F,10R,10S-D,0,N,White - British,,,,English,English,,B,B,C,B,B
+Student 12,F,10M,10S-A ,0,N,White and Black Caribbean,N,,,English,English,,B,A,C,B,B
+Student 13,F,10Q,10S-B,0,N,Any other ethnic group,,,,Vietnamese,Vietnamese,Y,A,A,A,A,A
+Student 14,F,10Z,10S-A ,1,N,Black - African,,,Y,English,Acholi,Y,A,A,A,*,*
+Student 15,F,10M,10S-B,1,N,White - British,,,,English,English,,D,C,C,C,C
+Student 16,F,10X,10S-A ,2,N,Indian,A,"Behaviour, Emotional and Social Difficulty",,English,English,,C,A,A,A,A
+Student 17,F,10F,10S-A ,1,N,Any other mixed background,,,,English,English,,C,B,B,B,B
+Student 18,F,10N,10S-E,-3,N,White - British,,,,English,English,,C,C,E,F,F
+Student 19,F,10M,10S-A ,0,N,White - British,N,,,English,English,,C,B,C,C,C
+Student 20,F,10Q,10S-D,-2,N,White - British,P,Autistic Spectrum Disorder,,English,English,,B,C,C,D,D
+Student 21,F,10F,10S-A ,0,N,White - British,,,,English,English,,B,A,B,B,B
+Student 22,F,10R,10S-E,-1,N,White - British,P,Specific Learning Difficulty,,English,English,,C,D,D,D,D
+Student 23,F,10M,10S-B,0,N,White - British,,,Y,English,English,,B,A,B,B,B
+Student 24,F,10Z,10S-B,1,N,Indian,,,,English,English,,C,B,B,B,B
+Student 25,F,10N,10S-E,-2,N,White - British,A,"Behaviour, Emotional and Social Difficulty",,English,English,,D,C,E,F,F
+Student 26,F,10F,10S-A ,1,N,Any other Asian background,,,,Tagalog/Filipino,Tagalog/Filipino,Y,C,A,B,B,B
+Student 27,F,10M,10S-B,0,N,White - British,,,,English,English,,A,A,A,A,A
+Student 28,F,10Z,10S-D,0,N,White - British,N,,,English,English,,C,C,D,C,C
+Student 29,F,10Z,10S-B,-1,N,White - British,,,,English,English,,B,A,C,C,C
+Student 30,F,10X,10S-E,0,N,White - British,,,,English,English,,E,C,E,E,E
+Student 31,F,10N,10S-C,0,N,White - British,,,Y,English,English,,B,A,C,B,B
+Student 32,F,10F,10S-B,1,N,White - British,N,,,English,English,,C,B,B,B,B
+Student 33,F,10N,10S-A ,1,N,White - British,,,,English,English,,B,B,A,A,A
+Student 34,F,10X,10S-A ,1,N,Black - African,,,Y,English,Shona,Y,A,A,*,*,*
+Student 35,F,10M,10S-B,1,N,White - British,,,,English,English,,B,A,A,A,A
+Student 36,F,10F,10S-B,0,N,Indian,,,,Classification Pending,Believed Other than English,Y,D,C,C,D,D
+Student 37,F,10Z,10S-F,-3,N,White and Asian,P,Moderate Learning Difficulty,,English,English,,D,D,G,U,U
+Student 38,F,10X,10S-D,0,N,White - British,,,,English,English,,C,B,C,C,C
+Student 39,F,10M,10S-F,-1,N,White - British,N,,,English,English,,D,C,D,E,E
+Student 40,F,10Z,10S-A ,1,N,Black - African,A,"Behaviour, Emotional and Social Difficulty",,English,Igbo,Y,C,C,B,B,B
+Student 41,F,10Q,10S-F,-2,N,White and Black Caribbean,P,"Behaviour, Emotional and Social Difficulty",,English,English,,D,D,E,F,F
+Student 42,F,10Q,10S-A ,2,N,White and Black Caribbean,,,,English,English,,C,A,A,A,A
+Student 43,F,10Z,10S-C,0,N,Black - African,,,,English,English,,B,B,B,B,B
+Student 44,F,10N,10S-B,0,N,White - British,,,,English,English,,B,A,B,B,B
+Student 45,F,10Q,10S-A ,0,Y,White - British,A,"Behaviour, Emotional and Social Difficulty",,English,English,,B,A,B,B,B
+Student 46,F,10M,10S-F,0,Y,White - British,,,,English,English,,D,C,E,D,D
+Student 47,F,10R,10S-C,0,N,White - British,,,,English,English,,C,C,C,C,C
+Student 48,F,10X,10S-D,1,N,White - British,,,,English,English,,D,C,C,C,C
+Student 49,F,10X,10S-C,0,Y,White - British,,,,English,English,,D,B,D,D,D
+Student 50,F,10M,10S-E,-1,Y,White and Black African,A,"Behaviour, Emotional and Social Difficulty",,English,English,,D,C,E,E,E
+Student 51,F,10N,10S-C,0,N,Any other ethnic group,,,,Spanish,Spanish,Y,B,C,C,B,B
+Student 52,F,10F,10S-F,0,N,White - British,,,,English,English,,C,C,C,C,C
+Student 53,F,10F,10S-B,-1,N,White - British,,,,English,English,,C,A,D,D,D
+Student 54,F,10X,10S-D,-1,N,White - British,,,,English,English,,B,A,C,C,C
+Student 55,F,10Q,10S-E,-2,N,Refused,P,Specific Learning Difficulty,,English,English,,C,D,E,E,E
+Student 56,M,10X,10S-F,-1,N,White - British,N,,,English,English,,D,C,E,E,E
+Student 57,M,10F,10S-B,0,N,Any other Asian background,,,,Tagalog/Filipino,Filipino,Y,C,C,C,C,C
+Student 58,M,10N,10S-E,-1,N,White - British,A,Moderate Learning Difficulty,,English,English,,D,D,D,E,E
+Student 59,M,10M,10S-B,0,N,White - British,N,,,English,English,,B,B,B,B,B
+Student 60,M,10Q,10S-B,-1,N,White - British,,,,English,English,,B,B,D,C,C
+Student 61,M,10Q,10S-E,-1,N,Any other Black background,,,Y,Portuguese,Portuguese,Y,C,C,D,D,D
+Student 62,M,10N,10S-E,0,N,White - British,,,,English,English,,D,C,D,D,D
+Student 63,M,10Z,10S-D,-1,N,Any other Asian background,A,"Behaviour, Emotional and Social Difficulty",,English,Sindhi,Y,B,C,C,C,C
+Student 64,M,10X,10S-C,1,N,White - British,,,,English,English,,D,C,C,C,C
+Student 65,M,10X,10S-D,0,N,White - British,,,,English,English,,C,B,C,C,C
+Student 66,M,10N,10S-A ,2,N,White - British,,,,English,English,,C,C,A,A,A
+Student 67,M,10M,10S-F,-3,N,White - British,A,Moderate Learning Difficulty,,English,English,,D,D,F,G,G
+Student 68,M,10R,10S-B,0,N,White - British,,,,English,English,,A,A,A,A,A
+Student 69,M,10N,10S-B,0,N,White - British,,,Y,English,English,,A,A,*,A,A
+Student 70,M,10M,10S-F,0,N,Refused,,,,English,English,,D,D,D,D,D
+Student 71,M,10Q,10S-C,0,N,White - British,,,Y,English,French,Y,B,A,B,B,B
+Student 72,M,10R,10S-D,1,N,White - British,,,,English,English,,C,B,B,B,B
+Student 73,M,10Q,10S-D,0,N,White and Asian,A,Specific Learning Difficulty,,English,English,,D,C,D,D,D
+Student 74,M,10M,10S-E,-1,Y,White - British,A,"Behaviour, Emotional and Social Difficulty",,English,English,,D,D,D,E,E
+Student 75,M,10X,10S-F,-3,N,White - British,,,,English,English,,D,D,G,G,G
+Student 76,M,10Z,10S-B,0,N,White - British,,,,English,English,,C,A,C,C,C
+Student 77,M,10F,10S-A ,0,N,White - British,,,,English,English,,B,C,B,B,B
+Student 78,M,10M,10S-B,0,N,Chinese,,,,Chinese,Other than English,Y,C,C,C,C,C
+Student 79,M,10F,10S-A ,-1,N,Any other mixed background,,,,English,English,,A,B,C,B,B
+Student 80,M,10M,10S-A ,0,N,White and Asian,,,,English,English,,B,A,B,B,B
+Student 81,M,10F,10S-D,1,N,Any other Asian background,,,,English,English,,C,C,B,B,B
+Student 82,M,10F,10S-C,1,N,White and Black African,,,,English,English,,D,B,C,C,C
+Student 83,M,10F,10S-C,0,N,Any other ethnic group,N,,,English,English,,C,C,C,C,C
+Student 84,M,10F,10S-D,1,N,White - British,,,,English,English,,B,A,A,A,A
+Student 85,M,10X,10S-B,1,N,White - British,S,Physical Disability,,English,Armenian,Y,B,A,A,A,A
+Student 86,M,10N,10S-E,-1,N,White - Irish,A,Moderate Learning Difficulty,,English,English,,D,C,E,E,E
+Student 87,M,10F,10S-E,-2,N,White - British,A,Specific Learning Difficulty,,English,English,,D,D,E,F,F
+Student 88,M,10F,10S-F,-2,N,White - British,N,,,English,English,,C,C,D,E,E
+Student 89,M,10M,10S-D,2,N,White - British,,,,English,English,,D,C,C,B,B
+Student 90,M,10Z,10S-C,1,N,White and Asian,,,,English,English,,C,A,B,B,B
+Student 91,M,10F,10S-C,-1,N,White - British,,,,English,English,,B,A,C,C,C
+Student 92,M,10X,10S-D,0,N,White - British,,,,English,English,,C,C,C,C,C
+Student 93,M,10N,10S-A ,0,N,White - British,N,,,English,English,,B,B,B,B,B
+Student 94,M,10N,10S-C,0,Y,White - British,,,,English,English,,C,C,D,C,C
+Student 95,M,10Q,10S-E,-3,Y,White - Irish,S,Specific Learning Difficulty,,English,English,,D,E,G,U,U
+Student 96,M,10R,10S-B,1,N,Any other mixed background,A,"Speech, Language or Communication Need",,English,English,,D,C,C,C,C
+Student 97,M,10F,10S-A ,0,N,White European,N,,,Spanish,English,,B,C,B,B,B
+Student 98,M,10M,10S-E,-2,N,White - British,,,,English,English,,D,C,E,F,F
+Student 99,M,10F,10S-D,0,N,White - British,S,"Behaviour, Emotional and Social Difficulty",,English,English,N,B,B,B,B,B
+Student 100,M,10N,10S-A ,1,N,White - British,,,,English,English,,B,A,B,A,A
+Student 101,M,10R,10S-D,1,N,White - British,N,,,English,Polish,Y,D,C,C,C,C
+Student 102,M,10R,10S-B,0,N,Any other mixed background,N,,,English,Filipino,Y,A,B,A,A,A
+Student 103,M,10Q,10S-E,0,N,White - British,P,Moderate Learning Difficulty,,English,English,,D,D,D,D,D
+Student 104,M,10F,10S-C,0,N,White European,,,,Polish,Polish,Y,C,C,C,C,C
+Student 105,M,10F,10S-E,-2,N,White and Black Caribbean,P,Specific Learning Difficulty,,English,English,,D,E,D,F,F
+Student 106,M,10M,10S-D,-2,N,Chinese,A,"Speech, Language or Communication Need",,English,Chinese,Y,A,C,C,C,C
+Student 107,M,10F,10S-B,0,N,White - British,A,Moderate Learning Difficulty,,English,English,,C,C,B,C,C
+Student 108,M,10R,10S-A ,-1,N,White - British,,,,English,English,,A,A,B,B,B
+Student 109,M,10Z,10S-C,1,N,White - British,A,Specific Learning Difficulty,,English,English,,D,C,B,C,C
+Student 110,M,10R,10S-A ,0,N,White - British,,,,English,English,,B,B,B,B,B
+Student 111,M,10F,10S-B,0,N,Any other mixed background,,,,English,English,,B,A,A,B,B
+Student 112,M,10R,10S-D,0,N,White - British,,,,English,English,,B,C,B,B,B
+Student 113,M,10X,10S-B,0,N,Any other mixed background,A,Other Difficulty/Disability,,English,English,,B,B,A,B,B
+Student 114,M,10F,10S-D,0,N,Black Caribbean,,,,English,English,,D,D,D,D,D
+Student 115,M,10M,10S-B,2,Y,White European,A,Moderate Learning Difficulty,,Albanian/Shqip,Albanian/Shqip,Y,B,B,A,A,*
+Student 116,M,10Z,10S-D,0,N,White - British,,,,English,English,,C,C,C,C,C
+Student 117,M,10Q,10S-D,1,N,White - British,,,,English,English,,D,C,C,C,C
+Student 118,M,10Z,10S-C,1,N,White - British,,,,English,English,,D,C,C,C,C
+Student 119,M,10N,10S-C,0,N,White - British,P,Specific Learning Difficulty,,English,English,,C,C,C,C,C
+Student 120,M,10X,10S-F,-1,N,Black - African,N,,,Classification Pending,Shilluk/Cholo,Y,D,D,D,E,E
+Student 121,M,10F,10S-B,0,Y,Any other Asian background,,,,French,French,Y,C,D,B,C,C
+Student 122,M,10F,10S-C,1,N,Black - African,,,,English,Shona,Y,D,D,C,C,C
+Student 10S-,M,10Z,10S-D,-1,Y,Any other Asian background,,,,English,English,,C,C,E,D,D
+Student 124,M,10X,10S-C,0,N,White European,A,Other Difficulty/Disability,,English,Polish,Y,C,C,C,C,C
+Student 125,M,10F,10S-C,0,N,White - British,,,,English,English,,C,A,D,C,C
+Student 126,M,10X,10S-A ,1,N,Indian,,,,English,Malagasy,Y,C,A,B,B,B
+Student 127,M,10F,10S-A ,0,N,White - British,,,Y,English,English,,A,A,B,A,A
+Student 128,M,10F,10S-F,0,N,Any other mixed background,,,,English,English,,D,D,D,D,D
+Student 129,M,10R,10S-D,0,N,Black - African,N,,,Classification Pending,Shona,Y,D,C,D,D,D
+Student 130,M,10X,10S-B,1,N,White and Black African,,,,English,English,,D,C,C,C,C
+Student 131,M,10R,10S-C,1,N,White - British,,,,English,English,,C,B,C,B,B
+Student 132,M,10Z,10S-A ,0,N,White - British,A,"Behaviour, Emotional and Social Difficulty",Y,English,English,,B,A,B,B,B
+Student 133,M,10Q,10S-A ,1,Y,White and Asian,,,,Arabic,Arabic,Y,C,B,B,B,B
+Student 134,M,10Q,10S-A ,1,N,White and Asian,,,,English,English,,C,C,B,B,B
+Student 135,M,10Z,10S-C,-1,N,Pakistani,,,,Urdu,English,,B,C,C,C,C
+Student 136,M,10Z,10S-E,-2,N,White - British,A,Moderate Learning Difficulty,,English,English,,D,D,F,F,F
