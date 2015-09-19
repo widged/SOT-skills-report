@@ -1,0 +1,11 @@
+{
+	"name": "inject",
+	"description": "Loading of CSS files or fonts",
+	"version": "1.0.0",
+	"author": {
+	  "name": "Marielle Lange",
+	  "web": "http://www.widged.com"
+	},
+	"main": "Inject.es6.js",
+	"private": true
+}
