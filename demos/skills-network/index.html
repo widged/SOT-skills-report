@@ -38,14 +38,14 @@ var network;
 var options = {
       nodes: {
         shape: 'dot',
-        size: 30,
+        size: 12,
         font: {
-          size: 12,
+          size: 18,
           face: 'Tahoma'
         }
       },
       edges: {
-        width: 0.15,
+        width: 0.10,
         color: {inherit: 'from'},
         smooth: {
           type: 'continuous'
@@ -53,7 +53,7 @@ var options = {
       },
       physics:{
           barnesHut:{gravitationalConstant:-30000},
-          stabilization: {iterations:2500}
+          stabilization: {iterations:1000}
         },
       interaction: {
         tooltipDelay: 200,
@@ -107,9 +107,9 @@ var options = {
         }
       }
       var connectedNodes = network.getConnectedNodes(selectedNode);
-      var allConnectedNodes = [];
 
       // get the second degree nodes
+      var allConnectedNodes = [];
       for (i = 1; i < degrees; i++) {
         for (j = 0; j < connectedNodes.length; j++) {
           allConnectedNodes = allConnectedNodes.concat(network.getConnectedNodes(connectedNodes[j]));
