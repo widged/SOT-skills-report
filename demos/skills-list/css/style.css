@@ -1,0 +1,48 @@
+#selection {
+	font-family: Verdana;
+	font-size: 10px;
+	color: #AFAFAF;
+}
+
+#skills .category {
+	font-family: Verdana;
+	display: inline-block;
+	vertical-align: top;
+	width: 20%;
+	font-size: 10px;
+}
+
+
+#skills h1 {
+	font-size: 1.3em;
+}
+
+#skills .category {
+	display: inline-block;
+	vertical-align: top;
+	width: 20%;
+}
+
+
+#skills ul {
+	list-style-type: none;
+	padding: 0; margin: 0;
+}
+
+#skills ul > li {
+	border: 1px solid gray;
+	background-color: #ADD5FC;
+	display: inline-block;
+	margin-right: 3px;
+	margin-bottom: 3px;
+	padding: 3px 6px;
+}
+
+#skills ul > li.type-skill {
+	background-color: #FF744E;
+}
+
+#skills ul > li.selected {
+	border: 3px solid red;
+}
+
