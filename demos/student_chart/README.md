@@ -8,7 +8,7 @@ It can run as is in an [electron environment](https://github.com/atom/electron).
 
 If `electron` is not already installed globally on your machine. 
     
-    npm install -g electron
+    npm install -g electron-prebuilt
 
 Then open a command line utility: 
     
