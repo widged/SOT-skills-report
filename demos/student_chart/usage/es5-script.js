@@ -52,22 +52,18 @@
 
 	var _Modules = __webpack_require__(2);
 
-	var _injectJsEs6Js = __webpack_require__(4);
-
-	var _injectJsEs6Js2 = _interopRequireDefault(_injectJsEs6Js);
-
 	var _react = __webpack_require__(5);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var Component = _react2['default'].Component;
 
-	var html = '\n<script type="text/javascript" src="../vendor/d3.v3.min.js"></script>\n<div class="page">\n    <h1>Summer of Tech Students</h1>\n    <div id="visualisation">\n        <div id="vis-controls">\n            <div id=\'group-by\'></div>\n            <div id=\'color-by\'></div>\n            <div id=\'filters\'></div>\n        </div>\n        <div id="vis-display">\n            <div id=\'vis\'></div>\n            <div id=\'itemTooltip\'></div>            \n            <div id="vis-legend"></div>\n        </div>\n    </div>\n</div>    \n';
+	var html = '\n<script type="text/javascript" src="../vendor/d3.v3.min.js"></script>\n<div class="page">\n    <h1>Summer of Tech Students</h1>\n    <div id="visualisation">\n        <div id="vis-controls">\n            <div id=\'group-by\'></div>\n            <div id=\'color-by\'></div>\n            <div id=\'filters\'></div>\n        </div>\n        <div id="vis-display">\n            <div id=\'vis\'></div>\n            <div id=\'itemTooltip\'></div>            \n        </div>\n        <div id="vis-legend"></div>\n    </div>\n</div>    \n';
 
 	document.getElementById('app').innerHTML = html;
 
 	_Modules.Inject.css({ file: '../css/style.css', parent: module });
-	(0, _injectJsEs6Js2['default'])(['../vendor/d3.v3.min.js'], function () {
+	_Modules.Inject.js(['../vendor/d3/d3.v3.min.js'], function () {
 	    //  d3.csv("data/sciencedata.csv", drawChart);
 	    d3.tsv('data/sot.tsv', drawChart);
 	});
@@ -180,11 +176,17 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _widgedDeployInjectInjectEs6Js = __webpack_require__(3);
+	var _componentsInjectInjectEs6Js = __webpack_require__(3);
 
-	var _widgedDeployInjectInjectEs6Js2 = _interopRequireDefault(_widgedDeployInjectInjectEs6Js);
+	var _componentsInjectInjectEs6Js2 = _interopRequireDefault(_componentsInjectInjectEs6Js);
 
-	exports.Inject = _widgedDeployInjectInjectEs6Js2['default'];
+	var _componentsInjectInjectJsEs6Js = __webpack_require__(4);
+
+	var _componentsInjectInjectJsEs6Js2 = _interopRequireDefault(_componentsInjectInjectJsEs6Js);
+
+	_componentsInjectInjectEs6Js2['default'].js = _componentsInjectInjectJsEs6Js2['default'];
+
+	exports.Inject = _componentsInjectInjectEs6Js2['default'];
 
 /***/ },
 /* 3 */
@@ -18918,6 +18920,11 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _Modules = __webpack_require__(2);
+
+	if (!process.env.BROWSER) {
+	    console.log('NOT browser');
+	    _Modules.Inject.css({ file: '../item-tooltip.css', parent: module });
+	}
 
 	var Component = _react2['default'].Component;
 
