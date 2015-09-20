@@ -11,8 +11,8 @@ var html = `
     <h1>Summer of Tech Students</h1>
     <div id="visualisation">
         <div id="vis-controls">
-            <div id='group-by'></div>
             <div id='color-by'></div>
+            <div id='group-by'></div>
             <div id='filters'></div>
         </div>
         <div id="vis-display">
