@@ -48,6 +48,8 @@
 
 	'use strict';
 
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _Modules = __webpack_require__(2);
@@ -58,21 +60,41 @@
 
 	var Component = _react2['default'].Component;
 
-	var html = '\n<script type="text/javascript" src="../vendor/d3.v3.min.js"></script>\n<div class="page">\n    <h1>Summer of Tech Students</h1>\n    <div id="visualisation">\n        <div id="vis-controls">\n            <div id=\'group-by\'></div>\n            <div id=\'color-by\'></div>\n            <div id=\'filters\'></div>\n        </div>\n        <div id="vis-display">\n            <div id=\'vis\'></div>\n            <div id=\'itemTooltip\'></div>            \n        </div>\n        <div id="vis-legend"></div>\n    </div>\n</div>    \n';
+	var html = '\n<div class="page">\n    <h1>Summer of Tech Students</h1>\n    <div id="visualisation">\n        <div id="vis-controls">\n            <div id=\'color-by\'></div>\n            <div id=\'group-by\'></div>\n            <div id=\'filters\'></div>\n        </div>\n        <div id="vis-display">\n            <div id=\'vis\'></div>\n            <div id=\'itemTooltip\'></div>            \n        </div>\n        <div id="vis-legend"></div>\n    </div>\n</div>    \n';
 
 	document.getElementById('app').innerHTML = html;
 
 	_Modules.Inject.css({ file: '../css/style.css', parent: module });
-	_Modules.Inject.js(['../vendor/d3/d3.v3.min.js'], function () {
-	    //  d3.csv("data/sciencedata.csv", drawChart);
-	    d3.tsv('data/sot.tsv', drawChart);
+	_Modules.Inject.js(['../../vendor/d3/d3.v3.min.js', './data/sot.jsonp'], function () {
+	    var tsv = jsonp_sot.split(/\n/);
+	    var first = tsv.shift();
+	    var heads = 'user_id, school, level, field, degree, degree_details, study_year,final_year'.split(/\t/);
+	    var items = tsv.map(function (line) {
+	        var _line$split = line.split('\t');
+
+	        var _line$split2 = _slicedToArray(_line$split, 8);
+
+	        var user_id = _line$split2[0];
+	        var school = _line$split2[1];
+	        var level = _line$split2[2];
+	        var field = _line$split2[3];
+	        var degree = _line$split2[4];
+	        var degree_details = _line$split2[5];
+	        var study_year = _line$split2[6];
+	        var final_year = _line$split2[7];
+
+	        return { user_id: user_id, school: school, level: level, field: field, degree: degree, degree_details: degree_details, study_year: study_year, final_year: final_year };
+	    });
+	    drawChart(items);
+
+	    // d3.tsv("data/sot.tsv", drawChart);
 	});
 
-	function drawChart(csv) {
+	function drawChart(tsv) {
 
-	    function getLookupKeys(csv, keyToLookup, keyFilterFn, keySortFn) {
+	    function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
 	        // columns that we are interested in
-	        var keys = Object.keys(csv[0]).map(function (k) {
+	        var keys = Object.keys(tsv[0]).map(function (k) {
 	            var _keyToLookup = keyToLookup(k);
 
 	            var key = _keyToLookup.key;
@@ -84,7 +106,7 @@
 	        }).filter(keyFilterFn);
 
 	        var _loop = function () {
-	            var item = csv[r];
+	            var item = tsv[r];
 	            keys.forEach(function (k) {
 	                if (!k.uniqueValues) {
 	                    k.uniqueValues = [];
@@ -98,7 +120,7 @@
 	        };
 
 	        // add list of unique values to each column
-	        for (var r = 0, nr = csv.length; r < nr; r++) {
+	        for (var r = 0, nr = tsv.length; r < nr; r++) {
 	            _loop();
 	        }
 	        var keyMap = {};
@@ -114,7 +136,7 @@
 
 	    // -- Getting the Lookup keys
 
-	    var _getLookupKeys = getLookupKeys(csv, StudentChart.keyToLookup, StudentChart.keyFilterFn, StudentChart.keySortFn);
+	    var _getLookupKeys = getLookupKeys(tsv, StudentChart.keyToLookup, StudentChart.keyFilterFn, StudentChart.keySortFn);
 
 	    var keys = _getLookupKeys.keys;
 	    var keyMap = _getLookupKeys.keyMap;
@@ -141,7 +163,7 @@
 	        var list = _ref.list;
 
 	        tooltip.setState({ visible: list && list.length, xy: xy, title: title, list: list });
-	    }).keySortFn(StudentChart.keySortFn).circleStyle(StudentChart.circleStyle).plot(csv).group_by();
+	    }).keySortFn(StudentChart.keySortFn).circleStyle(StudentChart.circleStyle).plot(tsv).group_by();
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)(module)))
 
@@ -19062,8 +19084,8 @@
 	                                null,
 	                                _react2['default'].createElement(
 	                                    'span',
-	                                    { style: { width: '15px', height: '15px', background: color } },
-	                                    '  '
+	                                    { style: { width: '15px', height: '15px', background: color, color: color } },
+	                                    '__'
 	                                ),
 	                                ' ',
 	                                name

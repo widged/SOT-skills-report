@@ -18,7 +18,7 @@ export default class ColorLegend extends Component {
                     <h3>{title}</h3>
                     <ul>
                     {(colorList || []).map(({name, color}) => {return (
-                        <li><span style={{width: '15px', height: '15px', background:color}}>&nbsp;&nbsp;</span> {name}</li>
+                        <li><span style={{width: '15px', height: '15px', background:color, color:color}}>__</span> {name}</li>
                     )})}
                     </ul>
                 </div>

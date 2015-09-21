@@ -6,7 +6,6 @@ import React from 'react';
 let {Component} = React;
 
 var html = `
-<script type="text/javascript" src="../vendor/d3.v3.min.js"></script>
 <div class="page">
     <h1>Summer of Tech Students</h1>
     <div id="visualisation">
@@ -28,18 +27,27 @@ document.getElementById('app').innerHTML = html;
 
 Inject.css({file: '../css/style.css', parent: module});
 Inject.js([
-	'../vendor/d3/d3.v3.min.js'
+	'../../vendor/d3/d3.v3.min.js',
+    './data/sot.jsonp'
 ], function() {
-   //  d3.csv("data/sciencedata.csv", drawChart);
-   d3.tsv("data/sot.tsv", drawChart);
+    var tsv = jsonp_sot.split(/\n/);
+    var first = tsv.shift();
+    var heads = 'user_id, school, level, field, degree, degree_details, study_year,final_year'.split(/\t/);
+    var items = tsv.map((line) => { 
+        var [user_id, school, level, field, degree, degree_details, study_year,final_year] = line.split('\t');
+        return {user_id, school, level, field, degree, degree_details, study_year,final_year};
+    });
+   drawChart(items);
 
+   // d3.tsv("data/sot.tsv", drawChart);
 });
 
-function drawChart(csv) {
+function drawChart(tsv) {
 
-    function getLookupKeys(csv, keyToLookup, keyFilterFn, keySortFn) {
+
+    function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
         // columns that we are interested in
-        var keys = Object.keys(csv[0])
+        var keys = Object.keys(tsv[0])
             .map((k) => {
                 let {key, type, title} = keyToLookup(k);
                 let column = {key, type, title};
@@ -48,8 +56,8 @@ function drawChart(csv) {
             .filter(keyFilterFn);
 
         // add list of unique values to each column
-        for (var r = 0, nr = csv.length; r < nr; r++) {
-            let item = csv[r];
+        for (var r = 0, nr = tsv.length; r < nr; r++) {
+            let item = tsv[r];
             keys.forEach((k) => {
                 if(!k.uniqueValues) { k.uniqueValues = [];}
                 let set = k.uniqueValues;
@@ -72,7 +80,7 @@ function drawChart(csv) {
 
     // -- Getting the Lookup keys
     let {keys, keyMap} = getLookupKeys(
-        csv,
+        tsv,
         StudentChart.keyToLookup,
         StudentChart.keyFilterFn,
         StudentChart.keySortFn
@@ -104,7 +112,7 @@ function drawChart(csv) {
         })
         .keySortFn(StudentChart.keySortFn)
         .circleStyle(StudentChart.circleStyle)
-        .plot(csv)
+        .plot(tsv)
         .group_by();
 
 }    
