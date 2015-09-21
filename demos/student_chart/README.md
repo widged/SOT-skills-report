@@ -17,10 +17,7 @@ Then open a command line utility:
 
 The code needs to be transpiled to run into a traditional browser. The easiest way to manage this is with babel and webpack. 
 
-If `babel` and `webpack` are not already installed globally on your machine.
-
-    cd path/to/SOT-skills-report/
-    npm install --dev
+If `babel` and `webpack` are not already installed globally on your machine, follow [these instructions](http://www.2ality.com/2015/04/webpack-es6.html)
 
 Then, open a command line utility: 
     
