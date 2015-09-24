@@ -16,6 +16,12 @@ text.parent {
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
+text.top_parent {
+  font-size: 16px;
+  fill: #000000;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+}
+
 circle {
   fill: #FF8787;
   stroke: #999;
@@ -53,6 +59,17 @@ circle.child_Paid {
   fill: #F50000;
 }
 
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
 
     </style>
   </head>
@@ -72,6 +89,11 @@ var w = 1280,
     node,
     root;
 
+    // Define the div for the tooltip
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 var pack = d3.layout.pack()
     .size([r, r])
     .value(function(d) { return d.size; })
@@ -90,26 +112,58 @@ d3.json("skills_bubbles.json", function(data) {
   vis.selectAll("circle")
       .data(nodes)
     .enter().append("svg:circle")
-      .attr("class", function(d) { return d.children ? "parent" : "child_"+d.name; })
+      .attr("class", function(d) { return d.children ? "parent" : "child_"+d.name;})
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d) { return d.r; })
-      .on("click", function(d) { return zoom(node == d ? root : d); });
+      .on("click", function(d) { return zoom(node == d ? root : d); })
+      .on("mouseover", function(d) {
+        if(d.children){
+          var text = d.name + "<br/>";
+          for(var i = 0, size = d.children.length; i < size ; i++){
+            var child = d.children[i];
+            text = text + child.value  + "\t" + child.name  + "<br/>";
+          }
+          div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div.html(text)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+        }
+      })
+      .on("mouseout", function(d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
 
   vis.selectAll("text")
       .data(nodes)
     .enter().append("svg:text")
-      .attr("class", function(d) { return d.children ? "parent" : "child"; })
-      .attr("id", function(d) { return d.children ? "parent" : "child"; })
+      .attr("class", function(d) { return bubbleTextClass(d) })
       .attr("x", function(d) { return d.x; })
       .attr("y", function(d) { return d.y; })
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-      .text(function(d) { return d.name; });
+      .text(function(d) { return d.name +"\t"+ d.value; });
 
   d3.select(window).on("click", function() { zoom(root); });
 });
+
+function bubbleTextClass(d){
+  var txtClass;
+  console.log(d);
+  if(d.depth == 1){
+    txtClass = "top_parent";
+  } else if (d.depth == 2){
+    txtClass = "parent";
+  } else {
+    txtClass = "child";
+  }
+  return txtClass;
+}
 
 function zoom(d, i) {
   var k = r / d.r / 2;
