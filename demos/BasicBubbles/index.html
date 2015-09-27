@@ -77,8 +77,8 @@ div.tooltip {
     <h2>
 
     </h2>
-    <script type="text/javascript" src="d3/d3.js"></script>
-    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <script type="text/javascript" src="skills_bubbles.jsonp"></script>
+    <script type="text/javascript" src="../vendor/d3/d3.v3.js"></script>
     <script type="text/javascript">
 
 var w = 1280,
@@ -104,7 +104,7 @@ var vis = d3.select("body").insert("svg:svg", "h2")
   .append("svg:g")
     .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
 
-d3.json("skills_bubbles.json", function(data) {
+var data = jsonp_bubbles;
   node = root = data;
 
   var nodes = pack.nodes(root);
@@ -150,7 +150,6 @@ d3.json("skills_bubbles.json", function(data) {
       .text(function(d) { return d.name +"\t"+ d.value; });
 
   d3.select(window).on("click", function() { zoom(root); });
-});
 
 function bubbleTextClass(d){
   var txtClass;
