@@ -1,3 +1,3 @@
-A Pen created at CodePen.io. You can find this one at http://codepen.io/widged/pen/EVyVjg.
+Now deprecated. See http://codepen.io/widged/pen/EVyVjg for first version. See skills.png for newer version
 
  
