@@ -1,0 +1,416 @@
+---- 10 most common skills for each proficiency level -----
+[
+  {
+    "Paid": "HTML, 78; Web Development, 74; CSS, 68; Javascript, 60; SQL, 54; Photoshop, 50; Front-end Web Frameworks, 45; Java, 36; Testing, 33; MySQL, 32"
+  }, {
+    "Academic": "C/C++, 300; Java, 255; HTML, 236; SQL, 225; Python, 221; CSS, 204; Statistics, 185; Agile, 183; MySQL, 182; Web Development, 178"
+  }, {
+    "Practical": "Java, 192; HTML, 187; Photoshop, 176; CSS, 152; Javascript, 135; Web Development, 129; Android, 121; C/C++, 119; Linux / Unix, 109; git, 105"
+  }, {
+    "Interested": "Android, 494; HTML, 447; Java, 446; iOS / iPhone, 440; Web Development, 439; Javascript, 431; C/C++, 426; Python, 411; CSS, 404; SQL, 397"
+  }, {
+    "FALSE": ", 2"
+  }, {
+    "TRUE": ", 7"
+  }
+]
+---- The difference between what schools teach and what students are interested in -----
+[
+  {
+    "Android": "Paid, 20; Interested, 494; Practical, 121; Academic, 90"
+  }, {
+    "Computer Architecture": "Academic, 173; Interested, 315; Practical, 38; Paid, 6"
+  }, {
+    "Distributed Programming": "Practical, 31; Interested, 289; Academic, 79; Paid, 3"
+  }, {
+    "Front-end Web Frameworks": "Paid, 45; Interested, 347; Practical, 81; Academic, 98"
+  }, {
+    "iOS / iPhone": "Paid, 6; Interested, 440; Academic, 44; Practical, 47"
+  }, {
+    "Network Programming": "Paid, 8; Interested, 331; Academic, 150; Practical, 33"
+  }, {
+    "Nodejs": "Practical, 34; Interested, 270; Academic, 43; Paid, 5"
+  }, {
+    "Responsive Web Development": "Academic, 81; Interested, 332; Practical, 72; Paid, 31"
+  }, {
+    "SQL": "Paid, 54; Interested, 397; Academic, 225; Practical, 100"
+  }, {
+    "Testing": "Paid, 33; Interested, 278; Academic, 158; Practical, 71"
+  }, {
+    "Web Development": "Paid, 74; Interested, 439; Academic, 178; Practical, 129"
+  }, {
+    "Actionscript / Flash": "Academic, 40; Interested, 209; Practical, 22; Paid, 3"
+  }, {
+    "C/C++": "Academic, 300; Interested, 426; Practical, 119; Paid, 9"
+  }, {
+    "CSS": "Paid, 68; Interested, 404; Academic, 204; Practical, 152"
+  }, {
+    "HTML": "Paid, 78; Interested, 447; Academic, 236; Practical, 187"
+  }, {
+    "Java": "Paid, 36; Interested, 446; Academic, 255; Practical, 192"
+  }, {
+    "Javascript": "Practical, 135; Interested, 431; Academic, 162; Paid, 60"
+  }, {
+    ".NET (C# and VB.net)": "Academic, 143; Interested, 374; Practical, 93; Paid, 29"
+  }, {
+    "Objective C / Swift": "Paid, 5; Interested, 296; Practical, 21; Academic, 30"
+  }, {
+    "Postgres": "Practical, 19; Interested, 196; Academic, 27; Paid, 6"
+  }, {
+    "Python": "Academic, 221; Interested, 411; Paid, 16; Practical, 91"
+  }, {
+    "Ruby on Rails": "Paid, 4; Interested, 372; Practical, 30; Academic, 29"
+  }, {
+    "SQL Server": "Paid, 28; Interested, 336; Practical, 66; Academic, 133"
+  }, {
+    "User Experience": "Academic, 133; Interested, 316; Practical, 61; Paid, 14"
+  }, {
+    "Micro-controller Programming": "Practical, 35; Interested, 167; Academic, 70; Paid, 7"
+  }, {
+    "Robotics": "Practical, 28; Interested, 227; Academic, 57; Paid, 2"
+  }, {
+    "Database Administration": "Practical, 54; Interested, 280; Academic, 110; Paid, 17"
+  }, {
+    "Distributed Computing / Virtualisation": "Academic, 51; Interested, 211; Practical, 17; Paid, 7"
+  }, {
+    "Information Security": "Academic, 100; Interested, 265; Practical, 19; Paid, 6"
+  }, {
+    "Network Architecture": "Academic, 130; Interested, 232; Paid, 5; Practical, 22"
+  }, {
+    "Network Engineering": "Paid, 5; Interested, 235; Academic, 100; Practical, 19"
+  }, {
+    "Switches / Routers": "Academic, 114; Interested, 211; Practical, 41; Paid, 7"
+  }, {
+    "Systems Engineering": "Academic, 81; Interested, 238; Paid, 9; Practical, 24"
+  }, {
+    "SQLServer DBA": "Practical, 35; Interested, 224; Academic, 61; Paid, 10"
+  }, {
+    "Project Management": "Academic, 177; Interested, 325; Practical, 65; Paid, 26"
+  }, {
+    "AI": "Interested, 370; Academic, 105; Practical, 25; Paid, 5"
+  }, {
+    "Linux / Unix": "Interested, 367; Practical, 109; Academic, 164; Paid, 18"
+  }, {
+    "Windows Universal Apps": "Interested, 295; Academic, 31; Practical, 43; Paid, 8"
+  }, {
+    "MySQL": "Interested, 383; Academic, 182; Practical, 99; Paid, 32"
+  }, {
+    "Perl": "Interested, 242; Academic, 11; Practical, 5; Paid, 2"
+  }, {
+    "PHP": "Interested, 350; Academic, 86; Practical, 76; Paid, 26"
+  }, {
+    "Typography": "Interested, 183; Academic, 35; Paid, 16; Practical, 29"
+  }, {
+    "Electronic Design": "Interested, 149; Academic, 62; Practical, 15; Paid, 3"
+  }, {
+    "Clustering": "Interested, 184; Practical, 8; Academic, 45; Paid, 5"
+  }, {
+    "Firewalls": "Interested, 231; Academic, 78; Paid, 3; Practical, 18"
+  }, {
+    "Load Balancers": "Interested, 154; Academic, 20; Practical, 7; Paid, 2"
+  }, {
+    "NoSQL": "Interested, 192; Academic, 34; Practical, 19; Paid, 4"
+  }, {
+    "Security Analysis": "Interested, 228; Academic, 58; Practical, 12; Paid, 5"
+  }, {
+    "Systems Infrastructure": "Interested, 209; Paid, 7; Academic, 48; Practical, 15"
+  }, {
+    "Mac OSX Admin": "Interested, 189; Practical, 22; Paid, 2; Academic, 13"
+  }, {
+    "MySQL DBA": "Interested, 236; Academic, 97; Practical, 49; Paid, 12"
+  }, {
+    "Oracle DBA": "Interested, 201; Academic, 41; Practical, 13; Paid, 6"
+  }, {
+    "Postgres DBA": "Interested, 163; Academic, 27; Practical, 14; Paid, 3"
+  }, {
+    "Systems Administration - Unix / Linux": "Interested, 230; Academic, 52; Practical, 40; Paid, 7"
+  }, {
+    "Systems Administration - Windows": "Interested, 242; Academic, 59; Paid, 18; Practical, 47"
+  }, {
+    "Vmware": "Interested, 211; Practical, 71; Academic, 68; Paid, 5"
+  }, {
+    "3D Modelling": "Practical, 60; Interested, 246; Academic, 101; Paid, 5"
+  }, {
+    "Agile": "Academic, 183; Interested, 349; Practical, 66; Paid, 29"
+  }, {
+    "Oracle": "Academic, 40; Interested, 235; Practical, 17; Paid, 11"
+  }, {
+    "Photography": "Practical, 90; Interested, 211; Paid, 25; Academic, 39"
+  }, {
+    "Video Editing": "Academic, 62; Interested, 245; Practical, 90; Paid, 19"
+  }, {
+    "Photoshop": "Practical, 176; Interested, 314; Academic, 83; Paid, 50"
+  }, {
+    "Business Analysis": "Academic, 127; Interested, 252; Practical, 26; Paid, 20"
+  }, {
+    "Data Analysis": "Academic, 118; Interested, 277; Practical, 30; Paid, 26"
+  }, {
+    "CS (Creative Suite)": "Interested, 225; Academic, 44; Practical, 55; Paid, 25"
+  }, {
+    "3D Printing": "Interested, 248; Academic, 53; Practical, 25; Paid, 6"
+  }, {
+    "PCB Design": "Interested, 116; Academic, 28; Practical, 19; Paid, 3"
+  }, {
+    "CAD / CAM": "Paid, 4; Academic, 94; Interested, 145; Practical, 17"
+  }, {
+    "Process Design": "Academic, 33; Interested, 136; Practical, 7; Paid, 2"
+  }, {
+    "Interaction Design": "Interested, 245; Academic, 77; Practical, 37; Paid, 7"
+  }, {
+    "Communications Engineering": "Interested, 147; Practical, 6; Academic, 46; Paid, 3"
+  }, {
+    "Control System Engineering": "Interested, 139; Practical, 10; Academic, 40; Paid, 1"
+  }, {
+    "Embedded Systems": "Interested, 172; Practical, 21; Academic, 64; Paid, 7"
+  }, {
+    "Power Systems & Distribution": "Interested, 98; Academic, 17"
+  }, {
+    "Analogue Circuit Design": "Academic, 55; Interested, 135; Practical, 22; Paid, 2"
+  }, {
+    "Analogue Electronics": "Academic, 50; Interested, 133; Practical, 21; Paid, 3"
+  }, {
+    "Digital Circuit Design": "Academic, 78; Interested, 146; Practical, 17"
+  }, {
+    "Signal Processing": "Academic, 51; Practical, 10; Paid, 1; Interested, 132"
+  }, {
+    "git": "Practical, 105; Interested, 207; Paid, 25; Academic, 64"
+  }, {
+    "Google Analytics": "Practical, 40; Interested, 288; Academic, 29; Paid, 15"
+  }, {
+    "3D Texturing": "Interested, 218; Academic, 52; Practical, 35; Paid, 2"
+  }, {
+    "Rigging / TD": "Interested, 130; Practical, 6; Academic, 19; Paid, 1"
+  }, {
+    "Animation": "Interested, 255; Practical, 34; Academic, 63; Paid, 6"
+  }, {
+    "Rendering": "Interested, 191; Academic, 74; Practical, 32; Paid, 4"
+  }, {
+    "Motion Graphics / Compositing": "Interested, 191; Academic, 27; Practical, 15; Paid, 6"
+  }, {
+    "FX": "Interested, 169; Academic, 9; Paid, 3; Practical, 12"
+  }, {
+    "Maya": "Interested, 187; Academic, 29; Practical, 18; Paid, 3"
+  }, {
+    "After Effects": "Interested, 199; Academic, 46; Practical, 44; Paid, 6"
+  }, {
+    "Illustrator": "Interested, 225; Academic, 64; Practical, 67; Paid, 26"
+  }, {
+    "Power Electronics": "Interested, 107; Practical, 5; Academic, 17; Paid, 1"
+  }, {
+    "InDesign": "Interested, 207; Academic, 54; Practical, 51; Paid, 25"
+  }, {
+    "Rotoscoping": "Interested, 131; Academic, 9; Practical, 5; Paid, 4"
+  }, {
+    "Concept Art / Matt": "Interested, 168; Academic, 19; Paid, 3; Practical, 17"
+  }, {
+    "Shake": "Interested, 139; Academic, 3"
+  }, {
+    "Mechatronics": "Practical, 7; Interested, 148; Academic, 26; Paid, 1"
+  }, {
+    "Instrumentation and controls": "Practical, 7; Academic, 18; Interested, 111; Paid, 1"
+  }, {
+    "R": "Academic, 89; Interested, 209; Practical, 7; Paid, 1"
+  }, {
+    "Statistics": "Academic, 185; Interested, 218; Practical, 21; Paid, 10"
+  }, {
+    "Content Marketing": "Interested, 177; Practical, 14; Academic, 31; Paid, 15"
+  }, {
+    "Digital Marketing": "Interested, 216; Practical, 19; Academic, 38; Paid, 18"
+  }, {
+    "Information Architecture": "Interested, 211; Practical, 8; Academic, 62; Paid, 4"
+  }, {
+    "Search Engine Optimisation (SEO)": "Interested, 240; Academic, 38; Practical, 21; Paid, 13"
+  }, {
+    "Adwords": "Interested, 216; Practical, 24; Academic, 16; Paid, 11"
+  }, {
+    "Sketch": "Interested, 172; Academic, 20; Practical, 21; Paid, 3"
+  }, {
+    "Docker": "Practical, 4; Interested, 41; Academic, 2"
+  }, {
+    "Vagrant": "Interested, 45; Academic, 2; Practical, 3; Paid, 2"
+  }, {
+    "": "FALSE, 2; TRUE, 7"
+  }, {
+    "Puppet": "Interested, 43; Academic, 2; Practical, 2"
+  }
+]
+---- Most common degrees -----
+[
+  "BSc: 175 students",
+  "BE: 166 students",
+  "BDes: 32 students",
+  "BICT: 25 students",
+  "BCom (InfoSys): 24 students",
+  "Bachelor of Creative Technologies: 19 students",
+  "Bachelor of I.T.: 11 students",
+  "Diploma of Web Development (Level 6): 11 students",
+  "Graduate Diploma in I.T.: 10 students",
+  "BCom: 6 students",
+  "DICT: 5 students",
+  "Graduate Diploma in Computer Science: 4 students",
+  "Graduate Diploma in I.T. (Level 7): 4 students",
+  "Post Graduate Diploma in I.T.: 3 students",
+  "Diploma of Digital Media Advanced (Level 7): 3 students",
+  "Bachelor of Computer and Information Sciences: 2 students",
+  "Graduate diploma in I.T.: 2 students",
+  "Graduate Diploma in Computing (Level 7): 2 students",
+  "Auckland: 2 students",
+  "BCom/BSc: 2 students",
+  "Graduate diploma in computer science: 2 students",
+  "BDI: 2 students",
+  "Bachelor of Engineering Technology: 2 students",
+  "Bachelor of Design Innovation - Media Design: 2 students",
+  "Bachelor of Design Innovation: 2 students",
+  "Bachelor of Commerce: 2 students",
+  "Bachelor of Technology: 2 students",
+  "Graduate Diploma in Computing: 2 students",
+  "Postgraduate Diploma in I.T.: 2 students",
+  "Diploma in Computing Level 6: 2 students",
+  "Diploma in Software Development: 2 students",
+  "Diploma in Computing Level 7: 2 students",
+  "Postgraduate diploma in I.T. (level 8): 1 student",
+  "Diploma in I.T. (Level 6): 1 student",
+  "BSc/LLB conjoint: 1 student",
+  "Bachelor of Technology in I.T.: 1 student",
+  "Post Graduation in I.T.: 1 student",
+  "BE/BCom: 1 student",
+  "BSc/BCom (compsci: 1 student",
+  "Postgraduate Diploma of Computer Ccience: 1 student",
+  "Graduate Diploma in Creative Technologies (3D): 1 student",
+  "Diploma in Advanced Software Development (Level 6): 1 student",
+  "BE(Hons)/BSc in Software Engineering and Physics: 1 student",
+  "Graduate Diploma in Information Assurance and Security: 1 student",
+  "GDIT (LEVEL 7): 1 student",
+  "Postgraduate Diplome in I.T.: 1 student",
+  "Bachelor of Commerce (BCom) Information Systems and e-Commerce Major: 1 student",
+  "BE/BCom(Econ/Mgmt) Conjoint: 1 student",
+  "Masters In Engineering Studies: 1 student",
+  "Bachelor of I.T. (Level 7) - Information Assurance & Security: 1 student",
+  "PG Diploma in I.T. ( Level 8 ): 1 student",
+  "Postgraduate diploma in I.T.: 1 student",
+  "Bachelor of Information Technologies: 1 student",
+  "Grad Dip in I.T. level 7: 1 student",
+  "PG Diploma in I.T. ( Level 8): 1 student",
+  "Bachelor of Computer and Information Science: 1 student",
+  "Bit majoring in programming: 1 student",
+  "Bachelor of Design Innovation Culture & Context & Marketing: 1 student",
+  "Bachelor of Design Innovation (BDI) Minor in Marketing: 1 student",
+  "BInfSc - Computer Science: 1 student",
+  "Diploma in Computer systems technology level -5: 1 student",
+  "Bachelor of Design Innovation (BDI) and Bachelor of Commerce (BCom): 1 student",
+  "Bachelor of Technology - I.T. (Honours): 1 student",
+  "Graduate Diploma in Science (Computer Science): 1 student",
+  "Bachelor of engineering ( ongoing): 1 student",
+  "Graduate Diploma in I.T. (Software Development) Level-7: 1 student",
+  "Graduate Diploma in I.T. (Software Devlopment Specialization): 1 student",
+  "Applied Physics + Computer Science: 1 student",
+  "GradDipSci Computer Science: 1 student",
+  "Graduate Diploma in Science in Computer Science: 1 student",
+  "Post Graduate Diploma in I.T. (Level 8): 1 student",
+  "Conjoint BSc Comp/ BDI Media Design: 1 student",
+  "Postgraduate Diploma in Computer and Information Science: 1 student",
+  "BDes(Hons) Visual Communication Design: 1 student",
+  "Master of Service Oriented Computing: 1 student",
+  "Bachelor of Design Innovation (Media Studies) and Bachelor of Arts (Film): 1 student",
+  "Bachelor of Engineering Technology / Computer and Mobile Systems Engineering: 1 student",
+  "Bachelor of Computer Information Sciences: 1 student",
+  "Bachelor of Computing and Information Science: 1 student",
+  "Bachelor of Commerce (Hons) Degree - Information Systems: 1 student",
+  "Graduate Diploma of Visual Communication Design: 1 student",
+  "BSc/BCom: 1 student",
+  "Graduate diploma in Computer and Information Sciences: 1 student",
+  "BCom (minor in CompSci): 1 student",
+  "BMathSci: 1 student",
+  "Bachelor of Computer and Information Science - Software Development Major: 1 student",
+  "Graduate Diploma in Computer and Information Sciences: 1 student",
+  "Conjoint BA/BSc: 1 student",
+  "Bachelor of Computer and Information Sciences (Software Development Major): 1 student",
+  "BMus: 1 student",
+  "Graduate Diploma of CIS: 1 student",
+  "Master Degree of Computer Science: 1 student",
+  "BCIS: 1 student",
+  "Commerce and Science conjoint: 1 student",
+  "Graduate diploma in Applied Business studies: 1 student",
+  "Bachelor of Mathematical Sciences: 1 student",
+  "Graduate diploma in information assurance and security.: 1 student",
+  "Bachelor of Design Innovation (Majoring in Media Design): 1 student",
+  "PGDIT: 1 student",
+  "Conjoint degree: 1 student",
+  "Graduate Diploma in I.T. Level7: 1 student",
+  "Graduate Diploma of I.T.: 1 student",
+  "Bachelor of I.T. double major in Programming and Software Engineering: 1 student",
+  "Graduate diploma in I.T. (Level 7): 1 student",
+  "BIT: 1 student",
+  "Diploma in I.T.: 1 student",
+  "Diploma in business management level 7: 1 student",
+  "PhD in Engineering: 1 student",
+  "Graduate Diploma in Computing(Networking & Data Communication) (Level 7): 1 student",
+  "Diploma on Advance Network Engineering (Level 7): 1 student",
+  "BCom in Economics and Finance: 1 student",
+  "DIPLOMA IN COMPUTING AND NETWORK ENGINEERING: 1 student",
+  "master of information management: 1 student",
+  "Introduction to Database Management and Programming at VUW: 1 student",
+  "Master of Computer Systems Engineering: 1 student",
+  "Industrial and Product Design Major; Minoring in Media Design: 1 student",
+  "Gradate Diploma in I.T. Level 7: 1 student",
+  "Master of Engineering studies (Software): 1 student",
+  "BCom(InfoSys)/LLB: 1 student",
+  "master of software engineering: 1 student",
+  "Master of Software Engineering: 1 student",
+  "Bachelor of design innovation: 1 student",
+  "BE and BSc: 1 student",
+  "Bachelor in Design (honours) majoring in Graphic Design: 1 student",
+  "Master of Computer Science: 1 student",
+  "Post graduate diploma in I.T. level8: 1 student",
+  "Graduate diploma in I.T.(Level 7): 1 student",
+  "Master of Design: 1 student",
+  "Bachelor in I.T. major Information assurance and security: 1 student",
+  "diploma in computer system support level 7 in I.T. networking: 1 student",
+  "Diploma in Advance Network Engineering: 1 student",
+  "Computer Science & Finance (BCom): 1 student",
+  "Graduate diploma in I.T.(level 7): 1 student",
+  "Diploma in I.T. Support: 1 student",
+  "Bachelor of Commerce Majoring in Information Systems and Management: 1 student",
+  "Bachelor of Computer Graphic Design: 1 student",
+  "Bachelor of Arts (double major in Politics and Communications): 1 student",
+  "Diploma in Computer Servicing: 1 student",
+  "Graduate diploma in computing (Level 7): 1 student",
+  "Post Graduate Diploma in I.T. (Level-8): 1 student",
+  "Master of engineering studies (electrical and electronics engineering): 1 student",
+  "Postgraduate Diploma in Science: 1 student",
+  "C# Stream Enspiral Dev Academy: 1 student",
+  "Graduate Diploma in I.T. level 7: 1 student",
+  "a Bachelor of Engineering in Computer Systems (Hons): 1 student",
+  "Post Graduation Diploma in I.T.: 1 student",
+  "Master of design: 1 student",
+  "Post Graduate Diploma in Information Communication Technology: 1 student",
+  "Post Graduate Diploma of Science in Computer Science: 1 student",
+  "Masters in Engineering studies (Software Engineering): 1 student",
+  "Bachelor of Applied Management: 1 student",
+  "C# / .Net Stream: 1 student",
+  "Post Graduate Diploma In I.T. Level 8: 1 student",
+  "Bachelors Of Engineering Technology: 1 student",
+  "Diploma in I.T. (level 6): 1 student",
+  "Master of Engineering Studies (Software Engineering): 1 student",
+  "Post Graduate Diploma (level 8) in Computer and Information Sciences: 1 student",
+  "Bachelor of Information Science Majoring in Software Engineering: 1 student",
+  "Bachelor in Computing Systems: 1 student",
+  "Bachelor of Art and Design: 1 student",
+  "I.T.: 1 student",
+  "Post Graduate Diploma In Computer and Information Science: 1 student",
+  "Postgraduate Diploma in Computer Science: 1 student",
+  "Bachelor of Media Design: 1 student",
+  "Bachelor of Computing and Mathematical Sciences: 1 student",
+  "Graduate Diploma in I.T. Level 7: 1 student",
+  "Diploma of computer science (Level7)/ applied Bachelor of computer science: 1 student",
+  "Diploma in Computing with specialization in Networking level 7: 1 student",
+  "Diploma in computing LEVEL 7: 1 student",
+  "Diploma in Computing (with strands in softwares) Level 7: 1 student",
+  "Diploma in Computing with stands software development: 1 student",
+  "Diploma In Computing (Strands in Development) Level: 1 student",
+  "Diploma in I.T(level 5&6): 1 student",
+  "Diploma in Computing Level 7 Strands in Networking: 1 student",
+  "Bachelor of Software Engineering: 1 student",
+  "Bachelor of Computer and Informational Sciences: 1 student",
+  "BHSC and BSc: 1 student"
+]

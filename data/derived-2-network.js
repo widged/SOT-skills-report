@@ -14,8 +14,24 @@ var skills = getNodes('derived/skills.tsv', sep, function([category, type, skill
 	return Object.assign({category, type, skill, level, user_id: user_ids.split(/\s+/)});
 }); 
 
+var env_d3 = {
+	id: function(id) { return id+0; },
+	node: function({id, label})    { return {name: label }; },
+	edge: function({id, from, to}) { return {source: from, target: to}; },
+	ext: 'd3'
+};
+
+var env_vis = {
+	id: function(id) { return id+1; },
+	node: function({id, label})    { return {id, label }; },
+	edge: function({id, from, to}) { return {id, from, to}; },
+	ext: 'vis'
+};
+
+var env = env_vis;
+
 function nextId(list) {
-	return (list.length + 1).toString();
+	return env.id(list.length).toString();
 }
 
 function addNode(nodes, maps, type, label, assign) {
@@ -23,19 +39,17 @@ function addNode(nodes, maps, type, label, assign) {
 	if(!maps.hasOwnProperty(type))  { maps[type] = {}; }
 	if(!maps[type].hasOwnProperty(label)) { 
 		maps[type][label] = id; 
-		nodes.push(Object.assign(assign, {id: id, label: label }));
+		nodes.push(Object.assign(assign, env.node({id, label}) ));
 	}
 }
 
 function addEdge(edges, maps, [typeFrom, labelFrom], [typeTo, labelTo]) {
-	edges.push({
+	edges.push(env.edge({
 		id: nextId(edges), 
 		from: maps[typeFrom][labelFrom],
 		to: maps[typeTo][labelTo]
-	});
+	}));
 }
-
-
 
 var {nodes, edges} = skills.reduce(({nodes, edges, maps}, {category, type, skill, level, user_id}, i) => {
 	addNode(nodes, maps, 'skill', skill, {group: 0});
@@ -52,22 +66,8 @@ var {nodes, edges} = skills.reduce(({nodes, edges, maps}, {category, type, skill
 }, {nodes: [], edges: [], maps: {}});
 
 
-fs.writeFileSync('network/nodes.jsonp', 'var jsonp_nodes = ' + JSON.stringify(nodes, null, 2));
-fs.writeFileSync('network/edges.jsonp', 'var jsonp_edges = ' + JSON.stringify(edges, null, 2));
-
-/*
-	if(d.type === 'user_id') {  userMap[d.label] = nodeId; }
-	if(d.type === 'skill' && d.user_id) {
-		d.user_id.forEach((u, i) => {
-			edges.push({
-				id: (edges.length+1).toString(), 
-				from: (userMap[u.toString()]).toString(), 
-				to: nodeId
-			});
-		});
-	}
-
-*/
+fs.writeFileSync('network/nodes-'+env.ext+'.jsonp', 'var jsonp_nodes = ' + JSON.stringify(nodes, null, 2));
+fs.writeFileSync('network/edges-'+env.ext+'.jsonp', 'var jsonp_edges = ' + JSON.stringify(edges, null, 2));
 
 function getNodes(file, sep, lineFn) {
 	var content = fs.readFileSync(file, 'utf8');
