@@ -11,7 +11,7 @@ export default function main() {
 
   var html = `<header>
     <div>
-      <h1> <img src="../css/sot_new3.png"></h1>
+      <h1> <img src="../dist/css/sot_new3.png"></h1>
       <h2>Job entrants - Paid Skills</h2>
     </div>
       
@@ -40,18 +40,18 @@ export default function main() {
   `;
   document.getElementById('app').innerHTML = html;
 
-  Inject.css({file: '../css/skill-vis.css', parent: module});
-  Inject.css({file: '../css/sot-branding.css', parent: module});
-  Inject.css({file: '../css/student-chart.css', parent: module});
-  Inject.css({file: '../css/skill-bubbles.css', parent: module});
+  Inject.css({file: '../dist/css/skill-vis.css', parent: module});
+  Inject.css({file: '../dist/css/sot-branding.css', parent: module});
+  Inject.css({file: '../dist/css/student-chart.css', parent: module});
+  Inject.css({file: '../dist/css/skill-bubbles.css', parent: module});
 
   Inject.js([
-    '../../data/secondary/secondary.jsonp',
-    '../../data/secondary/skills.jsonp',
-    '../data/skills_bubbles.jsonp',
+    '../dist/data/secondary.jsonp',
+    '../dist/data/skills.jsonp',
+    '../dist/data/skills_bubbles.jsonp',
     '../section-secondary/script.js',
     './../vendor/d3/d3.v3.min.js',
-    './../data/sot.jsonp'
+    './../dist/data/sot.jsonp'
   ], function() {
 
     var tsv = jsonp_sot.split(/\n/);
@@ -66,7 +66,6 @@ export default function main() {
       React.createElement(SkillVis, {primarySkills: jsonp_skills, secondarySkills: jsonp_secondary, handlePrimaryChange}), 
       document.getElementById('skills-vis')
     );
-
 
     var students = React.render(
       React.createElement(StudentVis, {list: items}), 

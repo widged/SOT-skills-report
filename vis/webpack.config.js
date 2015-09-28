@@ -1,8 +1,8 @@
 module.exports = {
-    entry  : './script.es6.js',
+    entry  : './bundle.es6.js',
     output : {
         path     : __dirname,
-        filename : 'es5-script.js'
+        filename : 'dist/bundle.es5.js'
     },
     module : {
         loaders: [ 

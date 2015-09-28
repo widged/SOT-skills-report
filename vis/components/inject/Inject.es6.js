@@ -46,7 +46,7 @@ export default class Inject {
 
     static css(url, asyncReturn) {
         if(typeof url === 'object') {
-            url = url.parent.filename + '/' + url.file;
+            url = (url.parent.filename || '.') + '/' + url.file;
         }
         FN.injectLink(url, asyncReturn);
     }
