@@ -9,4 +9,4 @@ Then, open a command line utility:
 
 This will convert `bundle.es6.js` and any code file that it imports to `dist/bundle.es5.js`. Once the conversion is done, navigate to `dist/index.html` in your browser.
 
-All data files have been rewritten in a jsonp format, so there is no more requirement to run the file over a server. Simply double click on `dist/index.html` to open it in your browser.
+All data files are in a jsonp format, so there is no requirement to run the file over a server. Simply double click on `dist/index.html` to open it in your browser.
