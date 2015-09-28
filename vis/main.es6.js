@@ -81,7 +81,7 @@ export default function main() {
       document.getElementById('skills-secondary-vis')
     );
 
-    draw_skills_bubbles();
+    draw_skills_bubbles(jsonp_bubbles);
 
   });
   
