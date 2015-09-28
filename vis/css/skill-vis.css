@@ -1,0 +1,73 @@
+.explanation {
+	color: #7D939F;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+categories > div {
+	display: inline-block;
+	width: 20%;
+	vertical-align: top;
+	font-family: Verdana;
+	font-size: 11px;
+}
+
+categories h1 {
+	font-size: 1.3em;
+}
+
+skills ul {
+	list-style-type: none;
+	padding: 0; margin: 0;
+}
+
+skills ul > li {
+	display: inline-block;
+}
+
+skill {
+	display: inline-block;
+	border: 1px solid gray;
+	
+	margin-right: 3px;
+	margin-bottom: 3px;
+	padding: 3px 6px;
+}
+
+skill.type-skill {
+	background-color: #FFC0AD;
+}
+
+skill.type-skill.selected {
+	background-color: #FF744E;
+}
+
+skill.type-skill.secondary qty {
+	background-color: #FF744E;
+}
+
+skill.type-tool {
+	background-color: #ADD5FC;
+}
+
+skill.type-tool.secondary qty {
+	background-color: #136FE2;
+}
+
+skill.type-tool.selected {
+	background-color: #136FE2;
+}
+
+skill qty {
+	display: inline-block;
+	pointer-events: none;
+	color: white;
+	border-radius: 3px;
+	width: 20px;
+	height: 12px;
+	min-width: 20px;
+	font-size: 7pt;
+	text-align: center;
+	vertical-align: middle;
+	margin-left: 3px;
+}

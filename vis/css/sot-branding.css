@@ -1,0 +1,39 @@
+body, html, #app {
+	padding: 0;
+	margin: 0;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+article {
+	margin: 12px 24px;
+}
+
+article section {
+	margin: 24px 0px;
+}
+
+
+header {
+	padding: 12px;
+	display: block;
+	background-color: #D51300;
+	color: white;
+	height: 160px;
+}
+
+header h1 {
+	font-variant:small-caps;
+}
+
+footer {
+	position: absolute;
+	text-align: center;
+	padding: 12px;
+	background-color: #D51300;
+	color: white;
+	height: 80px;
+	width: 100%;
+	font-size: 0.8em;
+	font-style: italic;
+	top: 1500px;
+}
