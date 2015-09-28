@@ -118,7 +118,7 @@ var data = jsonp_bubbles;
       .attr("r", function(d) { return d.r; })
       .on("click", function(d) { return zoom(node == d ? root : d); })
       .on("mouseover", function(d) {
-        if(d.children){
+        if(d.depth == 2){
           var text = d.name + "<br/>";
           for(var i = 0, size = d.children.length; i < size ; i++){
             var child = d.children[i];
@@ -147,7 +147,7 @@ var data = jsonp_bubbles;
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-      .text(function(d) { return d.name +"\t"+ d.value; });
+      .text(function(d) { if(d.depth !=0){return d.name +"\t"+ d.value;}return "";  });
 
   d3.select(window).on("click", function() { zoom(root); });
 
