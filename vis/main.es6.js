@@ -21,26 +21,35 @@ export default function main() {
       <div class="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
       <div id="skills-vis"></div>    
     </section>
-    <section>
+    <section style="height: 800px;">
       <div class="explanation">List of students. Select a field to color by or to group by.</div>    
       <br/>
       <div id="students-vis"></div>    
     </section>
+    <section>
+      <div class="explanation">List of secondary skills.</div>    
+      <br/>
+      <div id="skills-secondary-vis"></div>    
+    </section>
   </article>
+<!--
   <footer>
     Made in the context of data for goods challenges. Authors (alphabetical order).
   </footer>
-
+-->
   `;
   document.getElementById('app').innerHTML = html;
 
   Inject.css({file: '../css/skill-vis.css', parent: module});
   Inject.css({file: '../css/sot-branding.css', parent: module});
   Inject.css({file: '../css/student-chart.css', parent: module});
+  Inject.css({file: '../css/skill-bubbles.css', parent: module});
 
   Inject.js([
     '../../data/secondary/secondary.jsonp',
     '../../data/secondary/skills.jsonp',
+    '../data/skills_bubbles.jsonp',
+    '../section-secondary/script.js',
     './../vendor/d3/d3.v3.min.js',
     './../data/sot.jsonp'
   ], function() {
@@ -64,10 +73,16 @@ export default function main() {
       document.getElementById('students-vis')
     );
 
-
     function handlePrimaryChange(primary) {
       students.setState({filterStudents: primary});
     }
+
+    var secondarySkills = React.render(
+      React.createElement('skill-bubbles', {}), 
+      document.getElementById('skills-secondary-vis')
+    );
+
+    draw_skills_bubbles();
 
   });
   

@@ -1,0 +1,68 @@
+skill-bubbles {
+  display: block;
+}
+text {
+  font-size: 12px;
+  pointer-events: none;
+  fill: #ffffff;
+}
+
+text.parent {
+  font-size: 14px;
+  fill: #251FDE;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+}
+
+text.top_parent {
+  font-size: 16px;
+  fill: #000000;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+}
+
+circle {
+  fill: #FF8787;
+  stroke: #999;
+  pointer-events: all;
+}
+
+circle.parent {
+  fill: #FF8787;
+  fill-opacity: .1;
+  stroke: #046CB5;
+}
+
+circle.parent:hover {
+  stroke: #ff7f0e;
+  stroke-width: .5px;
+}
+
+circle.child_Interested {
+  pointer-events: none;
+  fill: #FC8888;
+}
+
+circle.child_Academic {
+  pointer-events: none;
+  fill: #FA5F5F;
+}
+
+circle.child_Practical {
+  pointer-events: none;
+  fill: #FF3030;
+}
+
+circle.child_Paid {
+  pointer-events: none;
+  fill: #F50000;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
