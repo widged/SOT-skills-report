@@ -1,4 +1,4 @@
-function draw_skills_bubbles() {
+function draw_skills_bubbles(data) {
 
   var w = 1280,
       h = 800,
@@ -23,7 +23,6 @@ function draw_skills_bubbles() {
     .append("svg:g")
       .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
 
-  var data = jsonp_bubbles;
     node = root = data;
 
     var nodes = pack.nodes(root);
@@ -72,7 +71,7 @@ function draw_skills_bubbles() {
 
   function bubbleTextClass(d){
     var txtClass;
-    console.log(d);
+    // console.log(d);
     if(d.depth == 1){
       txtClass = "top_parent";
     } else if (d.depth == 2){
