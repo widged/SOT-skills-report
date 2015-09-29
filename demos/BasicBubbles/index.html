@@ -28,6 +28,18 @@ circle {
   pointer-events: all;
 }
 
+circle.root {
+  fill: #fff;
+  stroke: #fff;
+  pointer-events: none;
+}
+
+circle.top_parent {
+  fill: #FFB5B5;
+  stroke: #999;
+  pointer-events: all;
+}
+
 circle.parent {
   fill: #FF8787;
   fill-opacity: .1;
@@ -112,7 +124,7 @@ var data = jsonp_bubbles;
   vis.selectAll("circle")
       .data(nodes)
     .enter().append("svg:circle")
-      .attr("class", function(d) { return d.children ? "parent" : "child_"+d.name;})
+      .attr("class", function(d) { return bubbleClass(d);})
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d) { return d.r; })
@@ -141,27 +153,36 @@ var data = jsonp_bubbles;
   vis.selectAll("text")
       .data(nodes)
     .enter().append("svg:text")
-      .attr("class", function(d) { return bubbleTextClass(d) })
+      .attr("class", function(d) { return bubbleClass(d); })
       .attr("x", function(d) { return d.x; })
       .attr("y", function(d) { return d.y; })
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-      .text(function(d) { if(d.depth !=0){return d.name +"\t"+ d.value;}return "";  });
+      .text(function(d) { return bubbleText(d);});
 
   d3.select(window).on("click", function() { zoom(root); });
 
-function bubbleTextClass(d){
-  var txtClass;
-  console.log(d);
+function bubbleText(d){
   if(d.depth == 1){
-    txtClass = "top_parent";
-  } else if (d.depth == 2){
-    txtClass = "parent";
-  } else {
-    txtClass = "child";
+    return d.name;
+  } else if (d.depth != 0){
+    return d.name +"\t"+ d.value;
   }
-  return txtClass;
+  return "";
+}
+
+function bubbleClass(d){
+  console.log(d);
+  if(d.depth == 0){
+    return "root";
+  } else if(d.depth == 1){
+    return "top_parent";
+  } else if (d.depth == 2){
+    return "parent";
+  } else {
+    return "child_"+d.name;
+  }
 }
 
 function zoom(d, i) {

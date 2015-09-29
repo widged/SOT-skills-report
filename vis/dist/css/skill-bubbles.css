@@ -25,6 +25,18 @@ skill-bubbles circle {
   pointer-events: all;
 }
 
+skill-bubbles circle.root {
+  fill: #fff;
+  stroke: #fff;
+  pointer-events: none;
+}
+
+skill-bubbles circle.top_parent {
+  fill: #FFB5B5;
+  stroke: #999;
+  pointer-events: all;
+}
+
 skill-bubbles circle.parent {
   fill: #FF8787;
   fill-opacity: .1;
