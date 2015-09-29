@@ -18,7 +18,7 @@ export default class SelectBy extends Component {
         var {optionChange} = this.state;
         return (
             <select-group>
-                <span class="title">{title}</span>
+                <span className="title">{title}</span>
                 <select onChange={optionChange}>
                     <option value=''></option>
                     {lookups.map(({key, title}) => { return (

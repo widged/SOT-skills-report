@@ -9,7 +9,7 @@ export default class StudentVis extends Component {
   render() {
     var {list} = this.props;
     return (
-      <div class="page">
+      <div className="page">
         <div id="visualisation">
             <div id="vis-controls">
                 <div id='color-by'></div>
@@ -95,7 +95,7 @@ export default class StudentVis extends Component {
             .keySortFn(StudentChart.keySortFn)
             .circleStyle(StudentChart.circleStyle)
             .plot(tsv)
-            .group_by(); 
+            .groupBy(); 
 
         return chart;
   }

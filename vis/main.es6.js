@@ -1,10 +1,10 @@
 /* jshint esnext: true */
 
-import React     from 'react';
-import {Inject}  from './imports';
-import SkillVis  from './section-skills/skill-vis.es6.js';
-import StudentVis from './section-students/student-chart.es6.js';
-import Select from 'react-select';
+import React             from 'react';
+import {Inject}          from './imports';
+import SkillTags         from './section-skills/SkillTags.es6.js';
+import SkillMultiSelect  from './section-skills/SkillMultiSelect.es6.js';
+import StudentVis        from './section-students/student-chart.es6.js';
 
 
 let {Component} = React;
@@ -36,81 +36,23 @@ export default function main() {
 
     let studentVis;
     
-    function getSkill(skillName) {
-        let skills = jsonp_skills.filter(({name}) => {  return name === skillName;});
-        return (skills) ? skills[0] : undefined;
-    }
-
-    function pluckSkillIds(expertiseLevel) {
-      return function(skill) {
-        if(!skill || !skill.levels || !skill.levels[expertiseLevel]) { return; }
-        return skill.levels[expertiseLevel].user_ids;      
-      };
-    }
-
-    function listIntesection(acc, d) {
-      acc = acc.filter((id) => { return Array.isArray(d) && d.indexOf(id) !== -1; });
-      return acc;
-    }
-
-    class MultiSelectField extends Component {
-       constructor (props) {
-          super(props);
-          let expertiseLevel = 'Paid';
-          let skills = jsonp_skills.slice(0).filter(({levels}) => { 
-            return levels.Paid && levels[expertiseLevel].user_ids  && levels[expertiseLevel].user_ids.length;
-          });
-          this.state =  { disabled: false, value: [], skills: skills, expertiseLevel };
-          this.handlers = {handleSelectChange: this.handleSelectChange.bind(this)};
-        }
-        
-        handleSelectChange (value, values) {
-          // logChange('New value:', value, 'Values:', values);
-          var {skills, expertiseLevel} = this.state;
-          let getSkillIds = pluckSkillIds(expertiseLevel);
-          if(values && values.length) {
-            var ids = values
-              .map(({value}) => value)
-              .map(getSkill)
-              .map(getSkillIds)
-              .reduce(listIntesection);
-            studentVis.setState({filterStudents: ids});
-
-            skills = jsonp_skills.slice(0).filter((skill) => {
-              let skill_ids = getSkillIds(skill);
-              let intersect =  listIntesection(ids, skill_ids);
-              return intersect && intersect.length;
-            });
-            console.log(skills)
-          } else {
-            studentVis.setState({filterStudents: undefined});
-            skills = jsonp_skills.slice(0);
-          }
-
-          this.setState({ value: value, skills: skills });
-        }
-
-        render () {
-          var ops = this.state.skills.map((d) => {
-            return { label: d.name, value: d.name }
-          }).sort(function(a, b) { return a.label < b.label ? -1 : a.label > b.label ? 1 : 0; });
-          let {handleSelectChange} = this.handlers;
-          return (
-            <div className="section">
-              <Select multi={true} disabled={this.state.disabled} value={this.state.value} placeholder="Select one or more skills" options={ops} onChange={handleSelectChange} />
-              <label className="checkbox">
-                <input type="checkbox" className="checkbox-control" checked="true" />
-                <span className="checkbox-label">Paid</span>
-              </label>
-
-            </div>
-          );
-        }
-    }
-    MultiSelectField.propTypes = { label: React.PropTypes.string };
+    
 
     class SotApp extends Component {
+
+      constructor(props) {
+        super(props);
+        this.state = {};
+        this.handlers = {handleSkillsChange: this.handleSkillsChange};
+      }
+
+      handleSkillsChange({students}) {
+        studentVis.setState({filterStudents: students});
+      }
+
       render() {
+        let {handleSkillsChange} = this.handlers;
+        console.log(handleSkillsChange)
         return (
         <div>
           <header>
@@ -121,26 +63,20 @@ export default function main() {
           </header>
           <article>
             <section>
-              <div class="explanation">Select a skill </div>    
+              <div className="explanation">Select a skill </div>    
               <br/>
-              <MultiSelectField label="Multiselect"/>
+              <SkillMultiSelect skills={jsonp_skills} handleChange={handleSkillsChange}/>
             </section>
             <section style={{height: 800}}>
-              <div class="explanation">List of students. Select a field to color by or to group by.</div>    
+              <div className="explanation">List of students. Select a field to color by or to group by.</div>    
               <br/>
               <div id="students-vis"/>
             </section>
             <section>
-              <div class="explanation">List of secondary skills.</div>    
+              <div className="explanation">List of secondary skills.</div>    
               <br/>
               <div id="skills-secondary-vis">
                 <skill-bubbles/> 
-              </div>
-            </section>
-            <section>
-              <div class="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
-              <div id="skills-vis">
-                <SkillVis primarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handlePrimaryChange}/>
               </div>
             </section>
           </article>
@@ -152,6 +88,15 @@ export default function main() {
       }
     }
 
+/*
+            <section>
+              <div className="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
+              <div id="skills-vis">
+                <SkillTags primarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handleSkillsChange}/>
+              </div>
+            </section>
+*/
+
     React.render(
       React.createElement(SotApp), 
       document.getElementById('app')
@@ -162,10 +107,6 @@ export default function main() {
       document.getElementById('students-vis')
     );
 
-    function handlePrimaryChange(studentList) {
-      console.log(studentList)
-      studentVis.setState({filterStudents: studentList});
-    }
 
     draw_skills_bubbles(jsonp_bubbles);
 

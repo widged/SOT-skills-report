@@ -4,7 +4,7 @@
 // -------------------------
 class FN {
 
-  static get_distinct_values(nodes, keyName, keySortFn) {
+  static getDistinctValues(nodes, keyName, keySortFn) {
     var allValues, distinctValues, key, value;
     allValues = {};
     nodes.forEach(function(d) {
@@ -92,6 +92,8 @@ class Svg {
   }
 
   static getGroupData({distinctValues, width, height}) {
+      let margin =  {left: 200, right: 50};
+      width = width - margin.left - margin.right;
       if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
         return [{label: '', cx: width / 2, cy: height / 2 }];
       }
@@ -100,7 +102,7 @@ class Svg {
       var numCenters     = distinctValues.length;
       var sp = 200;
       return distinctValues.map(function(d, i) {
-          var x_position = (((width - (sp*2)) * (i + 0)) / (numCenters-1) + sp);
+          var x_position = margin.left + (((width - (sp*2)) * (i + 0)) / (numCenters-1) + sp);
           return {label: d, cx: x_position, cy: center.cy};
       });
   }
@@ -203,21 +205,20 @@ export default class BubbleChart  {
     return this;
   }
 
-  color_by(keyName, getColorFn) {
+  colorBy(keyName, getColorFn) {
     let {nodes, circles, keySortFn} = this.state;
-    var distinctValues = FN.get_distinct_values(nodes, keyName, keySortFn);
+    var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
     let colorFn        = getColorFn(keyName, distinctValues);
-    let duration = (!keyName || !keyName.length) ? 1500 : 1000;
+    let duration       = (!keyName || !keyName.length) ? 1500 : 1000;
     circles.transition().duration(duration).style("fill", function(d) {
         return colorFn(d.original[keyName]);
     }); 
     return this;     
   }
 
-  group_by(keyName) {
-
+  groupBy(keyName) {
     let {width, height, forceGravity, damper, force, nodes, vis, circles, keySortFn} = this.state;
-    var distinctValues = FN.get_distinct_values(nodes, keyName, keySortFn);
+    var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
     let group_data = Svg.getGroupData({distinctValues, width, height});
     Svg.removeTopLabels(vis);
     var labels = Svg.addTopLabels(vis, group_data);
@@ -248,13 +249,9 @@ export default class BubbleChart  {
     let {circleStyle, force, nodes, circles} = this.state;
     let {radius} = circleStyle;
     nodes.forEach(function(d) {
-        var idx = students ? students.indexOf(d.original.user_id) : 0;
-        if (idx  === -1) { 
-          d.opacity = 0;
-        } else {
-          d.opacity = 1;
-        }
-
+      console.log(students)
+        var isIn = students ? (students.indexOf(d.original.user_id) !== -1) : true;
+        d.opacity = isIn ? 1 : 0;
       });
     force.start();
     circles.transition().duration(2000).attr("fill-opacity", function(d) {
