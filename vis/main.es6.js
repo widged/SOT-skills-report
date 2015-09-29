@@ -75,7 +75,6 @@ export default function main() {
     function handlePrimaryChange(primary) {
       students.setState({filterStudents: primary});
     }
-
     var secondarySkills = React.render(
       React.createElement('skill-bubbles', {}), 
       document.getElementById('skills-secondary-vis')
@@ -84,5 +83,4 @@ export default function main() {
     draw_skills_bubbles(jsonp_bubbles);
 
   });
-  
 }

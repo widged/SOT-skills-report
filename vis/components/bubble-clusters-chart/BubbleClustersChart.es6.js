@@ -29,11 +29,13 @@ class Svg {
     if(circles === undefined) { return; }
     if(typeof onItemSelection !== 'function') { onItemSelection = function() {}; }
     let {defaultStrokeColor, selectedStrokeColor, radius} = circleStyle;
+
       circles.on("mouseover", function(d, i) { 
         d3.select(this)
            .attr("r", radius + 2)
             .attr("stroke-width", 3)
            .attr("stroke", selectedStrokeColor);
+
         onItemSelection(d.original, {cx: Math.round(d.x), cy: Math.round(d.y)}); 
       })
       .on("mouseout", function(d, i)  { 
@@ -157,7 +159,7 @@ export default class BubbleChart  {
       width:      1000,
       height:      600,
       forceGravity: -0.01,
-      damper:        0.5
+      damper:        0.4
     };
 
     let {width, height} = this.state;
@@ -248,15 +250,15 @@ export default class BubbleChart  {
     nodes.forEach(function(d) {
         var idx = students.indexOf(d.original.user_id);
         if (idx  === -1) { 
-          d.radius = 0;
+          d.opacity = 0;
         } else {
-          d.radius = radius;
+          d.opacity = 1;
         }
 
       });
     force.start();
-    circles.transition().duration(2000).attr("r", function(d) {
-      return d.radius;
+    circles.transition().duration(2000).attr("fill-opacity", function(d) {
+      return d.opacity;
     });
     return this;
   }

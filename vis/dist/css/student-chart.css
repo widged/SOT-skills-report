@@ -17,7 +17,7 @@
   width: 1000px;
   height: 700px;
   margin-left: 200px;
-  z-index: -20;
+  z-index: 40; /* necessary for tooltip to show */
 }
 
 
@@ -48,6 +48,7 @@
 }
 svg g.top-labels {
   font-size: 14px;
+  stroke: #aaa;
   fill: #aaa;
 }
 
