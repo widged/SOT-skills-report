@@ -1,0 +1,138 @@
+var jsonp_skill_categories = {
+  "Web / Programming": {
+    "skills": [
+      "AI",
+      "Android",
+      "Computer Architecture",
+      "Distributed Programming",
+      "Front-end Web Frameworks",
+      "iOS / iPhone",
+      "Linux / Unix",
+      "Network Programming",
+      "Nodejs",
+      "Responsive Web Development",
+      "SQL",
+      "Testing",
+      "Web Development",
+      "Windows Universal Apps"
+    ],
+    "tools": [
+      "Actionscript / Flash",
+      "C/C++",
+      "CSS",
+      "Docker",
+      "git",
+      "HTML",
+      "Java",
+      "Javascript",
+      "MySQL",
+      ".NET (C# and VB.net)",
+      "Objective C / Swift",
+      "Oracle",
+      "Perl",
+      "PHP",
+      "Postgres",
+      "Puppet",
+      "Python",
+      "R",
+      "Ruby on Rails",
+      "SQL Server",
+      "Vagrant"
+    ]
+  },
+  "Design": {
+    "skills": [
+      "3D Modelling",
+      "3D Texturing",
+      "Animation",
+      "Concept Art / Matt",
+      "FX",
+      "Interaction Design",
+      "Motion Graphics / Compositing",
+      "Photography",
+      "Rendering",
+      "Rigging / TD",
+      "Rotoscoping",
+      "Typography",
+      "User Experience",
+      "Video Editing"
+    ],
+    "tools": [
+      "After Effects",
+      "CS (Creative Suite)",
+      "Illustrator",
+      "InDesign",
+      "Maya",
+      "Photoshop",
+      "Shake",
+      "Sketch"
+    ]
+  },
+  "Engineering Skills": {
+    "skills": [
+      "3D Printing",
+      "Analogue Circuit Design",
+      "Analogue Electronics",
+      "CAD / CAM",
+      "Communications Engineering",
+      "Control System Engineering",
+      "Digital Circuit Design",
+      "Electronic Design",
+      "Embedded Systems",
+      "Instrumentation and controls",
+      "Mechatronics",
+      "Micro-controller Programming",
+      "PCB Design",
+      "Power Electronics",
+      "Power Systems & Distribution",
+      "Process Design",
+      "Robotics",
+      "Signal Processing"
+    ],
+    "tools": []
+  },
+  "Systems / Ops / DBA": {
+    "skills": [
+      "Clustering",
+      "Database Administration",
+      "Distributed Computing / Virtualisation",
+      "Firewalls",
+      "Information Security",
+      "Load Balancers",
+      "Network Architecture",
+      "Network Engineering",
+      "NoSQL",
+      "Security Analysis",
+      "Switches / Routers",
+      "Systems Engineering",
+      "Systems Infrastructure"
+    ],
+    "tools": [
+      "Mac OSX Admin",
+      "MySQL DBA",
+      "Oracle DBA",
+      "Postgres DBA",
+      "SQLServer DBA",
+      "Systems Administration - Unix / Linux",
+      "Systems Administration - Windows",
+      "Vmware"
+    ]
+  },
+  "BA / Digital Marketing": {
+    "skills": [
+      "Agile",
+      "Business Analysis",
+      "Content Marketing",
+      "Data Analysis",
+      "Digital Marketing",
+      "Information Architecture",
+      "Project Management",
+      "Search Engine Optimisation (SEO)",
+      "Statistics"
+    ],
+    "tools": [
+      "Adwords",
+      "Google Analytics"
+    ]
+  }
+}

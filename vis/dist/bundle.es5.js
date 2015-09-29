@@ -130,7 +130,7 @@
 
 	    var secondarySkills = _react2['default'].render(_react2['default'].createElement('skill-bubbles', {}), document.getElementById('skills-secondary-vis'));
 
-	    draw_skills_bubbles();
+	    draw_skills_bubbles(jsonp_bubbles);
 	  });
 	}
 
@@ -19363,7 +19363,7 @@
 	var _injectInjectEs6Js2 = _interopRequireDefault(_injectInjectEs6Js);
 
 	if (!process.env.BROWSER) {
-	    _injectInjectEs6Js2['default'].css({ file: '../item-tooltip.css', parent: module });
+	    _injectInjectEs6Js2['default'].css({ file: '../components/item-tooltip/item-tooltip.css', parent: module });
 	}
 
 	var Component = _react2['default'].Component;
