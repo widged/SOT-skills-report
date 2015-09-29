@@ -121,7 +121,7 @@ export default function main() {
           </header>
           <article>
             <section>
-              <div class="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
+              <div class="explanation">Select a skill </div>    
               <br/>
               <MultiSelectField label="Multiselect"/>
             </section>
@@ -139,7 +139,6 @@ export default function main() {
             </section>
             <section>
               <div class="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
-              <MultiSelectField label="Multiselect"/>
               <div id="skills-vis">
                 <SkillVis primarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handlePrimaryChange}/>
               </div>

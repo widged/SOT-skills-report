@@ -277,19 +277,7 @@
 	                _react2['default'].createElement(
 	                  'div',
 	                  { 'class': 'explanation' },
-	                  'List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with ',
-	                  _react2['default'].createElement(
-	                    'em',
-	                    null,
-	                    'paid'
-	                  ),
-	                  ' experience for that skill. Next to other tags are the number of students that have ',
-	                  _react2['default'].createElement(
-	                    'em',
-	                    null,
-	                    'paid'
-	                  ),
-	                  ' experience with both that skill and the selected skill. '
+	                  'Select a skill '
 	                ),
 	                _react2['default'].createElement('br', null),
 	                _react2['default'].createElement(MultiSelectField, { label: 'Multiselect' })
@@ -340,7 +328,6 @@
 	                  ),
 	                  ' experience with both that skill and the selected skill. '
 	                ),
-	                _react2['default'].createElement(MultiSelectField, { label: 'Multiselect' }),
 	                _react2['default'].createElement(
 	                  'div',
 	                  { id: 'skills-vis' },
