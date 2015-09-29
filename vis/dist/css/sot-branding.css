@@ -26,7 +26,6 @@ header h1 {
 }
 
 footer {
-	position: absolute;
 	text-align: center;
 	padding: 12px;
 	background-color: #D51300;
@@ -35,5 +34,4 @@ footer {
 	width: 100%;
 	font-size: 0.8em;
 	font-style: italic;
-	top: 1500px;
 }

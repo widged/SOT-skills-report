@@ -248,7 +248,7 @@ export default class BubbleChart  {
     let {circleStyle, force, nodes, circles} = this.state;
     let {radius} = circleStyle;
     nodes.forEach(function(d) {
-        var idx = students.indexOf(d.original.user_id);
+        var idx = students ? students.indexOf(d.original.user_id) : 0;
         if (idx  === -1) { 
           d.opacity = 0;
         } else {
