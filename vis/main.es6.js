@@ -108,7 +108,10 @@ export default function main() {
     );
 
 
-    draw_skills_bubbles(jsonp_bubbles);
+    var rootNode = document.querySelector('skill-bubbles');
+    rootNode.innerHTML = '';
+    draw_skills_bubbles(jsonp_bubbles.children, rootNode);
+
 
   });
 }

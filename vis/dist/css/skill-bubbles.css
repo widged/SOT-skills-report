@@ -1,6 +1,7 @@
 skill-bubbles {
   display: block;
   position: relative;
+  height: 400px;
 }
 
 skill-bubbles > div {
@@ -10,36 +11,68 @@ skill-bubbles > div {
 
 
 skill-bubbles text {
-  font-size: 12px;
   pointer-events: none;
-  fill: #ffffff;
 }
 
 skill-bubbles text.parent {
-  font-size: 14px;
+  font-size: 6pt;
   fill: #251FDE;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
 skill-bubbles text.top_parent {
-  font-size: 16px;
+  font-size: 8pt;
   fill: #000000;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
-skill-bubbles .ba circle  {
-  fill: #FFA6AE;
-  stroke: #FFA6AE;
+
+skill-bubbles circle {
+  fill: #FF8787;
+  stroke: #999;
+  pointer-events: all;
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+skill-bubbles circle.root {
+  pointer-events: none;
+  fill-opacity: 0.1;
+  stroke-opacity: 0.1;
+}
+
+skill-bubbles circle.top_parent {
+  fill-opacity: 0.1;
+  stroke-opacity: 0.1;
+  pointer-events: all;
+}
+
+skill-bubbles circle.parent {
+  fill-opacity: 0.1;
+  stroke-opacity: 0.1;
+  stroke-opacity: 0.4;
+}
+
+skill-bubbles circle.parent:hover {
+  stroke-width: .5px;
+}
+
+
+
+/* // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops */
+skill-bubbles .ba circle {
+  fill: #FFDD73;
+  stroke: #E69D00;
 }
 
 skill-bubbles .design circle  {
-  fill: #99DDFF;
-  stroke: #008FCC;
+  fill: #C4E67F;
+  stroke: #78B300;
 }
 
 skill-bubbles .engineering circle  {
-  fill: #C4E67F;
-  stroke: #78B300;
+  fill: #99DDFF;
+  stroke: #008FCC;
 }
 
 skill-bubbles .systems circle  {
@@ -52,47 +85,33 @@ skill-bubbles .web circle  {
   stroke: #805933;
 }
 
-skill-bubbles circle {
-  fill: #FF8787;
-  stroke: #999;
-  pointer-events: all;
-}
-
-skill-bubbles circle.root {
-  pointer-events: none;
-  opacity: 0.2;
-}
-
-skill-bubbles circle.top_parent {
-  fill-opacity: 0.5;
-  pointer-events: all;
-}
-
-skill-bubbles circle.parent {
-  fill-opacity: 0.4;
-  stroke-opacity: 0.4;
-}
-
-skill-bubbles circle.parent:hover {
-  stroke-width: .5px;
-}
-
+/* Expertise levels */
 skill-bubbles circle.child_Interested {
   pointer-events: none;
-  fill-opacity: 0.9;
+  fill-opacity: 0.2;
+  stroke-opacity: 0.2;
 }
 
 skill-bubbles circle.child_Academic {
   pointer-events: none;
+  fill-opacity: 0.4;
+  stroke-opacity: 0.4;
 }
 
 skill-bubbles circle.child_Practical {
   pointer-events: none;
+  fill-opacity: 0.6;
+  stroke-opacity: 0.6;
 }
 
 skill-bubbles circle.child_Paid {
   pointer-events: none;
+  opacity: 1;
+  fill-opacity: 1;
+  stroke-opacity: 1;
 }
+
+/* Tooltip */
 
 skill-bubbles div.tooltip {
     position: absolute;

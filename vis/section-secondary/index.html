@@ -12,13 +12,7 @@
     <script type="text/javascript">
     var rootNode = document.querySelector('skill-bubbles');
     rootNode.innerHTML = '';
-    jsonp_bubbles.children.forEach(function(d, i) {
-      var div = document.createElement('div');
-      div.style.left = i * 270 + 'px';
-      div.classList.add(d.name.split(/\s+/)[0].toLowerCase());
-      rootNode.appendChild(div);
-      draw_skills_bubbles(d, div);
-    });
+    draw_skills_bubbles(jsonp_bubbles, rootNode);
       
     </script>
   </body>
