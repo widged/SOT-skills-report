@@ -1,6 +1,6 @@
 function draw_skills_bubbles(data) {
 
-  data = data.children[0]
+  data = data.children[0];
 
   var w = 1280,
     h = 800,
@@ -33,24 +33,23 @@ function draw_skills_bubbles(data) {
     .data(nodes)
     .enter().append("svg:circle")
 
-    .attr("class", function(d) { return bubbleClass(d);})
+    .attr("class", bubbleClass)
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", function(d) { return d.r; })
+    .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
     .on("click", function(d) { return zoom(node == d ? root : d); })
     .on("mouseover", function(d) {
-      if(d.depth == 1){
-        var text = d.name + "<br/>";
-        for(var i = 0, size = d.size; i < size ; i++){
-          var child = d.children[i];
-          text = text + child.value  + "\t" + child.name  + "<br/>";
-        }
+      if(d.depth === 1){
+        var lines = d.children.map(function(d) { return [d.value, d.name].join('\t'); });
+        lines.unshift(d.name);
         div.transition()
-        .duration(200)
-        .style("opacity", .9);
-        div.html(text)
-        .style("left", (d3.event.pageX) + "px")
-        .style("top", (d3.event.pageY - 28) + "px");
+          .duration(200)
+          .style("opacity", 0.9);
+
+        div.html(lines.join("<br/>"))
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
       }
     })
     .on("mouseout", function(d) {
@@ -62,7 +61,7 @@ function draw_skills_bubbles(data) {
   vis.selectAll("text")
     .data(nodes)
     .enter().append("svg:text")
-    .attr("class", function(d) { return bubbleClass(d); })
+    .attr("class", bubbleClass)
     .attr("x", function(d) { return d.x; })
     .attr("y", function(d) { return d.y; })
     .attr("dy", ".35em")
@@ -73,20 +72,20 @@ function draw_skills_bubbles(data) {
   d3.select(window).on("click", function() { zoom(root); });
 
   function bubbleText(d){
-    if(d.depth == 1){
+    if(d.depth === 1){
       return d.name;
-    } else if (d.depth != 0){
+    } else if (d.depth !== 0){
       return d.name +"\t"+ d.value;
     }
     return "";
   }
 
   function bubbleClass(d){
-    if(d.depth == 0){
+    if(d.depth === 0){
       return "root";
-    } else if(d.depth == 1){
+    } else if(d.depth === 1){
       return "top_parent";
-    } else if (d.depth == 2){
+    } else if (d.depth === 2){
       return "parent";
     } else {
       return "child_"+d.name;
