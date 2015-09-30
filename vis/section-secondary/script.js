@@ -37,7 +37,7 @@ function draw_skills_bubbles(data) {
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", function(d) { return d.r; })
-    .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
+    // .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
     .on("click", function(d) { return zoom(node == d ? root : d); })
     .on("mouseover", function(d) {
       if(d.depth === 1){
