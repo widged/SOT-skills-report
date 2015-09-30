@@ -1,8 +1,10 @@
 function draw_skills_bubbles(data) {
 
+  data = data.children[0]
+
   var w = 1280,
     h = 800,
-    r = 720,
+    r = 720  / 3,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
     node,
@@ -30,6 +32,7 @@ function draw_skills_bubbles(data) {
   vis.selectAll("circle")
     .data(nodes)
     .enter().append("svg:circle")
+
     .attr("class", function(d) { return bubbleClass(d);})
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
@@ -38,7 +41,7 @@ function draw_skills_bubbles(data) {
     .on("mouseover", function(d) {
       if(d.depth == 2){
         var text = d.name + "<br/>";
-        for(var i = 0, size = d.children.length; i < size ; i++){
+        for(var i = 0, size = d.size; i < size ; i++){
           var child = d.children[i];
           text = text + child.value  + "\t" + child.name  + "<br/>";
         }
