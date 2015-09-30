@@ -86,17 +86,17 @@
 
 	var _imports = __webpack_require__(159);
 
-	var _sectionSkillsSkillVisEs6Js = __webpack_require__(162);
+	var _sectionSkillsSkillTagsEs6Js = __webpack_require__(162);
 
-	var _sectionSkillsSkillVisEs6Js2 = _interopRequireDefault(_sectionSkillsSkillVisEs6Js);
+	var _sectionSkillsSkillTagsEs6Js2 = _interopRequireDefault(_sectionSkillsSkillTagsEs6Js);
 
-	var _sectionStudentsStudentChartEs6Js = __webpack_require__(163);
+	var _sectionSkillsSkillMultiSelectEs6Js = __webpack_require__(163);
+
+	var _sectionSkillsSkillMultiSelectEs6Js2 = _interopRequireDefault(_sectionSkillsSkillMultiSelectEs6Js);
+
+	var _sectionStudentsStudentChartEs6Js = __webpack_require__(170);
 
 	var _sectionStudentsStudentChartEs6Js2 = _interopRequireDefault(_sectionStudentsStudentChartEs6Js);
-
-	var _reactSelect = __webpack_require__(171);
-
-	var _reactSelect2 = _interopRequireDefault(_reactSelect);
 
 	var Component = _react2['default'].Component;
 
@@ -132,121 +132,30 @@
 
 	    var studentVis = undefined;
 
-	    function getSkill(skillName) {
-	      var skills = jsonp_skills.filter(function (_ref) {
-	        var name = _ref.name;
-	        return name === skillName;
-	      });
-	      return skills ? skills[0] : undefined;
-	    }
+	    var SotApp = (function (_Component) {
+	      _inherits(SotApp, _Component);
 
-	    function pluckSkillIds(expertiseLevel) {
-	      return function (skill) {
-	        if (!skill || !skill.levels || !skill.levels[expertiseLevel]) {
-	          return;
-	        }
-	        return skill.levels[expertiseLevel].user_ids;
-	      };
-	    }
+	      function SotApp(props) {
+	        _classCallCheck(this, SotApp);
 
-	    function listIntesection(acc, d) {
-	      acc = acc.filter(function (id) {
-	        return Array.isArray(d) && d.indexOf(id) !== -1;
-	      });
-	      return acc;
-	    }
-
-	    var MultiSelectField = (function (_Component) {
-	      _inherits(MultiSelectField, _Component);
-
-	      function MultiSelectField(props) {
-	        _classCallCheck(this, MultiSelectField);
-
-	        _get(Object.getPrototypeOf(MultiSelectField.prototype), 'constructor', this).call(this, props);
-	        var expertiseLevel = 'Paid';
-	        var skills = jsonp_skills.slice(0).filter(function (_ref2) {
-	          var levels = _ref2.levels;
-
-	          return levels.Paid && levels[expertiseLevel].user_ids && levels[expertiseLevel].user_ids.length;
-	        });
-	        this.state = { disabled: false, value: [], skills: skills, expertiseLevel: expertiseLevel };
-	        this.handlers = { handleSelectChange: this.handleSelectChange.bind(this) };
+	        _get(Object.getPrototypeOf(SotApp.prototype), 'constructor', this).call(this, props);
+	        this.state = {};
+	        this.handlers = { handleSkillsChange: this.handleSkillsChange };
 	      }
 
-	      _createClass(MultiSelectField, [{
-	        key: 'handleSelectChange',
-	        value: function handleSelectChange(value, values) {
-	          // logChange('New value:', value, 'Values:', values);
-	          var _state = this.state;
-	          var skills = _state.skills;
-	          var expertiseLevel = _state.expertiseLevel;
+	      _createClass(SotApp, [{
+	        key: 'handleSkillsChange',
+	        value: function handleSkillsChange(_ref) {
+	          var students = _ref.students;
 
-	          var getSkillIds = pluckSkillIds(expertiseLevel);
-	          if (values && values.length) {
-	            var ids = values.map(function (_ref3) {
-	              var value = _ref3.value;
-	              return value;
-	            }).map(getSkill).map(getSkillIds).reduce(listIntesection);
-	            studentVis.setState({ filterStudents: ids });
-
-	            skills = jsonp_skills.slice(0).filter(function (skill) {
-	              var skill_ids = getSkillIds(skill);
-	              var intersect = listIntesection(ids, skill_ids);
-	              return intersect && intersect.length;
-	            });
-	            console.log(skills);
-	          } else {
-	            studentVis.setState({ filterStudents: undefined });
-	            skills = jsonp_skills.slice(0);
-	          }
-
-	          this.setState({ value: value, skills: skills });
+	          studentVis.setState({ filterStudents: students });
 	        }
 	      }, {
 	        key: 'render',
 	        value: function render() {
-	          var ops = this.state.skills.map(function (d) {
-	            return { label: d.name, value: d.name };
-	          }).sort(function (a, b) {
-	            return a.label < b.label ? -1 : a.label > b.label ? 1 : 0;
-	          });
-	          var handleSelectChange = this.handlers.handleSelectChange;
+	          var handleSkillsChange = this.handlers.handleSkillsChange;
 
-	          return _react2['default'].createElement(
-	            'div',
-	            { className: 'section' },
-	            _react2['default'].createElement(_reactSelect2['default'], { multi: true, disabled: this.state.disabled, value: this.state.value, placeholder: 'Select one or more skills', options: ops, onChange: handleSelectChange }),
-	            _react2['default'].createElement(
-	              'label',
-	              { className: 'checkbox' },
-	              _react2['default'].createElement('input', { type: 'checkbox', className: 'checkbox-control', checked: 'true' }),
-	              _react2['default'].createElement(
-	                'span',
-	                { className: 'checkbox-label' },
-	                'Paid'
-	              )
-	            )
-	          );
-	        }
-	      }]);
-
-	      return MultiSelectField;
-	    })(Component);
-
-	    MultiSelectField.propTypes = { label: _react2['default'].PropTypes.string };
-
-	    var SotApp = (function (_Component2) {
-	      _inherits(SotApp, _Component2);
-
-	      function SotApp() {
-	        _classCallCheck(this, SotApp);
-
-	        _get(Object.getPrototypeOf(SotApp.prototype), 'constructor', this).apply(this, arguments);
-	      }
-
-	      _createClass(SotApp, [{
-	        key: 'render',
-	        value: function render() {
+	          console.log(handleSkillsChange);
 	          return _react2['default'].createElement(
 	            'div',
 	            null,
@@ -276,18 +185,18 @@
 	                null,
 	                _react2['default'].createElement(
 	                  'div',
-	                  { 'class': 'explanation' },
+	                  { className: 'explanation' },
 	                  'Select a skill '
 	                ),
 	                _react2['default'].createElement('br', null),
-	                _react2['default'].createElement(MultiSelectField, { label: 'Multiselect' })
+	                _react2['default'].createElement(_sectionSkillsSkillMultiSelectEs6Js2['default'], { skills: jsonp_skills, handleChange: handleSkillsChange })
 	              ),
 	              _react2['default'].createElement(
 	                'section',
 	                { style: { height: 800 } },
 	                _react2['default'].createElement(
 	                  'div',
-	                  { 'class': 'explanation' },
+	                  { className: 'explanation' },
 	                  'List of students. Select a field to color by or to group by.'
 	                ),
 	                _react2['default'].createElement('br', null),
@@ -298,7 +207,7 @@
 	                null,
 	                _react2['default'].createElement(
 	                  'div',
-	                  { 'class': 'explanation' },
+	                  { className: 'explanation' },
 	                  'List of secondary skills.'
 	                ),
 	                _react2['default'].createElement('br', null),
@@ -306,32 +215,6 @@
 	                  'div',
 	                  { id: 'skills-secondary-vis' },
 	                  _react2['default'].createElement('skill-bubbles', null)
-	                )
-	              ),
-	              _react2['default'].createElement(
-	                'section',
-	                null,
-	                _react2['default'].createElement(
-	                  'div',
-	                  { 'class': 'explanation' },
-	                  'List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with ',
-	                  _react2['default'].createElement(
-	                    'em',
-	                    null,
-	                    'paid'
-	                  ),
-	                  ' experience for that skill. Next to other tags are the number of students that have ',
-	                  _react2['default'].createElement(
-	                    'em',
-	                    null,
-	                    'paid'
-	                  ),
-	                  ' experience with both that skill and the selected skill. '
-	                ),
-	                _react2['default'].createElement(
-	                  'div',
-	                  { id: 'skills-vis' },
-	                  _react2['default'].createElement(_sectionSkillsSkillVisEs6Js2['default'], { primarySkills: jsonp_skills, secondarySkills: jsonp_secondary, handlePrimaryChange: handlePrimaryChange })
 	                )
 	              )
 	            ),
@@ -347,16 +230,22 @@
 	      return SotApp;
 	    })(Component);
 
+	    /*
+	                <section>
+	                  <div className="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
+	                  <div id="skills-vis">
+	                    <SkillTags primarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handleSkillsChange}/>
+	                  </div>
+	                </section>
+	    */
+
 	    _react2['default'].render(_react2['default'].createElement(SotApp), document.getElementById('app'));
 
 	    studentVis = _react2['default'].render(_react2['default'].createElement(_sectionStudentsStudentChartEs6Js2['default'], { list: items }), document.getElementById('students-vis'));
 
-	    function handlePrimaryChange(studentList) {
-	      console.log(studentList);
-	      studentVis.setState({ filterStudents: studentList });
-	    }
-
-	    draw_skills_bubbles(jsonp_bubbles);
+	    var rootNode = document.querySelector('skill-bubbles');
+	    rootNode.innerHTML = '';
+	    draw_skills_bubbles(jsonp_bubbles.children, rootNode);
 	  });
 	}
 
@@ -18928,7 +18817,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -18941,1208 +18830,128 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _imports = __webpack_require__(164);
-
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactSelect = __webpack_require__(164);
+
+	var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
 	var Component = _react2['default'].Component;
 
-	var StudentVis = (function (_Component) {
-	    _inherits(StudentVis, _Component);
+	function getSkill(skillName) {
+	  var skills = jsonp_skills.filter(function (_ref) {
+	    var name = _ref.name;
+	    return name === skillName;
+	  });
+	  return skills ? skills[0] : undefined;
+	}
 
-	    function StudentVis() {
-	        _classCallCheck(this, StudentVis);
-
-	        _get(Object.getPrototypeOf(StudentVis.prototype), 'constructor', this).apply(this, arguments);
+	function pluckSkillIds(expertiseLevel) {
+	  return function (skill) {
+	    if (!skill || !skill.levels || !skill.levels[expertiseLevel]) {
+	      return;
 	    }
+	    return skill.levels[expertiseLevel].user_ids;
+	  };
+	}
 
-	    _createClass(StudentVis, [{
-	        key: 'render',
-	        value: function render() {
-	            var list = this.props.list;
+	function listIntesection(acc, d) {
+	  acc = acc.filter(function (id) {
+	    return Array.isArray(d) && d.indexOf(id) !== -1;
+	  });
+	  return acc;
+	}
 
-	            return _react2['default'].createElement(
-	                'div',
-	                { 'class': 'page' },
-	                _react2['default'].createElement(
-	                    'div',
-	                    { id: 'visualisation' },
-	                    _react2['default'].createElement(
-	                        'div',
-	                        { id: 'vis-controls' },
-	                        _react2['default'].createElement('div', { id: 'color-by' }),
-	                        _react2['default'].createElement('div', { id: 'group-by' }),
-	                        _react2['default'].createElement('div', { id: 'filters' })
-	                    ),
-	                    _react2['default'].createElement(
-	                        'div',
-	                        { id: 'vis-display' },
-	                        _react2['default'].createElement('div', { id: 'vis' }),
-	                        _react2['default'].createElement('div', { id: 'itemTooltip' })
-	                    ),
-	                    _react2['default'].createElement('div', { id: 'vis-legend' })
-	                )
-	            );
-	        }
-	    }, {
-	        key: 'renderD3',
-	        value: function renderD3(tsv) {
-	            function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
-	                // columns that we are interested in
-	                var keys = Object.keys(tsv[0]).map(function (k) {
-	                    var _keyToLookup = keyToLookup(k);
+	var MultiSelectField = (function (_Component) {
+	  _inherits(MultiSelectField, _Component);
 
-	                    var key = _keyToLookup.key;
-	                    var type = _keyToLookup.type;
-	                    var title = _keyToLookup.title;
+	  function MultiSelectField(props) {
+	    _classCallCheck(this, MultiSelectField);
 
-	                    var column = { key: key, type: type, title: title };
-	                    return column;
-	                }).filter(keyFilterFn);
+	    _get(Object.getPrototypeOf(MultiSelectField.prototype), 'constructor', this).call(this, props);
+	    var expertiseLevel = 'Paid';
+	    var skills = jsonp_skills.slice(0).filter(function (_ref2) {
+	      var levels = _ref2.levels;
 
-	                var _loop = function () {
-	                    var item = tsv[r];
-	                    keys.forEach(function (k) {
-	                        if (!k.uniqueValues) {
-	                            k.uniqueValues = [];
-	                        }
-	                        var set = k.uniqueValues;
-	                        var value = item[k.key];
-	                        if (set.indexOf(value) === -1) {
-	                            set.push(value);
-	                        }
-	                    });
-	                };
+	      return levels.Paid && levels[expertiseLevel].user_ids && levels[expertiseLevel].user_ids.length;
+	    });
+	    this.state = { disabled: false, value: [], skills: skills, expertiseLevel: expertiseLevel };
+	    this.handlers = { handleChange: this.handleChange.bind(this) };
+	  }
 
-	                // add list of unique values to each column
-	                for (var r = 0, nr = tsv.length; r < nr; r++) {
-	                    _loop();
-	                }
-	                var keyMap = {};
-	                keys.forEach(function (k) {
-	                    k.uniqueValues.sort(keySortFn(k));
-	                    keyMap[k.key] = k;
-	                });
-	                return { keys: keys, keyMap: keyMap };
-	            }
+	  _createClass(MultiSelectField, [{
+	    key: 'handleChange',
+	    value: function handleChange(value, values) {
+	      // logChange('New value:', value, 'Values:', values);
+	      var _state = this.state;
+	      var skills = _state.skills;
+	      var expertiseLevel = _state.expertiseLevel;
 
-	            // -- Loading the chart config
-	            var StudentChart = __webpack_require__(165);
+	      var studentIds = undefined;
+	      var getSkillIds = pluckSkillIds(expertiseLevel);
+	      if (values && values.length) {
+	        var ids = values.map(function (_ref3) {
+	          var value = _ref3.value;
+	          return value;
+	        }).map(getSkill).map(getSkillIds).reduce(listIntesection);
 
-	            // -- Getting the Lookup keys
+	        studentIds = ids;
+	        skills = jsonp_skills.slice(0).filter(function (skill) {
+	          var skill_ids = getSkillIds(skill);
+	          var intersect = listIntesection(ids, skill_ids);
+	          return intersect && intersect.length;
+	        });
+	      } else {
+	        skills = jsonp_skills.slice(0);
+	      }
 
-	            var _getLookupKeys = getLookupKeys(tsv, StudentChart.keyToLookup, StudentChart.keyFilterFn, StudentChart.keySortFn);
+	      var dispatchChange = this.props && this.props.handleChange;
+	      if (typeof dispatchChange === 'function') {
+	        dispatchChange({ students: studentIds });
+	      }
 
-	            var keys = _getLookupKeys.keys;
-	            var keyMap = _getLookupKeys.keyMap;
-	            var _lookups$lookupMap = { lookups: keys, lookupMap: keyMap };
-	            var lookups = _lookups$lookupMap.lookups;
-	            var lookupMap = _lookups$lookupMap.lookupMap;
+	      this.setState({ value: value, skills: skills });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var ops = this.state.skills.map(function (d) {
+	        return { label: d.name, value: d.name };
+	      }).sort(function (a, b) {
+	        return a.label < b.label ? -1 : a.label > b.label ? 1 : 0;
+	      });
+	      var handleChange = this.handlers.handleChange;
 
-	            // -- Mounting the visualisation add-ons
-	            var ItemTooltip = __webpack_require__(168);
-	            var ColorLegend = __webpack_require__(169);
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'section' },
+	        _react2['default'].createElement(_reactSelect2['default'], { multi: true, disabled: this.state.disabled, value: this.state.value, placeholder: 'Select one or more skills', options: ops, onChange: handleChange }),
+	        _react2['default'].createElement(
+	          'label',
+	          { className: 'checkbox' },
+	          _react2['default'].createElement('input', { type: 'checkbox', className: 'checkbox-control', defaultChecked: 'true' }),
+	          _react2['default'].createElement(
+	            'span',
+	            { className: 'checkbox-label' },
+	            'Paid'
+	          )
+	        )
+	      );
+	    }
+	  }]);
 
-	            var tooltip = _react2['default'].render(_react2['default'].createElement(ItemTooltip, { title: 'my_tooltip', width: 240 }), document.getElementById('itemTooltip'));
-
-	            var colorLegend = _react2['default'].render(_react2['default'].createElement(ColorLegend), document.getElementById('vis-legend'));
-
-	            // -- Mounting the visualisation
-	            var BubbleChart = __webpack_require__(170);
-	            var chart = new BubbleChart();
-	            StudentChart.addControls({ lookups: lookups, lookupMap: lookupMap, chart: chart, colorLegend: colorLegend });
-	            chart.mountIn(document.getElementById('vis')).onItemSelection(function (item, xy) {
-	                var _ref = StudentChart.itemDump(item, lookupMap) || { title: null, list: null };
-
-	                var title = _ref.title;
-	                var list = _ref.list;
-
-	                tooltip.setState({ visible: list && list.length, xy: xy, title: title, list: list });
-	            }).keySortFn(StudentChart.keySortFn).circleStyle(StudentChart.circleStyle).plot(tsv).group_by();
-
-	            return chart;
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var tsv = this.props.list;
-	            var chart = this.renderD3(tsv);
-	            this.setState({ chart: chart });
-	        }
-	    }, {
-	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate(nextProps, nextState) {
-
-	            if (nextState.hasOwnProperty('filterStudents')) {
-	                var tsv = this.props.list;
-	                // this.renderD3(tsv);
-	                this.state.chart.filterStudents(nextState.filterStudents);
-	            }
-	            return false;
-	        }
-	    }]);
-
-	    return StudentVis;
+	  return MultiSelectField;
 	})(Component);
 
-	exports['default'] = StudentVis;
+	exports['default'] = MultiSelectField;
+
+	MultiSelectField.propTypes = { label: _react2['default'].PropTypes.string };
 	module.exports = exports['default'];
 
 /***/ },
 /* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* jshint esnext: true */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _componentsInjectInjectEs6Js = __webpack_require__(160);
-
-	var _componentsInjectInjectEs6Js2 = _interopRequireDefault(_componentsInjectInjectEs6Js);
-
-	var _componentsInjectInjectJsEs6Js = __webpack_require__(161);
-
-	var _componentsInjectInjectJsEs6Js2 = _interopRequireDefault(_componentsInjectInjectJsEs6Js);
-
-	_componentsInjectInjectEs6Js2['default'].js = _componentsInjectInjectJsEs6Js2['default'];
-
-	exports.Inject = _componentsInjectInjectEs6Js2['default'];
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* jshint esnext: true */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var Component = _react2['default'].Component;
-
-	var StudentChart = (function () {
-	    function StudentChart() {
-	        _classCallCheck(this, StudentChart);
-	    }
-
-	    _createClass(StudentChart, null, [{
-	        key: 'getFieldColor',
-	        value: function getFieldColor(value) {}
-	    }, {
-	        key: 'getLevelColor',
-	        value: function getLevelColor(value) {
-	            var colors = {
-	                'Dip': '#FF00CC',
-	                'GDip': '#FF00CC',
-	                'B': '#00FF00',
-	                'B(Hons)': '#00FF00',
-	                'PGDip': '#FFFF00',
-	                'M': '#FF0000',
-	                'PhD': '#FF0000',
-	                'default': '#4F4F4F'
-	            };
-	            return colors[value] || colors['default'];
-	        }
-	    }, {
-	        key: 'getDefaultColor',
-
-	        // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops
-
-	        value: function getDefaultColor(valueList) {
-	            var colors = ['#0000D9', '#FF00FF', '#FF0033', '#FFCC66', '#66CC33', '#33FFCC', '#00A0AA', '#FFCCFF', '#FF9933', '#99FF99', '#00BB00', '#CCFFCC', '#333333', '#CCCCCC', '#99CCCC', '#FF0000'];
-	            var colorMap = {};
-	            (valueList || []).forEach(function (d, i) {
-	                colorMap[d] = colors[i % colors.length];
-	            });
-	            return function (value) {
-	                return colorMap[value];
-	            };
-	        }
-	    }, {
-	        key: 'getColorFn',
-	        value: function getColorFn(type, distinctValues) {
-	            var colorFns = {
-	                // "level": StudentChart.getLevelColor,
-	                // "field": StudentChart.getFieldColor,
-	                'default': StudentChart.getDefaultColor(distinctValues)
-	            };
-	            return colorFns[type] || colorFns['default'];
-	        }
-	    }, {
-	        key: 'keyFilterFn',
-	        value: function keyFilterFn(_ref) {
-	            var key = _ref.key;
-	            var type = _ref.type;
-	            var title = _ref.title;
-
-	            return key.match(/^(school|level|field|degree|study_year|final_year)/);
-	        }
-	    }, {
-	        key: 'keySortFn',
-	        value: function keySortFn(keyName) {
-	            function sortNumericAsc(a, b) {
-	                return Number(a) - Number(b);
-	            }
-	            function sortLevel(a, b) {
-	                var order = 'Dip,GDip,B,B(Hons),PGDip,M,PhD,N/A'.split(',');
-	                return order.indexOf(a) - order.indexOf(b);
-	            }
-	            function sortField(a, b) {
-	                var order = 'Com,Com/BSc,Com/Sc,A,A/Sc,Mus,Des,Des/A,Des/Com,IT,Tech,CompSc,CompSc/Des,Eng,Eng/Com,Eng/Sc,Sc,Sc/HSc,Sc/Com,Sc/Law,MathSc'.split(',');
-	                return order.indexOf(a) - order.indexOf(b);
-	            }
-	            var map = { level: sortLevel, field: sortField };
-	            return map[keyName];
-	        }
-	    }, {
-	        key: 'keyToLookup',
-	        value: function keyToLookup(keyName) {
-	            var p = (keyName || '').split(':');
-	            if (p.length === 1) {
-	                p[1] = keyName;
-	            }
-	            return { key: keyName, type: p[0], title: p[1] };
-	        }
-	    }, {
-	        key: 'addControls',
-	        value: function addControls(_ref2) {
-	            var lookups = _ref2.lookups;
-	            var lookupMap = _ref2.lookupMap;
-	            var chart = _ref2.chart;
-	            var colorLegend = _ref2.colorLegend;
-
-	            var SelectBy = __webpack_require__(166);
-	            var FilterList = __webpack_require__(167);
-
-	            function whenColorValues(keyName, distinctValues) {
-	                var _ref3 = lookupMap[keyName] || { title: '' };
-
-	                var key = _ref3.key;
-	                var type = _ref3.type;
-	                var title = _ref3.title;
-	                var fillColor = StudentChart.circleStyle.fillColor;
-
-	                var colorFn = type ? StudentChart.getColorFn(type, distinctValues) : function (d) {
-	                    return fillColor;
-	                };
-	                function colorFormat(d, i) {
-	                    return { name: d, color: colorFn(d) };
-	                }
-	                distinctValues.sort(StudentChart.keySortFn(key));
-	                colorLegend.setState({ title: title, colorList: type ? distinctValues.map(colorFormat) : null });
-	                return colorFn;
-	            }
-
-	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Color by: ', onChange: function onChange(d) {
-	                    chart.color_by(d, whenColorValues);
-	                } }), document.getElementById('color-by'));
-
-	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Group by: ', onChange: function onChange(d) {
-	                    chart.group_by(d);
-	                } }), document.getElementById('group-by'));
-
-	            /*
-	                    React.render(
-	                        React.createElement(FilterList, {groups: lookups, onChange: function(d) { chart.use_filters(d); }}),
-	                        document.getElementById('filters')
-	                    );        
-	            */
-	        }
-	    }, {
-	        key: 'itemDump',
-	        value: function itemDump(obj, lookupMap) {
-	            if (!obj) {
-	                return;
-	            }
-	            var list = [];
-	            for (var key in obj) {
-	                var value = obj[key];
-
-	                var _ref4 = lookupMap[key] || {};
-
-	                var title = _ref4.title;
-
-	                if (title) {
-	                    list.push({ title: title, value: value });
-	                }
-	            }
-	            return { title: obj['user_id'], list: list };
-	        }
-	    }]);
-
-	    return StudentChart;
-	})();
-
-	exports['default'] = StudentChart;
-
-	StudentChart.circleStyle = { defaultStrokeColor: '#404040', selectedStrokeColor: '#DF1E21', fillColor: '#cfcfcf', radius: 7 };
-	module.exports = exports['default'];
-
-	/*
-	        var colors = {
-	          'HSc/Sc'    : 'SomeColorCloseToBlue',
-	          'Com'       : 'red1',
-	          'Com/BSc'   : 'red2',
-	          'Com/Sc'    : 'red3',
-	          'A'         : 'somewhatGreen1',
-	          'A/Sc'      : 'somewhatGreen2', 
-	          'Mus'       : 'greenishButDifferent' 
-	          'Des'       : 'typicallyGreen1'    
-	          'Des/A'     : 'typicallyGreen2'    
-	          'Des/Com'   : 'green/Red'  // not obvious how to present overlap
-	          'IT'        : 'darkGray1'
-	          'Tech'      : 'darkGray2'
-	          'CompSc'    : 'darkGray3'
-	          'CompSc/Des': 'darkGray4'
-	          'Eng'       : 'Blue1'
-	          'Eng/Com'   : 'Blue/Red'
-	          'Eng/Sc'    : 'Blue/Purple' // not obvious how to present overlap
-	          'Sc'        : 'Purple'
-	          'Sc/Com'    : 'Purple'
-	          'Sc/Law'    : 'Purple'
-	          'MathSc'    : 'SomeColorCloseToBlue'
-	        };
-	        return colors[value] || colors.default;
-	        */
-
-/***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* jshint esnext: true */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var Component = _react2['default'].Component;
-
-	var SelectBy = (function (_Component) {
-	    _inherits(SelectBy, _Component);
-
-	    function SelectBy(props) {
-	        _classCallCheck(this, SelectBy);
-
-	        _get(Object.getPrototypeOf(SelectBy.prototype), 'constructor', this).call(this, props);
-	        var onChange = props.onChange;
-
-	        var optionChange = function optionChange(event) {
-	            onChange(event.target.value);
-	        };
-	        this.state = { optionChange: optionChange };
-	    }
-
-	    _createClass(SelectBy, [{
-	        key: 'render',
-	        value: function render() {
-	            var _props = this.props;
-	            var lookups = _props.lookups;
-	            var title = _props.title;
-	            var optionChange = this.state.optionChange;
-
-	            return _react2['default'].createElement(
-	                'select-group',
-	                null,
-	                _react2['default'].createElement(
-	                    'span',
-	                    { 'class': 'title' },
-	                    title
-	                ),
-	                _react2['default'].createElement(
-	                    'select',
-	                    { onChange: optionChange },
-	                    _react2['default'].createElement('option', { value: '' }),
-	                    lookups.map(function (_ref) {
-	                        var key = _ref.key;
-	                        var title = _ref.title;
-	                        return _react2['default'].createElement(
-	                            'option',
-	                            { value: key },
-	                            title
-	                        );
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return SelectBy;
-	})(Component);
-
-	exports['default'] = SelectBy;
-	module.exports = exports['default'];
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* jshint esnext: true */
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var Component = _react2["default"].Component;
-
-	var CheckList = (function (_Component) {
-	    _inherits(CheckList, _Component);
-
-	    function CheckList(props) {
-	        _classCallCheck(this, CheckList);
-
-	        _get(Object.getPrototypeOf(CheckList.prototype), "constructor", this).call(this, props);
-	    }
-
-	    _createClass(CheckList, [{
-	        key: "render",
-	        value: function render() {
-	            var _props = this.props;
-	            var key = _props.key;
-	            var title = _props.title;
-	            var list = _props.list;
-
-	            return _react2["default"].createElement(
-	                "div",
-	                { "data-target": { key: key } },
-	                _react2["default"].createElement(
-	                    "h3",
-	                    null,
-	                    { title: title }
-	                ),
-	                (list || []).map(function (d) {
-	                    return _react2["default"].createElement(
-	                        "div",
-	                        null,
-	                        _react2["default"].createElement("input", { type: "checkbox", checked: "checked", value: d }),
-	                        " ",
-	                        d
-	                    );
-	                })
-	            );
-	        }
-	    }]);
-
-	    return CheckList;
-	})(Component);
-
-	exports["default"] = CheckList;
-
-	var FilterList = (function (_Component2) {
-	    _inherits(FilterList, _Component2);
-
-	    function FilterList(props) {
-	        _classCallCheck(this, FilterList);
-
-	        _get(Object.getPrototypeOf(FilterList.prototype), "constructor", this).call(this, props);
-	    }
-
-	    _createClass(FilterList, [{
-	        key: "render",
-	        value: function render() {
-	            var groups = this.props.groups;
-
-	            return _react2["default"].createElement(
-	                "div",
-	                null,
-	                _react2["default"].createElement(
-	                    "div",
-	                    { id: "clear_filters" },
-	                    _react2["default"].createElement(
-	                        "a",
-	                        { href: "#" },
-	                        "(clear)"
-	                    )
-	                ),
-	                _react2["default"].createElement(
-	                    "h2",
-	                    null,
-	                    "Filters:"
-	                ),
-	                _react2["default"].createElement(
-	                    "div",
-	                    null,
-	                    groups.map(function (_ref) {
-	                        var key = _ref.key;
-	                        var title = _ref.title;
-	                        var uniqueValues = _ref.uniqueValues;
-
-	                        return _react2["default"].createElement(CheckList, { key: key, title: title, list: uniqueValues });
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return FilterList;
-	})(Component);
-
-	exports["default"] = FilterList;
-	module.exports = exports["default"];
-
-	/*
-
-	function GetDiscreteFilters () {
-	    var filters = [];
-	    $('.filter_block').each(function (index, element) {
-	        var target = $(this).attr('data-target');
-	        var removeValues = {};
-	        $(this).find('input:not(:checked)').each(function (innerIndex, innerElement) {
-	            removeValues[$(this).val()] = true;
-	        });
-	        var toAdd = {
-	            target: target,
-	            removeValues: removeValues
-	        };
-	        filters.push(toAdd);
-	    });
-	    return filters;
-	};
-	function ResetFilters () {
-	    var filters = {
-	        discrete: GetDiscreteFilters(),
-	        numeric: [] // numeric not done yet!
-	    };
-	    dispatchChange(filters)
-	};
-	*/
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process, module) {/* jshint esnext: true */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _injectInjectEs6Js = __webpack_require__(160);
-
-	var _injectInjectEs6Js2 = _interopRequireDefault(_injectInjectEs6Js);
-
-	if (!process.env.BROWSER) {
-	    _injectInjectEs6Js2['default'].css({ file: '../item-tooltip.css', parent: module });
-	}
-
-	var Component = _react2['default'].Component;
-
-	var CustomTooltip = (function (_Component) {
-	    _inherits(CustomTooltip, _Component);
-
-	    function CustomTooltip(props) {
-	        _classCallCheck(this, CustomTooltip);
-
-	        _get(Object.getPrototypeOf(CustomTooltip.prototype), 'constructor', this).call(this, props);
-	        this.state = { visible: false };
-	    }
-
-	    _createClass(CustomTooltip, [{
-	        key: 'render',
-	        value: function render() {
-	            var _state = this.state;
-	            var list = _state.list;
-	            var xy = _state.xy;
-	            var title = _state.title;
-	            var visible = _state.visible;
-
-	            var _ref = xy || { x: 0, y: 0 };
-
-	            var cx = _ref.cx;
-	            var cy = _ref.cy;
-
-	            return _react2['default'].createElement(
-	                'item-tooltip',
-	                { className: visible ? '' : 'hidden', style: { left: cx + 20, top: cy + 10 } },
-	                _react2['default'].createElement(
-	                    'h3',
-	                    null,
-	                    title
-	                ),
-	                _react2['default'].createElement(
-	                    'ul',
-	                    null,
-	                    (list || []).map(function (_ref2) {
-	                        var title = _ref2.title;
-	                        var value = _ref2.value;
-
-	                        return _react2['default'].createElement(
-	                            'li',
-	                            null,
-	                            _react2['default'].createElement(
-	                                'span',
-	                                { className: 'name' },
-	                                title,
-	                                ':'
-	                            ),
-	                            _react2['default'].createElement(
-	                                'span',
-	                                { className: 'value' },
-	                                value
-	                            )
-	                        );
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return CustomTooltip;
-	})(Component);
-
-	exports['default'] = CustomTooltip;
-	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(2)(module)))
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* jshint esnext: true */
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(3);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var Component = _react2['default'].Component;
-
-	var ColorLegend = (function (_Component) {
-	    _inherits(ColorLegend, _Component);
-
-	    function ColorLegend(props) {
-	        _classCallCheck(this, ColorLegend);
-
-	        _get(Object.getPrototypeOf(ColorLegend.prototype), 'constructor', this).call(this, props);
-	        this.state = { title: '', colorList: [] };
-	    }
-
-	    _createClass(ColorLegend, [{
-	        key: 'render',
-	        value: function render() {
-	            var _state = this.state;
-	            var title = _state.title;
-	            var colorList = _state.colorList;
-
-	            if (!colorList) {
-	                return _react2['default'].createElement('div', null);
-	            } else {
-	                return _react2['default'].createElement(
-	                    'div',
-	                    null,
-	                    _react2['default'].createElement(
-	                        'h3',
-	                        null,
-	                        title
-	                    ),
-	                    _react2['default'].createElement(
-	                        'ul',
-	                        null,
-	                        (colorList || []).map(function (_ref) {
-	                            var name = _ref.name;
-	                            var color = _ref.color;
-	                            return _react2['default'].createElement(
-	                                'li',
-	                                null,
-	                                _react2['default'].createElement(
-	                                    'span',
-	                                    { style: { width: '15px', height: '15px', background: color, color: color } },
-	                                    '__'
-	                                ),
-	                                ' ',
-	                                name
-	                            );
-	                        })
-	                    )
-	                );
-	            }
-	        }
-	    }]);
-
-	    return ColorLegend;
-	})(Component);
-
-	exports['default'] = ColorLegend;
-	module.exports = exports['default'];
-
-/***/ },
-/* 170 */
-/***/ function(module, exports) {
-
-	/* jshint esnext: true */
-
-	// -------------------------
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var FN = (function () {
-	  function FN() {
-	    _classCallCheck(this, FN);
-	  }
-
-	  _createClass(FN, null, [{
-	    key: "get_distinct_values",
-	    value: function get_distinct_values(nodes, keyName, keySortFn) {
-	      var allValues, distinctValues, key, value;
-	      allValues = {};
-	      nodes.forEach(function (d) {
-	        var value = d.original[keyName];
-	        allValues[value] = true;
-	      });
-	      distinctValues = [];
-	      for (key in allValues) {
-	        value = allValues[key];
-	        distinctValues.push(key);
-	      }
-	      distinctValues.sort(keySortFn(keyName));
-	      return distinctValues;
-	    }
-	  }]);
-
-	  return FN;
-	})();
-
-	// -------------------------
-
-	var Svg = (function () {
-	  function Svg() {
-	    _classCallCheck(this, Svg);
-	  }
-
-	  _createClass(Svg, null, [{
-	    key: "listenForSelection",
-	    value: function listenForSelection(_ref) {
-	      var circles = _ref.circles;
-	      var circleStyle = _ref.circleStyle;
-	      var onItemSelection = _ref.onItemSelection;
-
-	      if (circles === undefined) {
-	        return;
-	      }
-	      if (typeof onItemSelection !== "function") {
-	        onItemSelection = function () {};
-	      }
-	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
-	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
-	      var radius = circleStyle.radius;
-
-	      circles.on("mouseover", function (d, i) {
-	        d3.select(this).attr("r", radius + 2).attr("stroke-width", 3).attr("stroke", selectedStrokeColor);
-
-	        onItemSelection(d.original, { cx: Math.round(d.x), cy: Math.round(d.y) });
-	      }).on("mouseout", function (d, i) {
-	        d3.select(this).attr("r", radius).attr("stroke-width", 1).attr("stroke", defaultStrokeColor);
-
-	        onItemSelection();
-	      });
-	    }
-	  }, {
-	    key: "mountVis",
-	    value: function mountVis(div, width, height) {
-	      var svg = d3.select(div).append("svg");
-	      svg.attr("width", width).attr("height", height);
-	      return svg;
-	    }
-	  }, {
-	    key: "appendCircles",
-	    value: function appendCircles(_ref2) {
-	      var vis = _ref2.vis;
-	      var data = _ref2.data;
-	      var circleStyle = _ref2.circleStyle;
-	      var width = _ref2.width;
-	      var height = _ref2.height;
-
-	      var svg = vis;
-	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
-	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
-	      var fillColor = circleStyle.fillColor;
-	      var radius = circleStyle.radius;
-
-	      var nodes = data.map(function (d, i) {
-	        return {
-	          id: i,
-	          original: d,
-	          radius: radius,
-	          x: Math.random() * width,
-	          y: Math.random() * height
-	        };
-	      });
-
-	      var circles = svg.append("g").selectAll("circle").data(nodes, function (d) {
-	        return d.id;
-	      });
-
-	      circles.enter().append("circle").attr("r", radius * 3).attr("stroke-width", 1).attr("stroke", defaultStrokeColor).attr("opacity", 0).style("fill", function (d) {
-	        return fillColor;
-	      }).attr("id", function (d) {
-	        return "b_" + d.id;
-	      });
-
-	      circles.transition().duration(2000).attr("opacity", 1).attr("r", function (d) {
-	        return d.radius;
-	      });
-
-	      var force = d3.layout.force().nodes(nodes).size([width, height]);
-	      circles.call(force.drag);
-
-	      return { nodes: nodes, circles: circles, force: force };
-	    }
-	  }, {
-	    key: "getGroupData",
-	    value: function getGroupData(_ref3) {
-	      var distinctValues = _ref3.distinctValues;
-	      var width = _ref3.width;
-	      var height = _ref3.height;
-
-	      if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
-	        return [{ label: "", cx: width / 2, cy: height / 2 }];
-	      }
-
-	      var center = { cx: width / 2, cy: height / 2 };
-	      var numCenters = distinctValues.length;
-	      var sp = 200;
-	      return distinctValues.map(function (d, i) {
-	        var x_position = (width - sp * 2) * (i + 0) / (numCenters - 1) + sp;
-	        return { label: d, cx: x_position, cy: center.cy };
-	      });
-	    }
-	  }, {
-	    key: "removeTopLabels",
-	    value: function removeTopLabels(svg) {
-	      svg.selectAll(".top-labels").remove();
-	    }
-	  }, {
-	    key: "addTopLabels",
-	    value: function addTopLabels(svg, group_data) {
-	      // add labels atop each group
-	      svg.selectAll(".top-labels").remove();
-
-	      var labels = svg.append("g").attr("class", "top-labels").selectAll("g").data(group_data);
-
-	      var g = labels.enter().append("g").attr("text-anchor", "start").attr("transform", function (_ref4) {
-	        var cx = _ref4.cx;
-	        return "translate(" + cx + ",100)rotate(-35)";
-	      });
-
-	      g.append("text").attr("fill", "white").attr("stroke", "white").attr("stroke-width", "3").text(function (_ref5) {
-	        var label = _ref5.label;
-	        return label;
-	      });
-	      g.append("text").text(function (_ref6) {
-	        var label = _ref6.label;
-	        return label;
-	      });
-	      return labels;
-	    }
-	  }]);
-
-	  return Svg;
-	})();
-
-	// -------------------------
-
-	var LayoutUtils = (function () {
-	  function LayoutUtils() {
-	    _classCallCheck(this, LayoutUtils);
-	  }
-
-	  _createClass(LayoutUtils, null, [{
-	    key: "moveTowardsGroupCenter",
-	    value: function moveTowardsGroupCenter(_ref7) {
-	      var alpha = _ref7.alpha;
-	      var width = _ref7.width;
-	      var height = _ref7.height;
-	      var damper = _ref7.damper;
-	      var group_data = _ref7.group_data;
-	      var keyName = _ref7.keyName;
-
-	      var centersMap = group_data.reduce(function (acc, d) {
-	        acc[d.label] = d;d.actual = [];return acc;
-	      }, {});
-
-	      return function (d) {
-	        var value = d.original[keyName];
-	        var center = centersMap[value || ""];
-	        d.x = d.x + (center.cx - d.x) * (damper + 0.02) * alpha * 1.1;
-	        d.y = d.y + (center.cy - d.y) * (damper + 0.02) * alpha * 1.1;
-	        center.actual.push({ cx: d.x, cy: d.y });
-	      };
-	    }
-	  }, {
-	    key: "charge",
-	    value: function charge(d) {
-	      return d.radius !== 0 ? -Math.pow(d.radius, 2) : 0;
-	    }
-	  }]);
-
-	  return LayoutUtils;
-	})();
-
-	// -------------------------
-
-	var BubbleChart = (function () {
-	  function BubbleChart() {
-	    _classCallCheck(this, BubbleChart);
-
-	    this.state = {
-	      width: 1000,
-	      height: 600,
-	      forceGravity: -0.01,
-	      damper: 0.4
-	    };
-
-	    var _state = this.state;
-	    var width = _state.width;
-	    var height = _state.height;
-
-	    var div = document.createElement("div");
-	    var vis = Svg.mountVis(div, width, height);
-	    this.state.div = div;
-	    this.state.vis = vis;
-	  }
-
-	  _createClass(BubbleChart, [{
-	    key: "keySortFn",
-
-	    // public accessors
-
-	    value: function keySortFn(_) {
-	      this.state.keySortFn = _;
-	      return this;
-	    }
-	  }, {
-	    key: "circleStyle",
-	    value: function circleStyle(_) {
-	      if (!arguments.length) {
-	        return this.state.circleStyle;
-	      }
-	      this.state.circleStyle = _;
-	      return this;
-	    }
-	  }, {
-	    key: "mountIn",
-	    value: function mountIn(node) {
-	      var div = this.state.div;
-
-	      node.appendChild(div);
-	      return this;
-	    }
-	  }, {
-	    key: "plot",
-	    value: function plot(data) {
-	      var _state2 = this.state;
-	      var vis = _state2.vis;
-	      var width = _state2.width;
-	      var height = _state2.height;
-	      var circleStyle = _state2.circleStyle;
-	      var onItemSelection = _state2.onItemSelection;
-
-	      var _Svg$appendCircles = Svg.appendCircles({ vis: vis, data: data, circleStyle: circleStyle, width: width, height: height });
-
-	      var circles = _Svg$appendCircles.circles;
-	      var nodes = _Svg$appendCircles.nodes;
-	      var force = _Svg$appendCircles.force;
-
-	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: onItemSelection });
-	      Object.assign(this.state, { force: force, nodes: nodes, vis: vis, circles: circles });
-	      return this;
-	    }
-	  }, {
-	    key: "onItemSelection",
-	    value: function onItemSelection(_) {
-	      var _state3 = this.state;
-	      var circles = _state3.circles;
-	      var circleStyle = _state3.circleStyle;
-
-	      this.state.onItemSelection = _;
-	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: _ });
-	      return this;
-	    }
-	  }, {
-	    key: "color_by",
-	    value: function color_by(keyName, getColorFn) {
-	      var _state4 = this.state;
-	      var nodes = _state4.nodes;
-	      var circles = _state4.circles;
-	      var keySortFn = _state4.keySortFn;
-
-	      var distinctValues = FN.get_distinct_values(nodes, keyName, keySortFn);
-	      var colorFn = getColorFn(keyName, distinctValues);
-	      var duration = !keyName || !keyName.length ? 1500 : 1000;
-	      circles.transition().duration(duration).style("fill", function (d) {
-	        return colorFn(d.original[keyName]);
-	      });
-	      return this;
-	    }
-	  }, {
-	    key: "group_by",
-	    value: function group_by(keyName) {
-	      var _state5 = this.state;
-	      var width = _state5.width;
-	      var height = _state5.height;
-	      var forceGravity = _state5.forceGravity;
-	      var damper = _state5.damper;
-	      var force = _state5.force;
-	      var nodes = _state5.nodes;
-	      var vis = _state5.vis;
-	      var circles = _state5.circles;
-	      var keySortFn = _state5.keySortFn;
-
-	      var distinctValues = FN.get_distinct_values(nodes, keyName, keySortFn);
-	      var group_data = Svg.getGroupData({ distinctValues: distinctValues, width: width, height: height });
-	      Svg.removeTopLabels(vis);
-	      var labels = Svg.addTopLabels(vis, group_data);
-
-	      var tickCount = 0;
-	      force.gravity(forceGravity).charge(LayoutUtils.charge).friction(0.9).on("tick", function (e) {
-	        tickCount++;
-	        circles.each(LayoutUtils.moveTowardsGroupCenter({ alpha: e.alpha, width: width, height: height, damper: damper, group_data: group_data, keyName: keyName })).attr("cx", function (d) {
-	          return d.x;
-	        }).attr("cy", function (d) {
-	          return d.y;
-	        });
-
-	        if (tickCount < 5 || tickCount % 10 == 0 && tickCount < 200) {
-	          labels.attr("transform", function (_ref8) {
-	            var cx = _ref8.cx;
-	            var actual = _ref8.actual;
-
-	            var cxstats = actual.reduce(function (acc, _ref9) {
-	              var cx = _ref9.cx;
-	              var cy = _ref9.cy;
-	              acc.sum += cx, acc.n += 1;return acc;
-	            }, { sum: 0, n: 0 });
-	            var avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
-	            return "translate(" + avg + ",100)rotate(-35)";
-	          });
-	        }
-	      });
-	      force.start();
-	      return this;
-	    }
-	  }, {
-	    key: "filterStudents",
-	    value: function filterStudents(students) {
-	      var _state6 = this.state;
-	      var circleStyle = _state6.circleStyle;
-	      var force = _state6.force;
-	      var nodes = _state6.nodes;
-	      var circles = _state6.circles;
-	      var radius = circleStyle.radius;
-
-	      nodes.forEach(function (d) {
-	        var idx = students ? students.indexOf(d.original.user_id) : 0;
-	        if (idx === -1) {
-	          d.opacity = 0;
-	        } else {
-	          d.opacity = 1;
-	        }
-	      });
-	      force.start();
-	      circles.transition().duration(2000).attr("fill-opacity", function (d) {
-	        return d.opacity;
-	      });
-	      return this;
-	    }
-	  }]);
-
-	  return BubbleChart;
-	})();
-
-	exports["default"] = BubbleChart;
-	module.exports = exports["default"];
-
-/***/ },
-/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* disable some rules until we refactor more completely; fixing them now would
@@ -20162,11 +18971,11 @@
 	};
 
 	var React = __webpack_require__(3);
-	var Input = __webpack_require__(172);
-	var classes = __webpack_require__(173);
-	var Value = __webpack_require__(174);
-	var SingleValue = __webpack_require__(175);
-	var Option = __webpack_require__(176);
+	var Input = __webpack_require__(165);
+	var classes = __webpack_require__(166);
+	var Value = __webpack_require__(167);
+	var SingleValue = __webpack_require__(168);
+	var Option = __webpack_require__(169);
 
 	var requestId = 0;
 
@@ -21010,7 +19819,7 @@
 	module.exports = Select;
 
 /***/ },
-/* 172 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21119,7 +19928,7 @@
 	module.exports = AutosizeInput;
 
 /***/ },
-/* 173 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -21172,13 +19981,13 @@
 	})();
 
 /***/ },
-/* 174 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var classes = __webpack_require__(173);
+	var classes = __webpack_require__(166);
 
 	var Value = React.createClass({
 
@@ -21240,13 +20049,13 @@
 	module.exports = Value;
 
 /***/ },
-/* 175 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var classes = __webpack_require__(173);
+	var classes = __webpack_require__(166);
 
 	var SingleValue = React.createClass({
 		displayName: 'SingleValue',
@@ -21269,13 +20078,13 @@
 	module.exports = SingleValue;
 
 /***/ },
-/* 176 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var classes = __webpack_require__(173);
+	var classes = __webpack_require__(166);
 
 	var Option = React.createClass({
 		displayName: 'Option',
@@ -21321,6 +20130,1227 @@
 	});
 
 	module.exports = Option;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _imports = __webpack_require__(171);
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var StudentVis = (function (_Component) {
+	    _inherits(StudentVis, _Component);
+
+	    function StudentVis() {
+	        _classCallCheck(this, StudentVis);
+
+	        _get(Object.getPrototypeOf(StudentVis.prototype), 'constructor', this).apply(this, arguments);
+	    }
+
+	    _createClass(StudentVis, [{
+	        key: 'render',
+	        value: function render() {
+	            var list = this.props.list;
+
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'page' },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { id: 'visualisation' },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { id: 'vis-controls' },
+	                        _react2['default'].createElement('div', { id: 'color-by' }),
+	                        _react2['default'].createElement('div', { id: 'group-by' }),
+	                        _react2['default'].createElement('div', { id: 'filters' })
+	                    ),
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { id: 'vis-display' },
+	                        _react2['default'].createElement('div', { id: 'vis' }),
+	                        _react2['default'].createElement('div', { id: 'itemTooltip' })
+	                    ),
+	                    _react2['default'].createElement('div', { id: 'vis-legend' })
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'renderD3',
+	        value: function renderD3(tsv) {
+	            function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
+	                // columns that we are interested in
+	                var keys = Object.keys(tsv[0]).map(function (k) {
+	                    var _keyToLookup = keyToLookup(k);
+
+	                    var key = _keyToLookup.key;
+	                    var type = _keyToLookup.type;
+	                    var title = _keyToLookup.title;
+
+	                    var column = { key: key, type: type, title: title };
+	                    return column;
+	                }).filter(keyFilterFn);
+
+	                var _loop = function () {
+	                    var item = tsv[r];
+	                    keys.forEach(function (k) {
+	                        if (!k.uniqueValues) {
+	                            k.uniqueValues = [];
+	                        }
+	                        var set = k.uniqueValues;
+	                        var value = item[k.key];
+	                        if (set.indexOf(value) === -1) {
+	                            set.push(value);
+	                        }
+	                    });
+	                };
+
+	                // add list of unique values to each column
+	                for (var r = 0, nr = tsv.length; r < nr; r++) {
+	                    _loop();
+	                }
+	                var keyMap = {};
+	                keys.forEach(function (k) {
+	                    k.uniqueValues.sort(keySortFn(k));
+	                    keyMap[k.key] = k;
+	                });
+	                return { keys: keys, keyMap: keyMap };
+	            }
+
+	            // -- Loading the chart config
+	            var StudentChart = __webpack_require__(172);
+
+	            // -- Getting the Lookup keys
+
+	            var _getLookupKeys = getLookupKeys(tsv, StudentChart.keyToLookup, StudentChart.keyFilterFn, StudentChart.keySortFn);
+
+	            var keys = _getLookupKeys.keys;
+	            var keyMap = _getLookupKeys.keyMap;
+	            var _lookups$lookupMap = { lookups: keys, lookupMap: keyMap };
+	            var lookups = _lookups$lookupMap.lookups;
+	            var lookupMap = _lookups$lookupMap.lookupMap;
+
+	            // -- Mounting the visualisation add-ons
+	            var ItemTooltip = __webpack_require__(175);
+	            var ColorLegend = __webpack_require__(176);
+
+	            var tooltip = _react2['default'].render(_react2['default'].createElement(ItemTooltip, { title: 'my_tooltip', width: 240 }), document.getElementById('itemTooltip'));
+
+	            var colorLegend = _react2['default'].render(_react2['default'].createElement(ColorLegend), document.getElementById('vis-legend'));
+
+	            // -- Mounting the visualisation
+	            var BubbleChart = __webpack_require__(177);
+	            var chart = new BubbleChart();
+	            StudentChart.addControls({ lookups: lookups, lookupMap: lookupMap, chart: chart, colorLegend: colorLegend });
+	            chart.mountIn(document.getElementById('vis')).onItemSelection(function (item, xy) {
+	                var _ref = StudentChart.itemDump(item, lookupMap) || { title: null, list: null };
+
+	                var title = _ref.title;
+	                var list = _ref.list;
+
+	                tooltip.setState({ visible: list && list.length, xy: xy, title: title, list: list });
+	            }).keySortFn(StudentChart.keySortFn).circleStyle(StudentChart.circleStyle).plot(tsv).groupBy();
+
+	            return chart;
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var tsv = this.props.list;
+	            var chart = this.renderD3(tsv);
+	            this.setState({ chart: chart });
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate(nextProps, nextState) {
+
+	            if (nextState.hasOwnProperty('filterStudents')) {
+	                var tsv = this.props.list;
+	                // this.renderD3(tsv);
+	                this.state.chart.filterStudents(nextState.filterStudents);
+	            }
+	            return false;
+	        }
+	    }]);
+
+	    return StudentVis;
+	})(Component);
+
+	exports['default'] = StudentVis;
+	module.exports = exports['default'];
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _componentsInjectInjectEs6Js = __webpack_require__(160);
+
+	var _componentsInjectInjectEs6Js2 = _interopRequireDefault(_componentsInjectInjectEs6Js);
+
+	var _componentsInjectInjectJsEs6Js = __webpack_require__(161);
+
+	var _componentsInjectInjectJsEs6Js2 = _interopRequireDefault(_componentsInjectInjectJsEs6Js);
+
+	_componentsInjectInjectEs6Js2['default'].js = _componentsInjectInjectJsEs6Js2['default'];
+
+	exports.Inject = _componentsInjectInjectEs6Js2['default'];
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var StudentChart = (function () {
+	    function StudentChart() {
+	        _classCallCheck(this, StudentChart);
+	    }
+
+	    _createClass(StudentChart, null, [{
+	        key: 'getFieldColor',
+	        value: function getFieldColor(value) {}
+	    }, {
+	        key: 'getLevelColor',
+	        value: function getLevelColor(value) {
+	            var colors = {
+	                'Dip': '#FF00CC',
+	                'GDip': '#FF00CC',
+	                'B': '#00FF00',
+	                'B(Hons)': '#00FF00',
+	                'PGDip': '#FFFF00',
+	                'M': '#FF0000',
+	                'PhD': '#FF0000',
+	                'default': '#4F4F4F'
+	            };
+	            return colors[value] || colors['default'];
+	        }
+	    }, {
+	        key: 'getDefaultColor',
+
+	        // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops
+
+	        value: function getDefaultColor(valueList) {
+	            var colors = ['#0000D9', '#FF00FF', '#FF0033', '#FFCC66', '#66CC33', '#33FFCC', '#00A0AA', '#FFCCFF', '#FF9933', '#99FF99', '#00BB00', '#CCFFCC', '#333333', '#CCCCCC', '#99CCCC', '#FF0000'];
+	            var colorMap = {};
+	            (valueList || []).forEach(function (d, i) {
+	                colorMap[d] = colors[i % colors.length];
+	            });
+	            return function (value) {
+	                return colorMap[value];
+	            };
+	        }
+	    }, {
+	        key: 'getColorFn',
+	        value: function getColorFn(type, distinctValues) {
+	            var colorFns = {
+	                // "level": StudentChart.getLevelColor,
+	                // "field": StudentChart.getFieldColor,
+	                'default': StudentChart.getDefaultColor(distinctValues)
+	            };
+	            return colorFns[type] || colorFns['default'];
+	        }
+	    }, {
+	        key: 'keyFilterFn',
+	        value: function keyFilterFn(_ref) {
+	            var key = _ref.key;
+	            var type = _ref.type;
+	            var title = _ref.title;
+
+	            return key.match(/^(school|level|field|degree|study_year|final_year)/);
+	        }
+	    }, {
+	        key: 'keySortFn',
+	        value: function keySortFn(keyName) {
+	            function sortNumericAsc(a, b) {
+	                return Number(a) - Number(b);
+	            }
+	            function sortLevel(a, b) {
+	                var order = 'Dip,GDip,B,B(Hons),PGDip,M,PhD,N/A'.split(',');
+	                return order.indexOf(a) - order.indexOf(b);
+	            }
+	            function sortField(a, b) {
+	                var order = 'Com,Com/BSc,Com/Sc,A,A/Sc,Mus,Des,Des/A,Des/Com,IT,Tech,CompSc,CompSc/Des,Eng,Eng/Com,Eng/Sc,Sc,Sc/HSc,Sc/Com,Sc/Law,MathSc'.split(',');
+	                return order.indexOf(a) - order.indexOf(b);
+	            }
+	            var map = { level: sortLevel, field: sortField };
+	            return map[keyName];
+	        }
+	    }, {
+	        key: 'keyToLookup',
+	        value: function keyToLookup(keyName) {
+	            var p = (keyName || '').split(':');
+	            if (p.length === 1) {
+	                p[1] = keyName;
+	            }
+	            return { key: keyName, type: p[0], title: p[1] };
+	        }
+	    }, {
+	        key: 'addControls',
+	        value: function addControls(_ref2) {
+	            var lookups = _ref2.lookups;
+	            var lookupMap = _ref2.lookupMap;
+	            var chart = _ref2.chart;
+	            var colorLegend = _ref2.colorLegend;
+
+	            var SelectBy = __webpack_require__(173);
+	            var FilterList = __webpack_require__(174);
+
+	            function whenColorValues(keyName, distinctValues) {
+	                var _ref3 = lookupMap[keyName] || { title: '' };
+
+	                var key = _ref3.key;
+	                var type = _ref3.type;
+	                var title = _ref3.title;
+	                var fillColor = StudentChart.circleStyle.fillColor;
+
+	                var colorFn = type ? StudentChart.getColorFn(type, distinctValues) : function (d) {
+	                    return fillColor;
+	                };
+	                function colorFormat(d, i) {
+	                    return { name: d, color: colorFn(d) };
+	                }
+	                distinctValues.sort(StudentChart.keySortFn(key));
+	                colorLegend.setState({ title: title, colorList: type ? distinctValues.map(colorFormat) : null });
+	                return colorFn;
+	            }
+
+	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Color by: ', onChange: function onChange(d) {
+	                    chart.colorBy(d, whenColorValues);
+	                } }), document.getElementById('color-by'));
+
+	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Group by: ', onChange: function onChange(d) {
+	                    chart.groupBy(d);
+	                } }), document.getElementById('group-by'));
+
+	            /*
+	                    React.render(
+	                        React.createElement(FilterList, {groups: lookups, onChange: function(d) { chart.use_filters(d); }}),
+	                        document.getElementById('filters')
+	                    );        
+	            */
+	        }
+	    }, {
+	        key: 'itemDump',
+	        value: function itemDump(obj, lookupMap) {
+	            if (!obj) {
+	                return;
+	            }
+	            var list = [];
+	            for (var key in obj) {
+	                var value = obj[key];
+
+	                var _ref4 = lookupMap[key] || {};
+
+	                var title = _ref4.title;
+
+	                if (title) {
+	                    list.push({ title: title, value: value });
+	                }
+	            }
+	            return { title: obj['user_id'], list: list };
+	        }
+	    }]);
+
+	    return StudentChart;
+	})();
+
+	exports['default'] = StudentChart;
+
+	StudentChart.circleStyle = { defaultStrokeColor: '#404040', selectedStrokeColor: '#DF1E21', fillColor: '#cfcfcf', radius: 7 };
+	module.exports = exports['default'];
+
+	/*
+	        var colors = {
+	          'HSc/Sc'    : 'SomeColorCloseToBlue',
+	          'Com'       : 'red1',
+	          'Com/BSc'   : 'red2',
+	          'Com/Sc'    : 'red3',
+	          'A'         : 'somewhatGreen1',
+	          'A/Sc'      : 'somewhatGreen2', 
+	          'Mus'       : 'greenishButDifferent' 
+	          'Des'       : 'typicallyGreen1'    
+	          'Des/A'     : 'typicallyGreen2'    
+	          'Des/Com'   : 'green/Red'  // not obvious how to present overlap
+	          'IT'        : 'darkGray1'
+	          'Tech'      : 'darkGray2'
+	          'CompSc'    : 'darkGray3'
+	          'CompSc/Des': 'darkGray4'
+	          'Eng'       : 'Blue1'
+	          'Eng/Com'   : 'Blue/Red'
+	          'Eng/Sc'    : 'Blue/Purple' // not obvious how to present overlap
+	          'Sc'        : 'Purple'
+	          'Sc/Com'    : 'Purple'
+	          'Sc/Law'    : 'Purple'
+	          'MathSc'    : 'SomeColorCloseToBlue'
+	        };
+	        return colors[value] || colors.default;
+	        */
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var SelectBy = (function (_Component) {
+	    _inherits(SelectBy, _Component);
+
+	    function SelectBy(props) {
+	        _classCallCheck(this, SelectBy);
+
+	        _get(Object.getPrototypeOf(SelectBy.prototype), 'constructor', this).call(this, props);
+	        var onChange = props.onChange;
+
+	        var optionChange = function optionChange(event) {
+	            onChange(event.target.value);
+	        };
+	        this.state = { optionChange: optionChange };
+	    }
+
+	    _createClass(SelectBy, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var lookups = _props.lookups;
+	            var title = _props.title;
+	            var optionChange = this.state.optionChange;
+
+	            return _react2['default'].createElement(
+	                'select-group',
+	                null,
+	                _react2['default'].createElement(
+	                    'span',
+	                    { className: 'title' },
+	                    title
+	                ),
+	                _react2['default'].createElement(
+	                    'select',
+	                    { onChange: optionChange },
+	                    _react2['default'].createElement('option', { value: '' }),
+	                    lookups.map(function (_ref) {
+	                        var key = _ref.key;
+	                        var title = _ref.title;
+	                        return _react2['default'].createElement(
+	                            'option',
+	                            { value: key },
+	                            title
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SelectBy;
+	})(Component);
+
+	exports['default'] = SelectBy;
+	module.exports = exports['default'];
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2["default"].Component;
+
+	var CheckList = (function (_Component) {
+	    _inherits(CheckList, _Component);
+
+	    function CheckList(props) {
+	        _classCallCheck(this, CheckList);
+
+	        _get(Object.getPrototypeOf(CheckList.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(CheckList, [{
+	        key: "render",
+	        value: function render() {
+	            var _props = this.props;
+	            var key = _props.key;
+	            var title = _props.title;
+	            var list = _props.list;
+
+	            return _react2["default"].createElement(
+	                "div",
+	                { "data-target": { key: key } },
+	                _react2["default"].createElement(
+	                    "h3",
+	                    null,
+	                    { title: title }
+	                ),
+	                (list || []).map(function (d) {
+	                    return _react2["default"].createElement(
+	                        "div",
+	                        null,
+	                        _react2["default"].createElement("input", { type: "checkbox", checked: "checked", value: d }),
+	                        " ",
+	                        d
+	                    );
+	                })
+	            );
+	        }
+	    }]);
+
+	    return CheckList;
+	})(Component);
+
+	exports["default"] = CheckList;
+
+	var FilterList = (function (_Component2) {
+	    _inherits(FilterList, _Component2);
+
+	    function FilterList(props) {
+	        _classCallCheck(this, FilterList);
+
+	        _get(Object.getPrototypeOf(FilterList.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(FilterList, [{
+	        key: "render",
+	        value: function render() {
+	            var groups = this.props.groups;
+
+	            return _react2["default"].createElement(
+	                "div",
+	                null,
+	                _react2["default"].createElement(
+	                    "div",
+	                    { id: "clear_filters" },
+	                    _react2["default"].createElement(
+	                        "a",
+	                        { href: "#" },
+	                        "(clear)"
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "h2",
+	                    null,
+	                    "Filters:"
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    null,
+	                    groups.map(function (_ref) {
+	                        var key = _ref.key;
+	                        var title = _ref.title;
+	                        var uniqueValues = _ref.uniqueValues;
+
+	                        return _react2["default"].createElement(CheckList, { key: key, title: title, list: uniqueValues });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return FilterList;
+	})(Component);
+
+	exports["default"] = FilterList;
+	module.exports = exports["default"];
+
+	/*
+
+	function GetDiscreteFilters () {
+	    var filters = [];
+	    $('.filter_block').each(function (index, element) {
+	        var target = $(this).attr('data-target');
+	        var removeValues = {};
+	        $(this).find('input:not(:checked)').each(function (innerIndex, innerElement) {
+	            removeValues[$(this).val()] = true;
+	        });
+	        var toAdd = {
+	            target: target,
+	            removeValues: removeValues
+	        };
+	        filters.push(toAdd);
+	    });
+	    return filters;
+	};
+	function ResetFilters () {
+	    var filters = {
+	        discrete: GetDiscreteFilters(),
+	        numeric: [] // numeric not done yet!
+	    };
+	    dispatchChange(filters)
+	};
+	*/
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process, module) {/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _injectInjectEs6Js = __webpack_require__(160);
+
+	var _injectInjectEs6Js2 = _interopRequireDefault(_injectInjectEs6Js);
+
+	if (!process.env.BROWSER) {
+	    _injectInjectEs6Js2['default'].css({ file: '../item-tooltip.css', parent: module });
+	}
+
+	var Component = _react2['default'].Component;
+
+	var CustomTooltip = (function (_Component) {
+	    _inherits(CustomTooltip, _Component);
+
+	    function CustomTooltip(props) {
+	        _classCallCheck(this, CustomTooltip);
+
+	        _get(Object.getPrototypeOf(CustomTooltip.prototype), 'constructor', this).call(this, props);
+	        this.state = { visible: false };
+	    }
+
+	    _createClass(CustomTooltip, [{
+	        key: 'render',
+	        value: function render() {
+	            var _state = this.state;
+	            var list = _state.list;
+	            var xy = _state.xy;
+	            var title = _state.title;
+	            var visible = _state.visible;
+
+	            var _ref = xy || { x: 0, y: 0 };
+
+	            var cx = _ref.cx;
+	            var cy = _ref.cy;
+
+	            return _react2['default'].createElement(
+	                'item-tooltip',
+	                { className: visible ? '' : 'hidden', style: { left: cx + 20, top: cy + 10 } },
+	                _react2['default'].createElement(
+	                    'h3',
+	                    null,
+	                    title
+	                ),
+	                _react2['default'].createElement(
+	                    'ul',
+	                    null,
+	                    (list || []).map(function (_ref2) {
+	                        var title = _ref2.title;
+	                        var value = _ref2.value;
+
+	                        return _react2['default'].createElement(
+	                            'li',
+	                            null,
+	                            _react2['default'].createElement(
+	                                'span',
+	                                { className: 'name' },
+	                                title,
+	                                ':'
+	                            ),
+	                            _react2['default'].createElement(
+	                                'span',
+	                                { className: 'value' },
+	                                value
+	                            )
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return CustomTooltip;
+	})(Component);
+
+	exports['default'] = CustomTooltip;
+	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(2)(module)))
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var ColorLegend = (function (_Component) {
+	    _inherits(ColorLegend, _Component);
+
+	    function ColorLegend(props) {
+	        _classCallCheck(this, ColorLegend);
+
+	        _get(Object.getPrototypeOf(ColorLegend.prototype), 'constructor', this).call(this, props);
+	        this.state = { title: '', colorList: [] };
+	    }
+
+	    _createClass(ColorLegend, [{
+	        key: 'render',
+	        value: function render() {
+	            var _state = this.state;
+	            var title = _state.title;
+	            var colorList = _state.colorList;
+
+	            if (!colorList) {
+	                return _react2['default'].createElement('div', null);
+	            } else {
+	                return _react2['default'].createElement(
+	                    'div',
+	                    null,
+	                    _react2['default'].createElement(
+	                        'h3',
+	                        null,
+	                        title
+	                    ),
+	                    _react2['default'].createElement(
+	                        'ul',
+	                        null,
+	                        (colorList || []).map(function (_ref) {
+	                            var name = _ref.name;
+	                            var color = _ref.color;
+	                            return _react2['default'].createElement(
+	                                'li',
+	                                null,
+	                                _react2['default'].createElement(
+	                                    'span',
+	                                    { style: { width: '15px', height: '15px', background: color, color: color } },
+	                                    '__'
+	                                ),
+	                                ' ',
+	                                name
+	                            );
+	                        })
+	                    )
+	                );
+	            }
+	        }
+	    }]);
+
+	    return ColorLegend;
+	})(Component);
+
+	exports['default'] = ColorLegend;
+	module.exports = exports['default'];
+
+/***/ },
+/* 177 */
+/***/ function(module, exports) {
+
+	/* jshint esnext: true */
+
+	// -------------------------
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FN = (function () {
+	  function FN() {
+	    _classCallCheck(this, FN);
+	  }
+
+	  _createClass(FN, null, [{
+	    key: "getDistinctValues",
+	    value: function getDistinctValues(nodes, keyName, keySortFn) {
+	      var allValues, distinctValues, key, value;
+	      allValues = {};
+	      nodes.forEach(function (d) {
+	        var value = d.original[keyName];
+	        allValues[value] = true;
+	      });
+	      distinctValues = [];
+	      for (key in allValues) {
+	        value = allValues[key];
+	        distinctValues.push(key);
+	      }
+	      distinctValues.sort(keySortFn(keyName));
+	      return distinctValues;
+	    }
+	  }]);
+
+	  return FN;
+	})();
+
+	// -------------------------
+
+	var Svg = (function () {
+	  function Svg() {
+	    _classCallCheck(this, Svg);
+	  }
+
+	  _createClass(Svg, null, [{
+	    key: "listenForSelection",
+	    value: function listenForSelection(_ref) {
+	      var circles = _ref.circles;
+	      var circleStyle = _ref.circleStyle;
+	      var onItemSelection = _ref.onItemSelection;
+
+	      if (circles === undefined) {
+	        return;
+	      }
+	      if (typeof onItemSelection !== "function") {
+	        onItemSelection = function () {};
+	      }
+	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
+	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
+	      var radius = circleStyle.radius;
+
+	      circles.on("mouseover", function (d, i) {
+	        d3.select(this).attr("r", radius + 2).attr("stroke-width", 3).attr("stroke", selectedStrokeColor);
+
+	        onItemSelection(d.original, { cx: Math.round(d.x), cy: Math.round(d.y) });
+	      }).on("mouseout", function (d, i) {
+	        d3.select(this).attr("r", radius).attr("stroke-width", 1).attr("stroke", defaultStrokeColor);
+
+	        onItemSelection();
+	      });
+	    }
+	  }, {
+	    key: "mountVis",
+	    value: function mountVis(div, width, height) {
+	      var svg = d3.select(div).append("svg");
+	      svg.attr("width", width).attr("height", height);
+	      return svg;
+	    }
+	  }, {
+	    key: "appendCircles",
+	    value: function appendCircles(_ref2) {
+	      var vis = _ref2.vis;
+	      var data = _ref2.data;
+	      var circleStyle = _ref2.circleStyle;
+	      var width = _ref2.width;
+	      var height = _ref2.height;
+
+	      var svg = vis;
+	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
+	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
+	      var fillColor = circleStyle.fillColor;
+	      var radius = circleStyle.radius;
+
+	      var nodes = data.map(function (d, i) {
+	        return {
+	          id: i,
+	          original: d,
+	          radius: radius,
+	          x: Math.random() * width,
+	          y: Math.random() * height
+	        };
+	      });
+
+	      var circles = svg.append("g").selectAll("circle").data(nodes, function (d) {
+	        return d.id;
+	      });
+
+	      circles.enter().append("circle").attr("r", radius * 3).attr("stroke-width", 1).attr("stroke", defaultStrokeColor).attr("opacity", 0).style("fill", function (d) {
+	        return fillColor;
+	      }).attr("id", function (d) {
+	        return "b_" + d.id;
+	      });
+
+	      circles.transition().duration(2000).attr("opacity", 1).attr("r", function (d) {
+	        return d.radius;
+	      });
+
+	      var force = d3.layout.force().nodes(nodes).size([width, height]);
+	      circles.call(force.drag);
+
+	      return { nodes: nodes, circles: circles, force: force };
+	    }
+	  }, {
+	    key: "getGroupData",
+	    value: function getGroupData(_ref3) {
+	      var distinctValues = _ref3.distinctValues;
+	      var width = _ref3.width;
+	      var height = _ref3.height;
+
+	      var margin = { left: 200, right: 50 };
+	      width = width - margin.left - margin.right;
+	      if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
+	        return [{ label: "", cx: width / 2, cy: height / 2 }];
+	      }
+
+	      var center = { cx: width / 2, cy: height / 2 };
+	      var numCenters = distinctValues.length;
+	      var sp = 200;
+	      return distinctValues.map(function (d, i) {
+	        var x_position = margin.left + ((width - sp * 2) * (i + 0) / (numCenters - 1) + sp);
+	        return { label: d, cx: x_position, cy: center.cy };
+	      });
+	    }
+	  }, {
+	    key: "removeTopLabels",
+	    value: function removeTopLabels(svg) {
+	      svg.selectAll(".top-labels").remove();
+	    }
+	  }, {
+	    key: "addTopLabels",
+	    value: function addTopLabels(svg, group_data) {
+	      // add labels atop each group
+	      svg.selectAll(".top-labels").remove();
+
+	      var labels = svg.append("g").attr("class", "top-labels").selectAll("g").data(group_data);
+
+	      var g = labels.enter().append("g").attr("text-anchor", "start").attr("transform", function (_ref4) {
+	        var cx = _ref4.cx;
+	        return "translate(" + cx + ",100)rotate(-35)";
+	      });
+
+	      g.append("text").attr("fill", "white").attr("stroke", "white").attr("stroke-width", "3").text(function (_ref5) {
+	        var label = _ref5.label;
+	        return label;
+	      });
+	      g.append("text").text(function (_ref6) {
+	        var label = _ref6.label;
+	        return label;
+	      });
+	      return labels;
+	    }
+	  }]);
+
+	  return Svg;
+	})();
+
+	// -------------------------
+
+	var LayoutUtils = (function () {
+	  function LayoutUtils() {
+	    _classCallCheck(this, LayoutUtils);
+	  }
+
+	  _createClass(LayoutUtils, null, [{
+	    key: "moveTowardsGroupCenter",
+	    value: function moveTowardsGroupCenter(_ref7) {
+	      var alpha = _ref7.alpha;
+	      var width = _ref7.width;
+	      var height = _ref7.height;
+	      var damper = _ref7.damper;
+	      var group_data = _ref7.group_data;
+	      var keyName = _ref7.keyName;
+
+	      var centersMap = group_data.reduce(function (acc, d) {
+	        acc[d.label] = d;d.actual = [];return acc;
+	      }, {});
+
+	      return function (d) {
+	        var value = d.original[keyName];
+	        var center = centersMap[value || ""];
+	        d.x = d.x + (center.cx - d.x) * (damper + 0.02) * alpha * 1.1;
+	        d.y = d.y + (center.cy - d.y) * (damper + 0.02) * alpha * 1.1;
+	        center.actual.push({ cx: d.x, cy: d.y });
+	      };
+	    }
+	  }, {
+	    key: "charge",
+	    value: function charge(d) {
+	      return d.radius !== 0 ? -Math.pow(d.radius, 2) : 0;
+	    }
+	  }]);
+
+	  return LayoutUtils;
+	})();
+
+	// -------------------------
+
+	var BubbleChart = (function () {
+	  function BubbleChart() {
+	    _classCallCheck(this, BubbleChart);
+
+	    this.state = {
+	      width: 1000,
+	      height: 600,
+	      forceGravity: -0.01,
+	      damper: 0.4
+	    };
+
+	    var _state = this.state;
+	    var width = _state.width;
+	    var height = _state.height;
+
+	    var div = document.createElement("div");
+	    var vis = Svg.mountVis(div, width, height);
+	    this.state.div = div;
+	    this.state.vis = vis;
+	  }
+
+	  _createClass(BubbleChart, [{
+	    key: "keySortFn",
+
+	    // public accessors
+
+	    value: function keySortFn(_) {
+	      this.state.keySortFn = _;
+	      return this;
+	    }
+	  }, {
+	    key: "circleStyle",
+	    value: function circleStyle(_) {
+	      if (!arguments.length) {
+	        return this.state.circleStyle;
+	      }
+	      this.state.circleStyle = _;
+	      return this;
+	    }
+	  }, {
+	    key: "mountIn",
+	    value: function mountIn(node) {
+	      var div = this.state.div;
+
+	      node.appendChild(div);
+	      return this;
+	    }
+	  }, {
+	    key: "plot",
+	    value: function plot(data) {
+	      var _state2 = this.state;
+	      var vis = _state2.vis;
+	      var width = _state2.width;
+	      var height = _state2.height;
+	      var circleStyle = _state2.circleStyle;
+	      var onItemSelection = _state2.onItemSelection;
+
+	      var _Svg$appendCircles = Svg.appendCircles({ vis: vis, data: data, circleStyle: circleStyle, width: width, height: height });
+
+	      var circles = _Svg$appendCircles.circles;
+	      var nodes = _Svg$appendCircles.nodes;
+	      var force = _Svg$appendCircles.force;
+
+	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: onItemSelection });
+	      Object.assign(this.state, { force: force, nodes: nodes, vis: vis, circles: circles });
+	      return this;
+	    }
+	  }, {
+	    key: "onItemSelection",
+	    value: function onItemSelection(_) {
+	      var _state3 = this.state;
+	      var circles = _state3.circles;
+	      var circleStyle = _state3.circleStyle;
+
+	      this.state.onItemSelection = _;
+	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: _ });
+	      return this;
+	    }
+	  }, {
+	    key: "colorBy",
+	    value: function colorBy(keyName, getColorFn) {
+	      var _state4 = this.state;
+	      var nodes = _state4.nodes;
+	      var circles = _state4.circles;
+	      var keySortFn = _state4.keySortFn;
+
+	      var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
+	      var colorFn = getColorFn(keyName, distinctValues);
+	      var duration = !keyName || !keyName.length ? 1500 : 1000;
+	      circles.transition().duration(duration).style("fill", function (d) {
+	        return colorFn(d.original[keyName]);
+	      });
+	      return this;
+	    }
+	  }, {
+	    key: "groupBy",
+	    value: function groupBy(keyName) {
+	      var _state5 = this.state;
+	      var width = _state5.width;
+	      var height = _state5.height;
+	      var forceGravity = _state5.forceGravity;
+	      var damper = _state5.damper;
+	      var force = _state5.force;
+	      var nodes = _state5.nodes;
+	      var vis = _state5.vis;
+	      var circles = _state5.circles;
+	      var keySortFn = _state5.keySortFn;
+
+	      var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
+	      var group_data = Svg.getGroupData({ distinctValues: distinctValues, width: width, height: height });
+	      Svg.removeTopLabels(vis);
+	      var labels = Svg.addTopLabels(vis, group_data);
+
+	      var tickCount = 0;
+	      force.gravity(forceGravity).charge(LayoutUtils.charge).friction(0.9).on("tick", function (e) {
+	        tickCount++;
+	        circles.each(LayoutUtils.moveTowardsGroupCenter({ alpha: e.alpha, width: width, height: height, damper: damper, group_data: group_data, keyName: keyName })).attr("cx", function (d) {
+	          return d.x;
+	        }).attr("cy", function (d) {
+	          return d.y;
+	        });
+
+	        if (tickCount < 5 || tickCount % 10 == 0 && tickCount < 200) {
+	          labels.attr("transform", function (_ref8) {
+	            var cx = _ref8.cx;
+	            var actual = _ref8.actual;
+
+	            var cxstats = actual.reduce(function (acc, _ref9) {
+	              var cx = _ref9.cx;
+	              var cy = _ref9.cy;
+	              acc.sum += cx, acc.n += 1;return acc;
+	            }, { sum: 0, n: 0 });
+	            var avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
+	            return "translate(" + avg + ",100)rotate(-35)";
+	          });
+	        }
+	      });
+	      force.start();
+	      return this;
+	    }
+	  }, {
+	    key: "filterStudents",
+	    value: function filterStudents(students) {
+	      var _state6 = this.state;
+	      var circleStyle = _state6.circleStyle;
+	      var force = _state6.force;
+	      var nodes = _state6.nodes;
+	      var circles = _state6.circles;
+	      var radius = circleStyle.radius;
+
+	      nodes.forEach(function (d) {
+	        console.log(students);
+	        var isIn = students ? students.indexOf(d.original.user_id) !== -1 : true;
+	        d.opacity = isIn ? 1 : 0;
+	      });
+	      force.start();
+	      circles.transition().duration(2000).attr("fill-opacity", function (d) {
+	        return d.opacity;
+	      });
+	      return this;
+	    }
+	  }]);
+
+	  return BubbleChart;
+	})();
+
+	exports["default"] = BubbleChart;
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
