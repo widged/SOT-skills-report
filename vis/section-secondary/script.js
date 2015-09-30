@@ -39,7 +39,7 @@ function draw_skills_bubbles(data) {
     .attr("r", function(d) { return d.r; })
     .on("click", function(d) { return zoom(node == d ? root : d); })
     .on("mouseover", function(d) {
-      if(d.depth == 2){
+      if(d.depth == 1){
         var text = d.name + "<br/>";
         for(var i = 0, size = d.size; i < size ; i++){
           var child = d.children[i];
