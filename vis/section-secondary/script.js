@@ -1,17 +1,15 @@
-function draw_skills_bubbles(data) {
+function draw_skills_bubbles(data, node) {
 
-  data = data.children[0];
-
-  var w = 1280,
-    h = 800,
+  var w = 400,
+    h = 400,
     r = 720  / 3,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
-    node,
+    zoomNode,
     root;
 
   // Define the div for the tooltip
-  var div = d3.select("skill-bubbles").append("div")
+  var div = d3.select(node).append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -19,13 +17,13 @@ function draw_skills_bubbles(data) {
     .size([r, r])
     .value(function(d) { return d.size; });
 
-  var vis = d3.select("skill-bubbles").insert("svg:svg", "h2")
+  var vis = d3.select(node).insert("svg:svg", "h2")
     .attr("width", w)
     .attr("height", h)
     .append("svg:g")
     .attr("transform", "translate(" + (w - r) / 2 + "," + (h - r) / 2 + ")");
 
-  node = root = data;
+  zoomNode = root = data;
 
   var nodes = pack.nodes(root);
 
@@ -36,9 +34,10 @@ function draw_skills_bubbles(data) {
     .attr("class", bubbleClass)
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
-    .attr("r", function(d) { return d.r; })
+    .attr("r",  function(d) { return d.r; })
     // .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
-    .on("click", function(d) { return zoom(node == d ? root : d); })
+    // .style('cursor', function(d) { return (d.depth === 2) ? 'pointer' : 'default'; })
+    .on("click", function(d) { return zoom(zoomNode == d ? root : d); })
     .on("mouseover", function(d) {
       if(d.depth === 1){
         var lines = d.children.map(function(d) { return [d.value, d.name].join('\t'); });
@@ -110,7 +109,7 @@ function draw_skills_bubbles(data) {
       .attr("y", function(d) { return y(d.y); })
       .style("opacity", function(d) { return k * d.r > 20 ? 1 : 0; });
 
-    node = d;
+    zoomNode = d;
     d3.event.stopPropagation();
   }
   

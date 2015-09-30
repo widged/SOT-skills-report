@@ -1,6 +1,14 @@
 skill-bubbles {
   display: block;
+  position: relative;
 }
+
+skill-bubbles > div {
+  position: absolute;
+  display: inline-block;
+}
+
+
 skill-bubbles text {
   font-size: 12px;
   pointer-events: none;
@@ -19,6 +27,31 @@ skill-bubbles text.top_parent {
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
+skill-bubbles .ba circle  {
+  fill: #FFA6AE;
+  stroke: #FFA6AE;
+}
+
+skill-bubbles .design circle  {
+  fill: #99DDFF;
+  stroke: #008FCC;
+}
+
+skill-bubbles .engineering circle  {
+  fill: #C4E67F;
+  stroke: #78B300;
+}
+
+skill-bubbles .systems circle  {
+  fill: #FFB499;
+  stroke: #E63D00;
+}
+
+skill-bubbles .web circle  {
+  fill: #CCB399;
+  stroke: #805933;
+}
+
 skill-bubbles circle {
   fill: #FF8787;
   stroke: #999;
@@ -26,46 +59,39 @@ skill-bubbles circle {
 }
 
 skill-bubbles circle.root {
-  fill: #fff;
-  stroke: #fff;
   pointer-events: none;
+  opacity: 0.2;
 }
 
 skill-bubbles circle.top_parent {
-  fill: #FFB5B5;
-  stroke: #999;
+  fill-opacity: 0.5;
   pointer-events: all;
 }
 
 skill-bubbles circle.parent {
-  fill: #FF8787;
-  fill-opacity: .1;
-  stroke: #046CB5;
+  fill-opacity: 0.4;
+  stroke-opacity: 0.4;
 }
 
 skill-bubbles circle.parent:hover {
-  stroke: #ff7f0e;
   stroke-width: .5px;
 }
 
 skill-bubbles circle.child_Interested {
   pointer-events: none;
-  fill: #FC8888;
+  fill-opacity: 0.9;
 }
 
 skill-bubbles circle.child_Academic {
   pointer-events: none;
-  fill: #FA5F5F;
 }
 
 skill-bubbles circle.child_Practical {
   pointer-events: none;
-  fill: #FF3030;
 }
 
 skill-bubbles circle.child_Paid {
   pointer-events: none;
-  fill: #F50000;
 }
 
 skill-bubbles div.tooltip {
