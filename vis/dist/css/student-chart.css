@@ -1,11 +1,11 @@
 
 /* ################
-   controls 
+   Student chart
 ################ */
 
 #visualisation {
   position: relative;
-  height: 540px;
+  height: 610px;
 }
 
 #vis-display {

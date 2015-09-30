@@ -21155,7 +21155,7 @@
 
 	    this.state = {
 	      width: 1000,
-	      height: 800,
+	      height: 610,
 	      forceGravity: -0.01,
 	      damper: 0.4
 	    };
