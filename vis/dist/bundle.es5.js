@@ -186,7 +186,7 @@
 	              ),
 	              _react2['default'].createElement(
 	                'section',
-	                { style: { height: 800 } },
+	                null,
 	                _react2['default'].createElement(
 	                  'div',
 	                  { className: 'explanation' },
@@ -21155,7 +21155,7 @@
 
 	    this.state = {
 	      width: 1000,
-	      height: 600,
+	      height: 800,
 	      forceGravity: -0.01,
 	      damper: 0.4
 	    };

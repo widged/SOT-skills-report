@@ -58,7 +58,7 @@ export default function main() {
               <br/>
               <SkillMultiSelect skills={jsonp_skills} handleChange={handleSkillsChange}/>
             </section>
-            <section style={{height: 800}}>
+            <section>
               <div className="explanation">List of students. Select a field to color by or to group by.</div>    
               <br/>
               <div id="students-vis"/>

@@ -159,7 +159,7 @@ export default class BubbleChart  {
   constructor() {
     this.state = {
       width:      1000,
-      height:      600,
+      height:      800,
       forceGravity: -0.01,
       damper:        0.4
     };
