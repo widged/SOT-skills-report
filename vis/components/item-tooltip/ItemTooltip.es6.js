@@ -1,12 +1,6 @@
 /* jshint esnext: true */
 
 import React from 'react';
-import Inject from '../inject/Inject.es6.js';
-
-if(!process.env.BROWSER) {
-    Inject.css({file: '../item-tooltip.css', parent: module});
-}
-
 let {Component} = React;
 
 export default class CustomTooltip extends Component {

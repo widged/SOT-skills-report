@@ -11,12 +11,6 @@ let {Component} = React;
 
 export default function main() {
 
-  Inject.css({file: '../dist/css/skill-vis.css', parent: module});
-  Inject.css({file: '../dist/css/sot-branding.css', parent: module});
-  Inject.css({file: '../dist/css/student-chart.css', parent: module});
-  Inject.css({file: '../dist/css/skill-bubbles.css', parent: module});
-  Inject.css({file: '../../node_modules/react-select/dist/default.css', parent: module});
-
   Inject.js([
     '../dist/data/secondary.jsonp',
     '../dist/data/skills.jsonp',
@@ -35,8 +29,6 @@ export default function main() {
     });
 
     let studentVis;
-    
-    
 
     class SotApp extends Component {
 
@@ -52,7 +44,6 @@ export default function main() {
 
       render() {
         let {handleSkillsChange} = this.handlers;
-        console.log(handleSkillsChange)
         return (
         <div>
           <header>

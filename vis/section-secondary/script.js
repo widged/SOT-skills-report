@@ -26,8 +26,9 @@ function draw_skills_bubbles(data, node) {
 
 
     jsonp_bubbles.children.forEach(function(d, i) {
-      var g = vis.insert("g");
+      var g = vis.insert("svg:g");
       g.attr("transform", "translate(" + (i * (r + 10)) + "," + 0 + ")");
+      g.attr("data-left", (i * (r + 10)));
       g.attr("class", d.name.split(/\s+/)[0].toLowerCase() );
       drawCategory(d, g);
     });
@@ -58,9 +59,10 @@ function draw_skills_bubbles(data, node) {
               .duration(200)
               .style("opacity", 0.9);
 
+              var groupLeft = parseInt(this.parentNode.getAttribute('data-left'), 10);
             div.html(lines.join("<br/>"))
-              .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY - 28) + "px");
+              .style("left", (groupLeft + parseInt(this.getAttribute('cx'))) + "px")
+              .style("top", (this.getAttribute('cy') - 28) + "px");
           }
         })
         .on("mouseout", function(d) {

@@ -6,7 +6,7 @@ skill-bubbles {
 
 skill-bubbles > div {
   position: absolute;
-  display: inline-block;
+  background-color: red;
 }
 
 
@@ -48,6 +48,7 @@ skill-bubbles circle.top_parent {
 }
 
 skill-bubbles circle.parent {
+  pointer-events: pointer;
   fill-opacity: 0.1;
   stroke-opacity: 0.1;
   stroke-opacity: 0.4;
@@ -57,33 +58,36 @@ skill-bubbles circle.parent:hover {
   stroke-width: .5px;
 }
 
-
-
-/* // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops */
+/* yellow - BA*/
 skill-bubbles .ba circle {
-  fill: #FFDD73;
-  stroke: #E69D00;
+  fill: #e65100;
+  stroke: #e65100;
 }
 
+/* green - design */
 skill-bubbles .design circle  {
-  fill: #C4E67F;
-  stroke: #78B300;
+  fill: #1b5e20;
+  stroke: #1b5e20;
 }
 
+/* blue - engineering */
 skill-bubbles .engineering circle  {
-  fill: #99DDFF;
-  stroke: #008FCC;
+  fill: #1565c0;
+  stroke: #1565c0;
 }
 
+/* red - Ops */
 skill-bubbles .systems circle  {
-  fill: #FFB499;
-  stroke: #E63D00;
+  fill: #b71c1c;
+  stroke: #b71c1c;
 }
 
+/* Black - code */
 skill-bubbles .web circle  {
-  fill: #CCB399;
-  stroke: #805933;
+  fill: #6a1b9a;
+  stroke: #6a1b9a;
 }
+
 
 /* Expertise levels */
 skill-bubbles circle.child_Interested {
