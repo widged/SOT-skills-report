@@ -1,7 +1,7 @@
 /* jshint esnext: true */
 
 import SummerOfTechEvent from './SummerOfTechEvent.es6.js';
-import EventEmitter2 from 'eventemitter2';
+// import EventEmitter2 from 'eventemitter2';
 
 class FN {
   static pluck(prop) {
@@ -51,7 +51,7 @@ export default class SummerOfTech {
       rawStudents: undefined, 
       activeLevels: ['Paid']
     };
-    this.emitter = new EventEmitter2.EventEmitter2();
+    // this.emitter = new EventEmitter2.EventEmitter2();
   }
 
   // ###########################
@@ -87,9 +87,11 @@ export default class SummerOfTech {
   // Interactivity
   // ###########################
 
+/*
   addEventListener(type, fn) {
     this.emitter.on(type, fn);
   }
+*/  
 
 
   // ###########################

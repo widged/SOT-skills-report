@@ -63,7 +63,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+		value: true
 	});
 	exports['default'] = main;
 
@@ -73,24 +73,26 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _libSummerOfTechEs6Js = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./lib/SummerOfTech.es6.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _libSummerOfTechSummerOfTechEs6Js = __webpack_require__(158);
 
-	var _libSummerOfTechEs6Js2 = _interopRequireDefault(_libSummerOfTechEs6Js);
+	var _libSummerOfTechSummerOfTechEs6Js2 = _interopRequireDefault(_libSummerOfTechSummerOfTechEs6Js);
 
-	var _SkilledStudentExplorerEs6Js = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./SkilledStudentExplorer.es6.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _StudentSkillsExplorerEs6Js = __webpack_require__(160);
 
-	var _SkilledStudentExplorerEs6Js2 = _interopRequireDefault(_SkilledStudentExplorerEs6Js);
+	var _StudentSkillsExplorerEs6Js2 = _interopRequireDefault(_StudentSkillsExplorerEs6Js);
 
 	var Component = _react2['default'].Component;
 
 	function main() {
 
-	  var summerOfTech = new _libSummerOfTechEs6Js2['default']().skills(jsonp_skills).categories(jsonp_categories).students(jsonp_students);
-	  _react2['default'].render(_react2['default'].createElement(SummerOfTechApp, { store: summerOfTech }), document.getElementById('app'));
+		var tsvStudents = __webpack_require__(180);
+		var rawStudents = _libSummerOfTechSummerOfTechEs6Js2['default'].studentsFromTsv(tsvStudents);
+		var rawSkills = __webpack_require__(181);
 
-	  var rootNode = document.querySelector('skill-bubbles');
-	  rootNode.innerHTML = '';
-	  draw_skills_bubbles(jsonp_bubbles.children, rootNode);
+		var summerOfTech = new _libSummerOfTechSummerOfTechEs6Js2['default']();
+		summerOfTech.rawSkills(rawSkills).rawStudents(rawStudents).activeExperienceLevels([_libSummerOfTechSummerOfTechEs6Js2['default'].experienceLevels.Paid]);
+
+		_react2['default'].render(_react2['default'].createElement(_StudentSkillsExplorerEs6Js2['default'], { store: summerOfTech }), document.getElementById('app'));
 	}
 
 	module.exports = exports['default'];
@@ -18233,6 +18235,3567 @@
 
 	module.exports = onlyChild;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _SummerOfTechEventEs6Js = __webpack_require__(159);
+
+	var _SummerOfTechEventEs6Js2 = _interopRequireDefault(_SummerOfTechEventEs6Js);
+
+	// import EventEmitter2 from 'eventemitter2';
+
+	var FN = (function () {
+	  function FN() {
+	    _classCallCheck(this, FN);
+	  }
+
+	  _createClass(FN, null, [{
+	    key: 'pluck',
+	    value: function pluck(prop) {
+	      return function (item) {
+	        if (!item.hasOwnProperty(prop)) {
+	          return;
+	        }
+	        return item[prop];
+	      };
+	    }
+	  }, {
+	    key: 'intersectLists',
+	    value: function intersectLists(acc, d) {
+	      if (!Array.isArray(acc)) {
+	        return d;
+	      }
+	      acc = acc.filter(function (id) {
+	        return Array.isArray(d) && d.indexOf(id) !== -1;
+	      });
+	      return acc;
+	    }
+	  }]);
+
+	  return FN;
+	})();
+
+	var Utils = (function () {
+	  function Utils() {
+	    _classCallCheck(this, Utils);
+	  }
+
+	  _createClass(Utils, null, [{
+	    key: 'listUsersAtActiveLevels',
+	    value: function listUsersAtActiveLevels(levels, activeLevels) {
+	      var user_ids = [];
+	      activeLevels.forEach(function (level) {
+	        if (levels && levels.hasOwnProperty(level) && levels[level].length > 0) {
+	          var ids = (levels[level] || '').split(/\s+/);
+	          ids.forEach(function (id) {
+	            if (user_ids.indexOf(id) === -1) {
+	              user_ids.push(id);
+	            }
+	          });
+	        }
+	      });
+	      return user_ids;
+	    }
+	  }]);
+
+	  return Utils;
+	})();
+
+	var SummerOfTech = (function () {
+
+	  // ###########################
+	  // Constructor
+	  // ###########################
+	  /**
+	    Let's store all state data in a state variable the way react does it.
+	    ES6 destructuring makes it straightforward to distinguish what values come from the state
+	    and what values are scoped to the function. let {a,b,c} = this.state, d, e;
+	  */
+
+	  function SummerOfTech() {
+	    _classCallCheck(this, SummerOfTech);
+
+	    this.events = _SummerOfTechEventEs6Js2['default'];
+	    this.state = {
+	      rawSkills: undefined,
+	      rawStudents: undefined,
+	      activeLevels: ['Paid']
+	    };
+	    // this.emitter = new EventEmitter2.EventEmitter2();
+	  }
+
+	  _createClass(SummerOfTech, [{
+	    key: 'rawSkills',
+
+	    // ###########################
+	    // Accessors
+	    // ###########################
+	    /**
+	      All accessors return this for fluent interface. The syntax for this is directly inspired from conventions found in jquery or d3js. 
+	      If no arguments are passed, then the current value, from the state, is returned. If an argument is provided, 
+	      then the state is set to the value provided. 
+	      To learn more about chainable/fluent interfaces:
+	        http://adripofjavascript.com/blog/drips/creating-chainable-interfaces-in-javascript.html
+	        https://en.wikipedia.org/wiki/Fluent_interface
+	    */
+	    value: function rawSkills(_) {
+	      if (!arguments.length) {
+	        return this.state.rawSkills;
+	      }
+	      this.state.rawSkills = _;
+	      return this;
+	    }
+	  }, {
+	    key: 'rawStudents',
+	    value: function rawStudents(_) {
+	      if (!arguments.length) {
+	        return this.state.rawStudents;
+	      }
+	      this.state.rawStudents = _;
+	      return this;
+	    }
+	  }, {
+	    key: 'activeExperienceLevels',
+	    value: function activeExperienceLevels(_) {
+	      if (!arguments.length) {
+	        return this.state.activeLevels;
+	      }
+	      this.state.activeLevels = _;
+	      return this;
+	    }
+	  }, {
+	    key: 'listActiveStudents',
+
+	    // ###########################
+	    // Interactivity
+	    // ###########################
+
+	    /*
+	      addEventListener(type, fn) {
+	        this.emitter.on(type, fn);
+	      }
+	    */
+
+	    // ###########################
+	    // Other Public methods
+	    // ###########################
+
+	    value: function listActiveStudents() {
+	      return this.state.rawStudents;
+	    }
+	  }, {
+	    key: 'listExperienceLevels',
+	    value: function listExperienceLevels() {
+	      var activeLevels = this.state.activeLevels;
+
+	      return Object.keys(SummerOfTech.experienceLevels).map(function (k, i) {
+	        return {
+	          name: k,
+	          checked: activeLevels.indexOf(k) !== -1 ? true : undefined
+	        };
+	      });
+	    }
+	  }, {
+	    key: 'listSkills',
+	    value: function listSkills(names) {
+	      var _state = this.state;
+	      var rawSkills = _state.rawSkills;
+	      var activeLevels = _state.activeLevels;
+
+	      var skills = rawSkills.names.dict;
+	      var students = rawSkills.students;
+
+	      // We are good if any of the levels has user_ids attached to it
+	      if (names === undefined) {
+	        names = skills;
+	      }
+	      return names.map(function (name) {
+	        var idx = skills.indexOf(name);
+	        var levels = students[idx].levels;
+	        var user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
+	        if (!user_ids || !user_ids.length) {}
+	        return { name: name, user_ids: user_ids };
+	      }).filter(function (_ref) {
+	        var user_ids = _ref.user_ids;
+
+	        return user_ids && user_ids.length;
+	      });
+	    }
+	  }, {
+	    key: 'listSkillNames',
+	    value: function listSkillNames(names) {
+	      return this.listSkills(names).map(function (_ref2) {
+	        var name = _ref2.name;
+	        return name;
+	      });
+	    }
+	  }, {
+	    key: 'listStudentsWithSkills',
+	    value: function listStudentsWithSkills(names) {
+	      return this.listSkills(names).map(FN.pluck('user_ids')).reduce(FN.intersectLists, null);
+	    }
+	  }, {
+	    key: 'listSkillsOfStudents',
+	    value: function listSkillsOfStudents(ids) {
+	      var _state2 = this.state;
+	      var rawSkills = _state2.rawSkills;
+	      var activeLevels = _state2.activeLevels;
+
+	      var skills = rawSkills.names.dict;
+	      var skillLevels = rawSkills.students;
+	      // return all skills if ids is undefined
+	      if (!Array.isArray(ids)) {
+	        return skills;
+	      }
+	      // return an empty list if ids is an empty array
+	      if (!ids.length) {
+	        return [];
+	      }
+
+	      var studentSkills = skills.filter(function (name) {
+	        var idx = skills.indexOf(name);
+	        var levels = skillLevels[idx].levels;
+	        var user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	          for (var _iterator = ids[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var id = _step.value;
+
+	            if (user_ids.indexOf(id) !== -1) {
+	              return true;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator['return']) {
+	              _iterator['return']();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
+
+	        return false;
+	      });
+	      return studentSkills;
+	    }
+	  }, {
+	    key: 'listComplementarySkills',
+	    value: function listComplementarySkills(names) {
+	      var ids = this.listStudentsWithSkills(names);
+	      var skills = this.listSkillsOfStudents(ids).filter(function (name) {
+	        return names.indexOf(name) === -1;
+	      });
+	      return skills;
+	    }
+	  }, {
+	    key: 'nestByCategory',
+	    value: function nestByCategory(names) {
+	      var rawSkills = this.state.rawSkills;
+
+	      var skills = rawSkills.names.dict;
+	      var types = rawSkills.types;
+	      var categories = rawSkills.categories;
+	      var students = rawSkills.students;
+
+	      if (names === undefined || names === null) {
+	        names = skills;
+	      }
+
+	      var list = names.map(function (name) {
+	        var idx = skills.indexOf(name);
+	        if (idx === -1) {
+	          return { name: name, type: 'n/a', category: 'n/a', levels: 'n/a' };
+	        } else {
+	          var type = types.list.split(' ')[idx];
+	          var category = categories.list.split(' ')[idx];
+	          var levels = students[idx].levels;
+	          return { name: name, type: type, category: category, levels: levels };
+	        }
+	      });
+
+	      var children = list.reduce(function (acc, _ref3) {
+	        var name = _ref3.name;
+	        var type = _ref3.type;
+	        var category = _ref3.category;
+	        var levels = _ref3.levels;
+
+	        var bubbleLevels = Object.keys(levels).map(function (k) {
+	          var size = (levels[k] || '').split(' ').length;
+	          return { size: size, name: k };
+	        });
+	        acc[category].children.push({ name: name, type: type, children: bubbleLevels });
+	        return acc;
+	      }, categories.dict.map(function (name) {
+	        return { name: name, children: [] };
+	      }));
+	      return { name: 'skills', children: children };
+	    }
+	  }], [{
+	    key: 'studentsFromTsv',
+
+	    // ###########################
+	    // Public Static methods
+	    // ###########################
+
+	    value: function studentsFromTsv(_) {
+	      if (typeof _ !== 'string') {
+	        throw new Error('[studentsFromTsv] expecting a string');
+	      }
+	      var tsv = _.split(/\n/);
+	      var first = tsv.shift();
+	      var heads = 'user_id, school, level, field, degree, degree_details, study_year,final_year'.split(/\t/);
+	      return tsv.map(function (line) {
+	        var _line$split = line.split('\t');
+
+	        var _line$split2 = _slicedToArray(_line$split, 8);
+
+	        var user_id = _line$split2[0];
+	        var school = _line$split2[1];
+	        var level = _line$split2[2];
+	        var field = _line$split2[3];
+	        var degree = _line$split2[4];
+	        var degree_details = _line$split2[5];
+	        var study_year = _line$split2[6];
+	        var final_year = _line$split2[7];
+
+	        return { user_id: user_id, school: school, level: level, field: field, degree: degree, degree_details: degree_details, study_year: study_year, final_year: final_year };
+	      });
+	    }
+	  }]);
+
+	  return SummerOfTech;
+	})();
+
+	exports['default'] = SummerOfTech;
+
+	SummerOfTech.experienceLevels = {
+	  'Paid': 'Paid',
+	  'Practical': 'Practical',
+	  'Academic': 'Academic',
+	  'Interested': 'Interested'
+	};
+	SummerOfTech.experienceOrder = [SummerOfTech.experienceLevels.Paid, SummerOfTech.experienceLevels.Practical, SummerOfTech.experienceLevels.Academic, SummerOfTech.experienceLevels.Interested];
+	module.exports = exports['default'];
+
+	// console.log('[levels missing]', name);
+
+/***/ },
+/* 159 */
+/***/ function(module, exports) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = {
+	  'primarySkillChange': 'primarySkillChange'
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _sectionSkillsSkillMultiSelectEs6Js = __webpack_require__(161);
+
+	var _sectionSkillsSkillMultiSelectEs6Js2 = _interopRequireDefault(_sectionSkillsSkillMultiSelectEs6Js);
+
+	var _sectionSkillsExperienceLevelSelectEs6Js = __webpack_require__(168);
+
+	var _sectionSkillsExperienceLevelSelectEs6Js2 = _interopRequireDefault(_sectionSkillsExperienceLevelSelectEs6Js);
+
+	var _sectionStudentsStudentChartEs6Js = __webpack_require__(169);
+
+	var _sectionStudentsStudentChartEs6Js2 = _interopRequireDefault(_sectionStudentsStudentChartEs6Js);
+
+	var _sectionSkillsSkillTagsEs6Js = __webpack_require__(179);
+
+	var _sectionSkillsSkillTagsEs6Js2 = _interopRequireDefault(_sectionSkillsSkillTagsEs6Js);
+
+	var Component = _react2['default'].Component;
+
+	var SkillBubbles = (function () {
+	  function SkillBubbles() {
+	    _classCallCheck(this, SkillBubbles);
+	  }
+
+	  _createClass(SkillBubbles, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var rootNode = document.querySelector('skill-bubbles');
+	      rootNode.innerHTML = '';
+	      var rawBubbles = this.props.list;
+	      draw_skills_bubbles(rawBubbles, rootNode);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2['default'].createElement('skill-bubbles', null);
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      if (nextProps.hasOwnProperty('list')) {
+	        var rootNode = document.querySelector('skill-bubbles');
+	        rootNode.innerHTML = '';
+	        var rawBubbles = nextProps.list;
+	        draw_skills_bubbles(rawBubbles, rootNode);
+	      }
+	      return false;
+	    }
+	  }]);
+
+	  return SkillBubbles;
+	})();
+
+	var SummerOfTechApp = (function (_Component) {
+	  _inherits(SummerOfTechApp, _Component);
+
+	  function SummerOfTechApp(props) {
+	    _classCallCheck(this, SummerOfTechApp);
+
+	    _get(Object.getPrototypeOf(SummerOfTechApp.prototype), 'constructor', this).call(this, props);
+	    var store = this.props.store;
+
+	    this.state = {
+	      complementarySkills: store.listSkillNames(),
+	      bubbleSkills: store.nestByCategory(),
+	      levels: store.listExperienceLevels(),
+	      students: store.listActiveStudents(),
+	      filterStudents: undefined
+	    };
+	    this.handlers = {
+	      handleSkillsChange: this.handleSkillsChange.bind(this),
+	      handleExperienceChange: this.handleExperienceChange.bind(this)
+	    };
+	  }
+
+	  _createClass(SummerOfTechApp, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var store = this.props.store;
+	    }
+	  }, {
+	    key: 'handleSkillsChange',
+	    value: function handleSkillsChange(names) {
+	      var store = this.props.store;
+
+	      var complementarySkills = store.listComplementarySkills(names);
+	      this.setState({
+	        complementarySkills: complementarySkills,
+	        filterStudents: store.listStudentsWithSkills(names),
+	        bubbleSkills: store.nestByCategory(complementarySkills)
+	      });
+	    }
+	  }, {
+	    key: 'handleExperienceChange',
+	    value: function handleExperienceChange(names) {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var store = this.props.store;
+	      var _state = this.state;
+	      var complementarySkills = _state.complementarySkills;
+	      var students = _state.students;
+	      var filterStudents = _state.filterStudents;
+	      var levels = _state.levels;
+	      var bubbleSkills = _state.bubbleSkills;
+	      var _handlers = this.handlers;
+	      var handleSkillsChange = _handlers.handleSkillsChange;
+	      var handleExperienceChange = _handlers.handleExperienceChange;
+
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(
+	          'header',
+	          null,
+	          _react2['default'].createElement(
+	            'div',
+	            null,
+	            _react2['default'].createElement(
+	              'h1',
+	              null,
+	              _react2['default'].createElement('img', { src: '../dist/css/sot_new3.png' })
+	            ),
+	            _react2['default'].createElement(
+	              'h2',
+	              null,
+	              'Interns with Paid Work Experience'
+	            )
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'article',
+	          null,
+	          _react2['default'].createElement(
+	            'section',
+	            null,
+	            _react2['default'].createElement(_sectionSkillsSkillMultiSelectEs6Js2['default'], { names: complementarySkills, handleChange: handleSkillsChange }),
+	            _react2['default'].createElement(_sectionSkillsExperienceLevelSelectEs6Js2['default'], { levels: levels, handleChange: handleExperienceChange })
+	          ),
+	          _react2['default'].createElement(
+	            'section',
+	            null,
+	            _react2['default'].createElement(
+	              'div',
+	              { id: 'students-vis' },
+	              _react2['default'].createElement(_sectionStudentsStudentChartEs6Js2['default'], { list: students, filterStudents: filterStudents })
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            'section',
+	            null,
+	            _react2['default'].createElement(
+	              'div',
+	              { className: 'explanation' },
+	              'The students matching your criteria also have these skills'
+	            ),
+	            _react2['default'].createElement('br', null),
+	            _react2['default'].createElement(
+	              'div',
+	              { id: 'skills-secondary-vis' },
+	              _react2['default'].createElement(SkillBubbles, { list: bubbleSkills })
+	            )
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'footer',
+	          null,
+	          'Made in the context of data for goods challenges. Authors (alphabetical order).'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SummerOfTechApp;
+	})(Component);
+
+	exports['default'] = SummerOfTechApp;
+	module.exports = exports['default'];
+
+	/*
+	handleComplementary(skills);
+	// let skills = Sot.listSkillsAtExpertise(jsonp_skills, expertiseLevel);
+	studentVis.setState({filterStudents: students});
+	*/
+
+	/*
+	<section>
+	  <div className="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
+	  <div id="skills-vis">
+	    <SkillTags complementarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handleSkillsChange}/>
+	  </div>
+	</section>
+	*/
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactSelect = __webpack_require__(162);
+
+	var _reactSelect2 = _interopRequireDefault(_reactSelect);
+
+	var Component = _react2['default'].Component;
+
+	var MultiSelectField = (function (_Component) {
+	  _inherits(MultiSelectField, _Component);
+
+	  function MultiSelectField(props) {
+	    _classCallCheck(this, MultiSelectField);
+
+	    _get(Object.getPrototypeOf(MultiSelectField.prototype), 'constructor', this).call(this, props);
+	    this.state = { value: undefined };
+	    this.handlers = { handleChange: this.handleChange.bind(this) };
+	  }
+
+	  _createClass(MultiSelectField, [{
+	    key: 'handleChange',
+	    value: function handleChange(value, values) {
+	      // logChange('New value:', value, 'Values:', values);
+	      var dispatchChange = this.props && this.props.handleChange;
+	      if (typeof dispatchChange === 'function') {
+	        var names = values.map(function (_ref) {
+	          var value = _ref.value;
+	          return value;
+	        });
+	        dispatchChange(names);
+	      }
+	      this.setState({ value: value });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var handleChange = this.handlers.handleChange;
+	      var names = this.props.names;
+
+	      var ops = names.map(function (name) {
+	        return { label: name, value: name };
+	      }).sort(function (a, b) {
+	        return a.label < b.label ? -1 : a.label > b.label ? 1 : 0;
+	      });
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'section' },
+	        _react2['default'].createElement(_reactSelect2['default'], { multi: true, value: this.state.value, placeholder: 'Please select one or more skills. The students with that skill will be highlighted.', options: ops, onChange: handleChange })
+	      );
+	    }
+	  }]);
+
+	  return MultiSelectField;
+	})(Component);
+
+	exports['default'] = MultiSelectField;
+
+	MultiSelectField.propTypes = { label: _react2['default'].PropTypes.string };
+	module.exports = exports['default'];
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* disable some rules until we refactor more completely; fixing them now would
+	   cause conflicts with some open PRs unnecessarily. */
+	/* eslint react/jsx-sort-prop-types: 0, react/sort-comp: 0, react/prop-types: 0 */
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}return target;
+	};
+
+	var React = __webpack_require__(2);
+	var Input = __webpack_require__(163);
+	var classes = __webpack_require__(164);
+	var Value = __webpack_require__(165);
+	var SingleValue = __webpack_require__(166);
+	var Option = __webpack_require__(167);
+
+	var requestId = 0;
+
+	var Select = React.createClass({
+
+		displayName: 'Select',
+
+		propTypes: {
+			addLabelText: React.PropTypes.string, // placeholder displayed when you want to add a label on a multi-value input
+			allowCreate: React.PropTypes.bool, // whether to allow creation of new entries
+			asyncOptions: React.PropTypes.func, // function to call to get options
+			autoload: React.PropTypes.bool, // whether to auto-load the default async options set
+			backspaceRemoves: React.PropTypes.bool, // whether backspace removes an item if there is no text input
+			cacheAsyncResults: React.PropTypes.bool, // whether to allow cache
+			className: React.PropTypes.string, // className for the outer element
+			clearAllText: React.PropTypes.string, // title for the "clear" control when multi: true
+			clearValueText: React.PropTypes.string, // title for the "clear" control
+			clearable: React.PropTypes.bool, // should it be possible to reset value
+			delimiter: React.PropTypes.string, // delimiter to use to join multiple values
+			disabled: React.PropTypes.bool, // whether the Select is disabled or not
+			filterOption: React.PropTypes.func, // method to filter a single option: function(option, filterString)
+			filterOptions: React.PropTypes.func, // method to filter the options array: function([options], filterString, [values])
+			ignoreCase: React.PropTypes.bool, // whether to perform case-insensitive filtering
+			inputProps: React.PropTypes.object, // custom attributes for the Input (in the Select-control) e.g: {'data-foo': 'bar'}
+			isLoading: React.PropTypes.bool, // whether the Select is loading externally or not (such as options being loaded)
+			matchPos: React.PropTypes.string, // (any|start) match the start or entire string when filtering
+			matchProp: React.PropTypes.string, // (any|label|value) which option property to filter on
+			multi: React.PropTypes.bool, // multi-value input
+			name: React.PropTypes.string, // field name, for hidden <input /> tag
+			newOptionCreator: React.PropTypes.func, // factory to create new options when allowCreate set
+			noResultsText: React.PropTypes.string, // placeholder displayed when there are no matching search results
+			onBlur: React.PropTypes.func, // onBlur handler: function(event) {}
+			onChange: React.PropTypes.func, // onChange handler: function(newValue) {}
+			onFocus: React.PropTypes.func, // onFocus handler: function(event) {}
+			onInputChange: React.PropTypes.func, // onInputChange handler: function(inputValue) {}
+			onOptionLabelClick: React.PropTypes.func, // onCLick handler for value labels: function (value, event) {}
+			optionComponent: React.PropTypes.func, // option component to render in dropdown
+			optionRenderer: React.PropTypes.func, // optionRenderer: function(option) {}
+			options: React.PropTypes.array, // array of options
+			placeholder: React.PropTypes.string, // field placeholder, displayed when there's no value
+			searchable: React.PropTypes.bool, // whether to enable searching feature or not
+			searchingText: React.PropTypes.string, // message to display whilst options are loading via asyncOptions
+			searchPromptText: React.PropTypes.string, // label to prompt for search input
+			singleValueComponent: React.PropTypes.func, // single value component when multiple is set to false
+			value: React.PropTypes.any, // initial field value
+			valueComponent: React.PropTypes.func, // value component to render in multiple mode
+			valueRenderer: React.PropTypes.func // valueRenderer: function(option) {}
+		},
+
+		getDefaultProps: function getDefaultProps() {
+			return {
+				addLabelText: 'Add "{label}"?',
+				allowCreate: false,
+				asyncOptions: undefined,
+				autoload: true,
+				backspaceRemoves: true,
+				cacheAsyncResults: true,
+				className: undefined,
+				clearAllText: 'Clear all',
+				clearValueText: 'Clear value',
+				clearable: true,
+				delimiter: ',',
+				disabled: false,
+				ignoreCase: true,
+				inputProps: {},
+				isLoading: false,
+				matchPos: 'any',
+				matchProp: 'any',
+				name: undefined,
+				newOptionCreator: undefined,
+				noResultsText: 'No results found',
+				onChange: undefined,
+				onInputChange: undefined,
+				onOptionLabelClick: undefined,
+				optionComponent: Option,
+				options: undefined,
+				placeholder: 'Select...',
+				searchable: true,
+				searchingText: 'Searching...',
+				searchPromptText: 'Type to search',
+				singleValueComponent: SingleValue,
+				value: undefined,
+				valueComponent: Value
+			};
+		},
+
+		getInitialState: function getInitialState() {
+			return {
+				/*
+	    * set by getStateFromValue on componentWillMount:
+	    * - value
+	    * - values
+	    * - filteredOptions
+	    * - inputValue
+	    * - placeholder
+	    * - focusedOption
+	   */
+				isFocused: false,
+				isLoading: false,
+				isOpen: false,
+				options: this.props.options
+			};
+		},
+
+		componentWillMount: function componentWillMount() {
+			var _this = this;
+
+			this._optionsCache = {};
+			this._optionsFilterString = '';
+			this._closeMenuIfClickedOutside = function (event) {
+				if (!_this.state.isOpen) {
+					return;
+				}
+				var menuElem = React.findDOMNode(_this.refs.selectMenuContainer);
+				var controlElem = React.findDOMNode(_this.refs.control);
+
+				var eventOccuredOutsideMenu = _this.clickedOutsideElement(menuElem, event);
+				var eventOccuredOutsideControl = _this.clickedOutsideElement(controlElem, event);
+
+				// Hide dropdown menu if click occurred outside of menu
+				if (eventOccuredOutsideMenu && eventOccuredOutsideControl) {
+					_this.setState({
+						isOpen: false
+					}, _this._unbindCloseMenuIfClickedOutside);
+				}
+			};
+			this._bindCloseMenuIfClickedOutside = function () {
+				if (!document.addEventListener && document.attachEvent) {
+					document.attachEvent('onclick', this._closeMenuIfClickedOutside);
+				} else {
+					document.addEventListener('click', this._closeMenuIfClickedOutside);
+				}
+			};
+			this._unbindCloseMenuIfClickedOutside = function () {
+				if (!document.removeEventListener && document.detachEvent) {
+					document.detachEvent('onclick', this._closeMenuIfClickedOutside);
+				} else {
+					document.removeEventListener('click', this._closeMenuIfClickedOutside);
+				}
+			};
+			this.setState(this.getStateFromValue(this.props.value));
+		},
+
+		componentDidMount: function componentDidMount() {
+			if (this.props.asyncOptions && this.props.autoload) {
+				this.autoloadAsyncOptions();
+			}
+		},
+
+		componentWillUnmount: function componentWillUnmount() {
+			clearTimeout(this._blurTimeout);
+			clearTimeout(this._focusTimeout);
+			if (this.state.isOpen) {
+				this._unbindCloseMenuIfClickedOutside();
+			}
+		},
+
+		componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+			var _this2 = this;
+
+			var optionsChanged = false;
+			if (JSON.stringify(newProps.options) !== JSON.stringify(this.props.options)) {
+				optionsChanged = true;
+				this.setState({
+					options: newProps.options,
+					filteredOptions: this.filterOptions(newProps.options)
+				});
+			}
+			if (newProps.value !== this.state.value || newProps.placeholder !== this.props.placeholder || optionsChanged) {
+				var setState = function setState(newState) {
+					_this2.setState(_this2.getStateFromValue(newProps.value, newState && newState.options || newProps.options, newProps.placeholder));
+				};
+				if (this.props.asyncOptions) {
+					this.loadAsyncOptions(newProps.value, {}, setState);
+				} else {
+					setState();
+				}
+			}
+		},
+
+		componentDidUpdate: function componentDidUpdate() {
+			var _this3 = this;
+
+			if (!this.props.disabled && this._focusAfterUpdate) {
+				clearTimeout(this._blurTimeout);
+				this._focusTimeout = setTimeout(function () {
+					_this3.getInputNode().focus();
+					_this3._focusAfterUpdate = false;
+				}, 50);
+			}
+			if (this._focusedOptionReveal) {
+				if (this.refs.focused && this.refs.menu) {
+					var focusedDOM = React.findDOMNode(this.refs.focused);
+					var menuDOM = React.findDOMNode(this.refs.menu);
+					var focusedRect = focusedDOM.getBoundingClientRect();
+					var menuRect = menuDOM.getBoundingClientRect();
+
+					if (focusedRect.bottom > menuRect.bottom || focusedRect.top < menuRect.top) {
+						menuDOM.scrollTop = focusedDOM.offsetTop + focusedDOM.clientHeight - menuDOM.offsetHeight;
+					}
+				}
+				this._focusedOptionReveal = false;
+			}
+		},
+
+		focus: function focus() {
+			this.getInputNode().focus();
+		},
+
+		clickedOutsideElement: function clickedOutsideElement(element, event) {
+			var eventTarget = event.target ? event.target : event.srcElement;
+			while (eventTarget != null) {
+				if (eventTarget === element) return false;
+				eventTarget = eventTarget.offsetParent;
+			}
+			return true;
+		},
+
+		getStateFromValue: function getStateFromValue(value, options, placeholder) {
+			if (!options) {
+				options = this.state.options;
+			}
+			if (!placeholder) {
+				placeholder = this.props.placeholder;
+			}
+
+			// reset internal filter string
+			this._optionsFilterString = '';
+
+			var values = this.initValuesArray(value, options);
+			var filteredOptions = this.filterOptions(options, values);
+
+			var focusedOption;
+			var valueForState = null;
+			if (!this.props.multi && values.length) {
+				focusedOption = values[0];
+				valueForState = values[0].value;
+			} else {
+				focusedOption = this.getFirstFocusableOption(filteredOptions);
+				valueForState = values.map(function (v) {
+					return v.value;
+				}).join(this.props.delimiter);
+			}
+
+			return {
+				value: valueForState,
+				values: values,
+				inputValue: '',
+				filteredOptions: filteredOptions,
+				placeholder: !this.props.multi && values.length ? values[0].label : placeholder,
+				focusedOption: focusedOption
+			};
+		},
+
+		getFirstFocusableOption: function getFirstFocusableOption(options) {
+
+			for (var optionIndex = 0; optionIndex < options.length; ++optionIndex) {
+				if (!options[optionIndex].disabled) {
+					return options[optionIndex];
+				}
+			}
+		},
+
+		initValuesArray: function initValuesArray(values, options) {
+			if (!Array.isArray(values)) {
+				if (typeof values === 'string') {
+					values = values === '' ? [] : this.props.multi ? values.split(this.props.delimiter) : [values];
+				} else {
+					values = values !== undefined && values !== null ? [values] : [];
+				}
+			}
+			return values.map(function (val) {
+				if (typeof val === 'string' || typeof val === 'number') {
+					for (var key in options) {
+						if (options.hasOwnProperty(key) && options[key] && (options[key].value === val || typeof options[key].value === 'number' && options[key].value.toString() === val)) {
+							return options[key];
+						}
+					}
+					return { value: val, label: val };
+				} else {
+					return val;
+				}
+			});
+		},
+
+		setValue: function setValue(value, focusAfterUpdate) {
+			if (focusAfterUpdate || focusAfterUpdate === undefined) {
+				this._focusAfterUpdate = true;
+			}
+			var newState = this.getStateFromValue(value);
+			newState.isOpen = false;
+			this.fireChangeEvent(newState);
+			this.setState(newState);
+		},
+
+		selectValue: function selectValue(value) {
+			if (!this.props.multi) {
+				this.setValue(value);
+			} else if (value) {
+				this.addValue(value);
+			}
+			this._unbindCloseMenuIfClickedOutside();
+		},
+
+		addValue: function addValue(value) {
+			this.setValue(this.state.values.concat(value));
+		},
+
+		popValue: function popValue() {
+			this.setValue(this.state.values.slice(0, this.state.values.length - 1));
+		},
+
+		removeValue: function removeValue(valueToRemove) {
+			this.setValue(this.state.values.filter(function (value) {
+				return value !== valueToRemove;
+			}));
+		},
+
+		clearValue: function clearValue(event) {
+			// if the event was triggered by a mousedown and not the primary
+			// button, ignore it.
+			if (event && event.type === 'mousedown' && event.button !== 0) {
+				return;
+			}
+			event.stopPropagation();
+			event.preventDefault();
+			this.setValue(null);
+		},
+
+		resetValue: function resetValue() {
+			this.setValue(this.state.value === '' ? null : this.state.value);
+		},
+
+		getInputNode: function getInputNode() {
+			var input = this.refs.input;
+			return this.props.searchable ? input : React.findDOMNode(input);
+		},
+
+		fireChangeEvent: function fireChangeEvent(newState) {
+			if (newState.value !== this.state.value && this.props.onChange) {
+				this.props.onChange(newState.value, newState.values);
+			}
+		},
+
+		handleMouseDown: function handleMouseDown(event) {
+			// if the event was triggered by a mousedown and not the primary
+			// button, or if the component is disabled, ignore it.
+			if (this.props.disabled || event.type === 'mousedown' && event.button !== 0) {
+				return;
+			}
+			event.stopPropagation();
+			event.preventDefault();
+
+			// for the non-searchable select, close the dropdown when button is clicked
+			if (this.state.isOpen && !this.props.searchable) {
+				this.setState({
+					isOpen: false
+				}, this._unbindCloseMenuIfClickedOutside);
+				return;
+			}
+
+			if (this.state.isFocused) {
+				this.setState({
+					isOpen: true
+				}, this._bindCloseMenuIfClickedOutside);
+			} else {
+				this._openAfterFocus = true;
+				this.getInputNode().focus();
+			}
+		},
+
+		handleMouseDownOnArrow: function handleMouseDownOnArrow(event) {
+			// if the event was triggered by a mousedown and not the primary
+			// button, or if the component is disabled, ignore it.
+			if (this.props.disabled || event.type === 'mousedown' && event.button !== 0) {
+				return;
+			}
+			// If not focused, handleMouseDown will handle it
+			if (!this.state.isOpen) {
+				return;
+			}
+			event.stopPropagation();
+			event.preventDefault();
+			this.setState({
+				isOpen: false
+			}, this._unbindCloseMenuIfClickedOutside);
+		},
+
+		handleInputFocus: function handleInputFocus(event) {
+			var newIsOpen = this.state.isOpen || this._openAfterFocus;
+			this.setState({
+				isFocused: true,
+				isOpen: newIsOpen
+			}, function () {
+				if (newIsOpen) {
+					this._bindCloseMenuIfClickedOutside();
+				} else {
+					this._unbindCloseMenuIfClickedOutside();
+				}
+			});
+			this._openAfterFocus = false;
+			if (this.props.onFocus) {
+				this.props.onFocus(event);
+			}
+		},
+
+		handleInputBlur: function handleInputBlur(event) {
+			var _this4 = this;
+
+			this._blurTimeout = setTimeout(function () {
+				if (_this4._focusAfterUpdate) return;
+				_this4.setState({
+					isFocused: false,
+					isOpen: false
+				});
+			}, 50);
+			if (this.props.onBlur) {
+				this.props.onBlur(event);
+			}
+		},
+
+		handleKeyDown: function handleKeyDown(event) {
+			if (this.props.disabled) return;
+			switch (event.keyCode) {
+				case 8:
+					// backspace
+					if (!this.state.inputValue && this.props.backspaceRemoves) {
+						event.preventDefault();
+						this.popValue();
+					}
+					return;
+				case 9:
+					// tab
+					if (event.shiftKey || !this.state.isOpen || !this.state.focusedOption) {
+						return;
+					}
+					this.selectFocusedOption();
+					break;
+				case 13:
+					// enter
+					if (!this.state.isOpen) return;
+
+					this.selectFocusedOption();
+					break;
+				case 27:
+					// escape
+					if (this.state.isOpen) {
+						this.resetValue();
+					} else if (this.props.clearable) {
+						this.clearValue(event);
+					}
+					break;
+				case 38:
+					// up
+					this.focusPreviousOption();
+					break;
+				case 40:
+					// down
+					this.focusNextOption();
+					break;
+				case 188:
+					// ,
+					if (this.props.allowCreate && this.props.multi) {
+						event.preventDefault();
+						event.stopPropagation();
+						this.selectFocusedOption();
+					} else {
+						return;
+					}
+					break;
+				default:
+					return;
+			}
+			event.preventDefault();
+		},
+
+		// Ensures that the currently focused option is available in filteredOptions.
+		// If not, returns the first available option.
+		_getNewFocusedOption: function _getNewFocusedOption(filteredOptions) {
+			for (var key in filteredOptions) {
+				if (filteredOptions.hasOwnProperty(key) && filteredOptions[key] === this.state.focusedOption) {
+					return filteredOptions[key];
+				}
+			}
+			return this.getFirstFocusableOption(filteredOptions);
+		},
+
+		handleInputChange: function handleInputChange(event) {
+			// assign an internal variable because we need to use
+			// the latest value before setState() has completed.
+			this._optionsFilterString = event.target.value;
+
+			if (this.props.onInputChange) {
+				this.props.onInputChange(event.target.value);
+			}
+
+			if (this.props.asyncOptions) {
+				this.setState({
+					isLoading: true,
+					inputValue: event.target.value
+				});
+				this.loadAsyncOptions(event.target.value, {
+					isLoading: false,
+					isOpen: true
+				}, this._bindCloseMenuIfClickedOutside);
+			} else {
+				var filteredOptions = this.filterOptions(this.state.options);
+				this.setState({
+					isOpen: true,
+					inputValue: event.target.value,
+					filteredOptions: filteredOptions,
+					focusedOption: this._getNewFocusedOption(filteredOptions)
+				}, this._bindCloseMenuIfClickedOutside);
+			}
+		},
+
+		autoloadAsyncOptions: function autoloadAsyncOptions() {
+			var _this5 = this;
+
+			this.setState({
+				isLoading: true
+			});
+			this.loadAsyncOptions(this.props.value || '', { isLoading: false }, function () {
+				// update with fetched but don't focus
+				_this5.setValue(_this5.props.value, false);
+			});
+		},
+
+		loadAsyncOptions: function loadAsyncOptions(input, state, callback) {
+			var _this6 = this;
+
+			var thisRequestId = this._currentRequestId = requestId++;
+			if (this.props.cacheAsyncResults) {
+				for (var i = 0; i <= input.length; i++) {
+					var cacheKey = input.slice(0, i);
+					if (this._optionsCache[cacheKey] && (input === cacheKey || this._optionsCache[cacheKey].complete)) {
+						var options = this._optionsCache[cacheKey].options;
+						var filteredOptions = this.filterOptions(options);
+						var newState = {
+							options: options,
+							filteredOptions: filteredOptions,
+							focusedOption: this._getNewFocusedOption(filteredOptions)
+						};
+						for (var key in state) {
+							if (state.hasOwnProperty(key)) {
+								newState[key] = state[key];
+							}
+						}
+						this.setState(newState);
+						if (callback) callback.call(this, newState);
+						return;
+					}
+				}
+			}
+
+			this.props.asyncOptions(input, function (err, data) {
+				if (err) throw err;
+				if (_this6.props.cacheAsyncResults) {
+					_this6._optionsCache[input] = data;
+				}
+				if (thisRequestId !== _this6._currentRequestId) {
+					return;
+				}
+				var filteredOptions = _this6.filterOptions(data.options);
+				var newState = {
+					options: data.options,
+					filteredOptions: filteredOptions,
+					focusedOption: _this6._getNewFocusedOption(filteredOptions)
+				};
+				for (var key in state) {
+					if (state.hasOwnProperty(key)) {
+						newState[key] = state[key];
+					}
+				}
+				_this6.setState(newState);
+				if (callback) callback.call(_this6, newState);
+			});
+		},
+
+		filterOptions: function filterOptions(options, values) {
+			var filterValue = this._optionsFilterString;
+			var exclude = (values || this.state.values).map(function (i) {
+				return i.value;
+			});
+			if (this.props.filterOptions) {
+				return this.props.filterOptions.call(this, options, filterValue, exclude);
+			} else {
+				var filterOption = function filterOption(op) {
+					if (this.props.multi && exclude.indexOf(op.value) > -1) return false;
+					if (this.props.filterOption) return this.props.filterOption.call(this, op, filterValue);
+					var valueTest = String(op.value),
+					    labelTest = String(op.label);
+					if (this.props.ignoreCase) {
+						valueTest = valueTest.toLowerCase();
+						labelTest = labelTest.toLowerCase();
+						filterValue = filterValue.toLowerCase();
+					}
+					return !filterValue || this.props.matchPos === 'start' ? this.props.matchProp !== 'label' && valueTest.substr(0, filterValue.length) === filterValue || this.props.matchProp !== 'value' && labelTest.substr(0, filterValue.length) === filterValue : this.props.matchProp !== 'label' && valueTest.indexOf(filterValue) >= 0 || this.props.matchProp !== 'value' && labelTest.indexOf(filterValue) >= 0;
+				};
+				return (options || []).filter(filterOption, this);
+			}
+		},
+
+		selectFocusedOption: function selectFocusedOption() {
+			if (this.props.allowCreate && !this.state.focusedOption) {
+				return this.selectValue(this.state.inputValue);
+			}
+
+			if (this.state.focusedOption) {
+				return this.selectValue(this.state.focusedOption);
+			}
+		},
+
+		focusOption: function focusOption(op) {
+			this.setState({
+				focusedOption: op
+			});
+		},
+
+		focusNextOption: function focusNextOption() {
+			this.focusAdjacentOption('next');
+		},
+
+		focusPreviousOption: function focusPreviousOption() {
+			this.focusAdjacentOption('previous');
+		},
+
+		focusAdjacentOption: function focusAdjacentOption(dir) {
+			this._focusedOptionReveal = true;
+			var ops = this.state.filteredOptions.filter(function (op) {
+				return !op.disabled;
+			});
+			if (!this.state.isOpen) {
+				this.setState({
+					isOpen: true,
+					inputValue: '',
+					focusedOption: this.state.focusedOption || ops[dir === 'next' ? 0 : ops.length - 1]
+				}, this._bindCloseMenuIfClickedOutside);
+				return;
+			}
+			if (!ops.length) {
+				return;
+			}
+			var focusedIndex = -1;
+			for (var i = 0; i < ops.length; i++) {
+				if (this.state.focusedOption === ops[i]) {
+					focusedIndex = i;
+					break;
+				}
+			}
+			var focusedOption = ops[0];
+			if (dir === 'next' && focusedIndex > -1 && focusedIndex < ops.length - 1) {
+				focusedOption = ops[focusedIndex + 1];
+			} else if (dir === 'previous') {
+				if (focusedIndex > 0) {
+					focusedOption = ops[focusedIndex - 1];
+				} else {
+					focusedOption = ops[ops.length - 1];
+				}
+			}
+			this.setState({
+				focusedOption: focusedOption
+			});
+		},
+
+		unfocusOption: function unfocusOption(op) {
+			if (this.state.focusedOption === op) {
+				this.setState({
+					focusedOption: null
+				});
+			}
+		},
+
+		buildMenu: function buildMenu() {
+			var focusedValue = this.state.focusedOption ? this.state.focusedOption.value : null;
+			var renderLabel = this.props.optionRenderer || function (op) {
+				return op.label;
+			};
+			if (this.state.filteredOptions.length > 0) {
+				focusedValue = focusedValue == null ? this.state.filteredOptions[0] : focusedValue;
+			}
+			// Add the current value to the filtered options in last resort
+			var options = this.state.filteredOptions;
+			if (this.props.allowCreate && this.state.inputValue.trim()) {
+				var inputValue = this.state.inputValue;
+				options = options.slice();
+				var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
+					value: inputValue,
+					label: inputValue,
+					create: true
+				};
+				options.unshift(newOption);
+			}
+			var ops = Object.keys(options).map(function (key) {
+				var op = options[key];
+				var isSelected = this.state.value === op.value;
+				var isFocused = focusedValue === op.value;
+				var optionClass = classes({
+					'Select-option': true,
+					'is-selected': isSelected,
+					'is-focused': isFocused,
+					'is-disabled': op.disabled
+				});
+				var ref = isFocused ? 'focused' : null;
+				var mouseEnter = this.focusOption.bind(this, op);
+				var mouseLeave = this.unfocusOption.bind(this, op);
+				var mouseDown = this.selectValue.bind(this, op);
+				var optionResult = React.createElement(this.props.optionComponent, {
+					key: 'option-' + op.value,
+					className: optionClass,
+					renderFunc: renderLabel,
+					mouseEnter: mouseEnter,
+					mouseLeave: mouseLeave,
+					mouseDown: mouseDown,
+					click: mouseDown,
+					addLabelText: this.props.addLabelText,
+					option: op,
+					ref: ref
+				});
+				return optionResult;
+			}, this);
+
+			if (ops.length) {
+				return ops;
+			} else {
+				var noResultsText, promptClass;
+				if (this.isLoading()) {
+					promptClass = 'Select-searching';
+					noResultsText = this.props.searchingText;
+				} else if (this.state.inputValue || !this.props.asyncOptions) {
+					promptClass = 'Select-noresults';
+					noResultsText = this.props.noResultsText;
+				} else {
+					promptClass = 'Select-search-prompt';
+					noResultsText = this.props.searchPromptText;
+				}
+
+				return React.createElement('div', { className: promptClass }, noResultsText);
+			}
+		},
+
+		handleOptionLabelClick: function handleOptionLabelClick(value, event) {
+			if (this.props.onOptionLabelClick) {
+				this.props.onOptionLabelClick(value, event);
+			}
+		},
+
+		isLoading: function isLoading() {
+			return this.props.isLoading || this.state.isLoading;
+		},
+
+		render: function render() {
+			var selectClass = classes('Select', this.props.className, {
+				'is-multi': this.props.multi,
+				'is-searchable': this.props.searchable,
+				'is-open': this.state.isOpen,
+				'is-focused': this.state.isFocused,
+				'is-loading': this.isLoading(),
+				'is-disabled': this.props.disabled,
+				'has-value': this.state.value
+			});
+			var value = [];
+			if (this.props.multi) {
+				this.state.values.forEach(function (val) {
+					var onOptionLabelClick = this.handleOptionLabelClick.bind(this, val);
+					var onRemove = this.removeValue.bind(this, val);
+					var valueComponent = React.createElement(this.props.valueComponent, {
+						key: val.value,
+						option: val,
+						renderer: this.props.valueRenderer,
+						optionLabelClick: !!this.props.onOptionLabelClick,
+						onOptionLabelClick: onOptionLabelClick,
+						onRemove: onRemove,
+						disabled: this.props.disabled
+					});
+					value.push(valueComponent);
+				}, this);
+			}
+
+			if (!this.state.inputValue && (!this.props.multi || !value.length)) {
+				var val = this.state.values[0] || null;
+				if (this.props.valueRenderer && !!this.state.values.length) {
+					value.push(React.createElement(Value, {
+						key: 0,
+						option: val,
+						renderer: this.props.valueRenderer,
+						disabled: this.props.disabled }));
+				} else {
+					var singleValueComponent = React.createElement(this.props.singleValueComponent, {
+						key: 'placeholder',
+						value: val,
+						placeholder: this.state.placeholder
+					});
+					value.push(singleValueComponent);
+				}
+			}
+
+			var loading = this.isLoading() ? React.createElement('span', { className: 'Select-loading', 'aria-hidden': 'true' }) : null;
+			var clear = this.props.clearable && this.state.value && !this.props.disabled ? React.createElement('span', { className: 'Select-clear', title: this.props.multi ? this.props.clearAllText : this.props.clearValueText, 'aria-label': this.props.multi ? this.props.clearAllText : this.props.clearValueText, onMouseDown: this.clearValue, onTouchEnd: this.clearValue, onClick: this.clearValue, dangerouslySetInnerHTML: { __html: '&times;' } }) : null;
+
+			var menu;
+			var menuProps;
+			if (this.state.isOpen) {
+				menuProps = {
+					ref: 'menu',
+					className: 'Select-menu',
+					onMouseDown: this.handleMouseDown
+				};
+				menu = React.createElement('div', { ref: 'selectMenuContainer', className: 'Select-menu-outer' }, React.createElement('div', menuProps, this.buildMenu()));
+			}
+
+			var input;
+			var inputProps = {
+				ref: 'input',
+				className: 'Select-input ' + (this.props.inputProps.className || ''),
+				tabIndex: this.props.tabIndex || 0,
+				onFocus: this.handleInputFocus,
+				onBlur: this.handleInputBlur
+			};
+			for (var key in this.props.inputProps) {
+				if (this.props.inputProps.hasOwnProperty(key) && key !== 'className') {
+					inputProps[key] = this.props.inputProps[key];
+				}
+			}
+
+			if (!this.props.disabled) {
+				if (this.props.searchable) {
+					input = React.createElement(Input, _extends({ value: this.state.inputValue, onChange: this.handleInputChange, minWidth: '5' }, inputProps));
+				} else {
+					input = React.createElement('div', inputProps, ' ');
+				}
+			} else if (!this.props.multi || !this.state.values.length) {
+				input = React.createElement('div', { className: 'Select-input' }, ' ');
+			}
+
+			return React.createElement('div', { ref: 'wrapper', className: selectClass }, React.createElement('input', { type: 'hidden', ref: 'value', name: this.props.name, value: this.state.value, disabled: this.props.disabled }), React.createElement('div', { className: 'Select-control', ref: 'control', onKeyDown: this.handleKeyDown, onMouseDown: this.handleMouseDown, onTouchEnd: this.handleMouseDown }, value, input, React.createElement('span', { className: 'Select-arrow-zone', onMouseDown: this.handleMouseDownOnArrow }), React.createElement('span', { className: 'Select-arrow', onMouseDown: this.handleMouseDownOnArrow }), loading, clear), menu);
+		}
+
+	});
+
+	module.exports = Select;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+		for (var i = 1; i < arguments.length; i++) {
+			var source = arguments[i];for (var key in source) {
+				if (Object.prototype.hasOwnProperty.call(source, key)) {
+					target[key] = source[key];
+				}
+			}
+		}return target;
+	};
+
+	var React = __webpack_require__(2);
+
+	var sizerStyle = { position: 'absolute', visibility: 'hidden', height: 0, width: 0, overflow: 'scroll', whiteSpace: 'nowrap' };
+
+	var AutosizeInput = React.createClass({
+		displayName: 'AutosizeInput',
+
+		propTypes: {
+			value: React.PropTypes.any, // field value
+			defaultValue: React.PropTypes.any, // default field value
+			onChange: React.PropTypes.func, // onChange handler: function(newValue) {}
+			style: React.PropTypes.object, // css styles for the outer element
+			className: React.PropTypes.string, // className for the outer element
+			minWidth: React.PropTypes.oneOfType([// minimum width for input element
+			React.PropTypes.number, React.PropTypes.string]),
+			inputStyle: React.PropTypes.object, // css styles for the input element
+			inputClassName: React.PropTypes.string // className for the input element
+		},
+		getDefaultProps: function getDefaultProps() {
+			return {
+				minWidth: 1
+			};
+		},
+		getInitialState: function getInitialState() {
+			return {
+				inputWidth: this.props.minWidth
+			};
+		},
+		componentDidMount: function componentDidMount() {
+			this.copyInputStyles();
+			this.updateInputWidth();
+		},
+		componentDidUpdate: function componentDidUpdate() {
+			this.updateInputWidth();
+		},
+		copyInputStyles: function copyInputStyles() {
+			if (!this.isMounted() || !window.getComputedStyle) {
+				return;
+			}
+			var inputStyle = window.getComputedStyle(React.findDOMNode(this.refs.input));
+			var widthNode = React.findDOMNode(this.refs.sizer);
+			widthNode.style.fontSize = inputStyle.fontSize;
+			widthNode.style.fontFamily = inputStyle.fontFamily;
+			widthNode.style.letterSpacing = inputStyle.letterSpacing;
+			if (this.props.placeholder) {
+				var placeholderNode = React.findDOMNode(this.refs.placeholderSizer);
+				placeholderNode.style.fontSize = inputStyle.fontSize;
+				placeholderNode.style.fontFamily = inputStyle.fontFamily;
+				placeholderNode.style.letterSpacing = inputStyle.letterSpacing;
+			}
+		},
+		updateInputWidth: function updateInputWidth() {
+			if (!this.isMounted() || typeof React.findDOMNode(this.refs.sizer).scrollWidth === 'undefined') {
+				return;
+			}
+			var newInputWidth;
+			if (this.props.placeholder) {
+				newInputWidth = Math.max(React.findDOMNode(this.refs.sizer).scrollWidth, React.findDOMNode(this.refs.placeholderSizer).scrollWidth) + 2;
+			} else {
+				newInputWidth = React.findDOMNode(this.refs.sizer).scrollWidth + 2;
+			}
+			if (newInputWidth < this.props.minWidth) {
+				newInputWidth = this.props.minWidth;
+			}
+			if (newInputWidth !== this.state.inputWidth) {
+				this.setState({
+					inputWidth: newInputWidth
+				});
+			}
+		},
+		getInput: function getInput() {
+			return this.refs.input;
+		},
+		focus: function focus() {
+			React.findDOMNode(this.refs.input).focus();
+		},
+		select: function select() {
+			React.findDOMNode(this.refs.input).select();
+		},
+		render: function render() {
+			var escapedValue = (this.props.value || '').replace(/\&/g, '&amp;').replace(/ /g, '&nbsp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+			var wrapperStyle = this.props.style || {};
+			wrapperStyle.display = 'inline-block';
+			var inputStyle = _extends({}, this.props.inputStyle);
+			inputStyle.width = this.state.inputWidth;
+			inputStyle.boxSizing = 'content-box';
+			var placeholder = this.props.placeholder ? React.createElement('div', { ref: 'placeholderSizer', style: sizerStyle }, this.props.placeholder) : null;
+			return React.createElement('div', { className: this.props.className, style: wrapperStyle }, React.createElement('input', _extends({}, this.props, { ref: 'input', className: this.props.inputClassName, style: inputStyle })), React.createElement('div', { ref: 'sizer', style: sizerStyle, dangerouslySetInnerHTML: { __html: escapedValue } }), placeholder);
+		}
+	});
+
+	module.exports = AutosizeInput;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+
+	'use strict';
+
+	(function () {
+		'use strict';
+
+		function classNames() {
+
+			var classes = '';
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if ('string' === argType || 'number' === argType) {
+					classes += ' ' + arg;
+				} else if (Array.isArray(arg)) {
+					classes += ' ' + classNames.apply(null, arg);
+				} else if ('object' === argType) {
+					for (var key in arg) {
+						if (arg.hasOwnProperty(key) && arg[key]) {
+							classes += ' ' + key;
+						}
+					}
+				}
+			}
+
+			return classes.substr(1);
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// AMD. Register as an anonymous module.
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	})();
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var classes = __webpack_require__(164);
+
+	var Value = React.createClass({
+
+		displayName: 'Value',
+
+		propTypes: {
+			disabled: React.PropTypes.bool, // disabled prop passed to ReactSelect
+			onOptionLabelClick: React.PropTypes.func, // method to handle click on value label
+			onRemove: React.PropTypes.func, // method to handle remove of that value
+			option: React.PropTypes.object.isRequired, // option passed to component
+			optionLabelClick: React.PropTypes.bool, // indicates if onOptionLabelClick should be handled
+			renderer: React.PropTypes.func // method to render option label passed to ReactSelect
+		},
+
+		blockEvent: function blockEvent(event) {
+			event.stopPropagation();
+		},
+
+		handleOnRemove: function handleOnRemove(event) {
+			if (!this.props.disabled) {
+				this.props.onRemove(event);
+			}
+		},
+
+		render: function render() {
+			var label = this.props.option.label;
+			if (this.props.renderer) {
+				label = this.props.renderer(this.props.option);
+			}
+
+			if (!this.props.onRemove && !this.props.optionLabelClick) {
+				return React.createElement('div', {
+					className: classes('Select-value', this.props.option.className),
+					style: this.props.option.style,
+					title: this.props.option.title
+				}, label);
+			}
+
+			if (this.props.optionLabelClick) {
+
+				label = React.createElement('a', { className: classes('Select-item-label__a', this.props.option.className),
+					onMouseDown: this.blockEvent,
+					onTouchEnd: this.props.onOptionLabelClick,
+					onClick: this.props.onOptionLabelClick,
+					style: this.props.option.style,
+					title: this.props.option.title }, label);
+			}
+
+			return React.createElement('div', { className: classes('Select-item', this.props.option.className),
+				style: this.props.option.style,
+				title: this.props.option.title }, React.createElement('span', { className: 'Select-item-icon',
+				onMouseDown: this.blockEvent,
+				onClick: this.handleOnRemove,
+				onTouchEnd: this.handleOnRemove }, '×'), React.createElement('span', { className: 'Select-item-label' }, label));
+		}
+
+	});
+
+	module.exports = Value;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var classes = __webpack_require__(164);
+
+	var SingleValue = React.createClass({
+		displayName: 'SingleValue',
+
+		propTypes: {
+			placeholder: React.PropTypes.string, // this is default value provided by React-Select based component
+			value: React.PropTypes.object // selected option
+		},
+		render: function render() {
+
+			var classNames = classes('Select-placeholder', this.props.value && this.props.value.className);
+			return React.createElement('div', {
+				className: classNames,
+				style: this.props.value && this.props.value.style,
+				title: this.props.value && this.props.value.title
+			}, this.props.placeholder);
+		}
+	});
+
+	module.exports = SingleValue;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var classes = __webpack_require__(164);
+
+	var Option = React.createClass({
+		displayName: 'Option',
+
+		propTypes: {
+			addLabelText: React.PropTypes.string, // string rendered in case of allowCreate option passed to ReactSelect
+			className: React.PropTypes.string, // className (based on mouse position)
+			mouseDown: React.PropTypes.func, // method to handle click on option element
+			mouseEnter: React.PropTypes.func, // method to handle mouseEnter on option element
+			mouseLeave: React.PropTypes.func, // method to handle mouseLeave on option element
+			option: React.PropTypes.object.isRequired, // object that is base for that option
+			renderFunc: React.PropTypes.func // method passed to ReactSelect component to render label text
+		},
+
+		blockEvent: function blockEvent(event) {
+			event.preventDefault();
+			if (event.target.tagName !== 'A' || !('href' in event.target)) {
+				return;
+			}
+
+			if (event.target.target) {
+				window.open(event.target.href);
+			} else {
+				window.location.href = event.target.href;
+			}
+		},
+
+		render: function render() {
+			var obj = this.props.option;
+			var renderedLabel = this.props.renderFunc(obj);
+			var optionClasses = classes(this.props.className, obj.className);
+
+			return obj.disabled ? React.createElement('div', { className: optionClasses,
+				onMouseDown: this.blockEvent,
+				onClick: this.blockEvent }, renderedLabel) : React.createElement('div', { className: optionClasses,
+				style: obj.style,
+				onMouseEnter: this.props.mouseEnter,
+				onMouseLeave: this.props.mouseLeave,
+				onMouseDown: this.props.mouseDown,
+				onClick: this.props.mouseDown,
+				title: obj.title }, obj.create ? this.props.addLabelText.replace('{label}', obj.label) : renderedLabel);
+		}
+	});
+
+	module.exports = Option;
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2["default"].Component;
+
+	var ExperienceLevelSelect = (function (_Component) {
+	  _inherits(ExperienceLevelSelect, _Component);
+
+	  function ExperienceLevelSelect() {
+	    _classCallCheck(this, ExperienceLevelSelect);
+
+	    _get(Object.getPrototypeOf(ExperienceLevelSelect.prototype), "constructor", this).apply(this, arguments);
+	  }
+
+	  _createClass(ExperienceLevelSelect, [{
+	    key: "checkboxRenderer",
+	    value: function checkboxRenderer(_ref) {
+	      var name = _ref.name;
+	      var checked = _ref.checked;
+
+	      return _react2["default"].createElement(
+	        "item",
+	        null,
+	        _react2["default"].createElement("input", { type: "checkbox", className: "checkbox-control", defaultChecked: checked }),
+	        _react2["default"].createElement(
+	          "span",
+	          { className: "checkbox-label" },
+	          name
+	        )
+	      );
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var levels = this.props.levels;
+
+	      var checkboxRenderer = this.checkboxRenderer;
+	      return _react2["default"].createElement(
+	        "div",
+	        { className: "section" },
+	        _react2["default"].createElement(
+	          "label",
+	          { className: "checkbox" },
+	          levels.map(checkboxRenderer)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ExperienceLevelSelect;
+	})(Component);
+
+	exports["default"] = ExperienceLevelSelect;
+	module.exports = exports["default"];
+
+	// defaultChecked
+	/*
+	              <div>
+	              </div>
+
+	*/
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _imports = __webpack_require__(170);
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var StudentVis = (function (_Component) {
+	    _inherits(StudentVis, _Component);
+
+	    function StudentVis(props) {
+	        _classCallCheck(this, StudentVis);
+
+	        _get(Object.getPrototypeOf(StudentVis.prototype), 'constructor', this).call(this, props);
+	        this.state = {};
+	    }
+
+	    _createClass(StudentVis, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: 'page' },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { id: 'visualisation' },
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { id: 'vis-controls' },
+	                        _react2['default'].createElement('div', { id: 'color-by' }),
+	                        _react2['default'].createElement('div', { id: 'group-by' }),
+	                        _react2['default'].createElement('div', { id: 'filters' })
+	                    ),
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { id: 'vis-display' },
+	                        _react2['default'].createElement('div', { id: 'vis' }),
+	                        _react2['default'].createElement('div', { id: 'itemTooltip' })
+	                    ),
+	                    _react2['default'].createElement('div', { id: 'vis-legend' })
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'renderD3',
+	        value: function renderD3(tsv) {
+	            function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
+	                // columns that we are interested in
+	                var keys = Object.keys(tsv[0]).map(function (k) {
+	                    var _keyToLookup = keyToLookup(k);
+
+	                    var key = _keyToLookup.key;
+	                    var type = _keyToLookup.type;
+	                    var title = _keyToLookup.title;
+
+	                    var column = { key: key, type: type, title: title };
+	                    return column;
+	                }).filter(keyFilterFn);
+
+	                var _loop = function () {
+	                    var item = tsv[r];
+	                    keys.forEach(function (k) {
+	                        if (!k.uniqueValues) {
+	                            k.uniqueValues = [];
+	                        }
+	                        var set = k.uniqueValues;
+	                        var value = item[k.key];
+	                        if (set.indexOf(value) === -1) {
+	                            set.push(value);
+	                        }
+	                    });
+	                };
+
+	                // add list of unique values to each column
+	                for (var r = 0, nr = tsv.length; r < nr; r++) {
+	                    _loop();
+	                }
+	                var keyMap = {};
+	                keys.forEach(function (k) {
+	                    k.uniqueValues.sort(keySortFn(k));
+	                    keyMap[k.key] = k;
+	                });
+	                return { keys: keys, keyMap: keyMap };
+	            }
+
+	            // -- Loading the chart config
+	            var StudentChart = __webpack_require__(173);
+
+	            // -- Getting the Lookup keys
+
+	            var _getLookupKeys = getLookupKeys(tsv, StudentChart.keyToLookup, StudentChart.keyFilterFn, StudentChart.keySortFn);
+
+	            var keys = _getLookupKeys.keys;
+	            var keyMap = _getLookupKeys.keyMap;
+	            var _lookups$lookupMap = { lookups: keys, lookupMap: keyMap };
+	            var lookups = _lookups$lookupMap.lookups;
+	            var lookupMap = _lookups$lookupMap.lookupMap;
+
+	            // -- Mounting the visualisation add-ons
+	            var ItemTooltip = __webpack_require__(176);
+	            var ColorLegend = __webpack_require__(177);
+
+	            var tooltip = _react2['default'].render(_react2['default'].createElement(ItemTooltip, { title: 'my_tooltip', width: 240 }), document.getElementById('itemTooltip'));
+
+	            var colorLegend = _react2['default'].render(_react2['default'].createElement(ColorLegend), document.getElementById('vis-legend'));
+
+	            // -- Mounting the visualisation
+	            var BubbleChart = __webpack_require__(178);
+	            var chart = new BubbleChart();
+	            StudentChart.addControls({ lookups: lookups, lookupMap: lookupMap, chart: chart, colorLegend: colorLegend });
+	            chart.mountIn(document.getElementById('vis')).onItemSelection(function (item, xy) {
+	                var _ref = StudentChart.itemDump(item, lookupMap) || { title: null, list: null };
+
+	                var title = _ref.title;
+	                var list = _ref.list;
+
+	                tooltip.setState({ visible: list && list.length, xy: xy, title: title, list: list });
+	            }).keySortFn(StudentChart.keySortFn).circleStyle(StudentChart.circleStyle).plot(tsv).groupBy();
+
+	            return chart;
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var tsv = this.props.list;
+	            var chart = this.renderD3(tsv);
+	            this.setState({ chart: chart });
+	        }
+	    }, {
+	        key: 'shouldComponentUpdate',
+	        value: function shouldComponentUpdate(nextProps, nextState) {
+	            if (nextProps.hasOwnProperty('filterStudents')) {
+	                var tsv = this.props.list;
+	                // this.renderD3(tsv);
+	                if (this.state.chart) {
+	                    this.state.chart.filterStudents(nextProps.filterStudents);
+	                }
+	            }
+	            return false;
+	        }
+	    }]);
+
+	    return StudentVis;
+	})(Component);
+
+	exports['default'] = StudentVis;
+	module.exports = exports['default'];
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _componentsInjectInjectEs6Js = __webpack_require__(171);
+
+	var _componentsInjectInjectEs6Js2 = _interopRequireDefault(_componentsInjectInjectEs6Js);
+
+	var _componentsInjectInjectJsEs6Js = __webpack_require__(172);
+
+	var _componentsInjectInjectJsEs6Js2 = _interopRequireDefault(_componentsInjectInjectJsEs6Js);
+
+	_componentsInjectInjectEs6Js2['default'].js = _componentsInjectInjectJsEs6Js2['default'];
+
+	exports.Inject = _componentsInjectInjectEs6Js2['default'];
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var FN = (function () {
+	    function FN() {
+	        _classCallCheck(this, FN);
+	    }
+
+	    _createClass(FN, null, [{
+	        key: 'guaranteeFunction',
+	        value: function guaranteeFunction(fn) {
+	            if (typeof fn !== 'function') {
+	                fn = function () {};
+	            }
+	            return fn;
+	        }
+	    }, {
+	        key: 'loadNode',
+	        value: function loadNode(node, asyncReturn) {
+	            var yieldReturn = FN.guaranteeFunction(asyncReturn);
+	            if (!node) {
+	                yieldReturn();return;
+	            }
+	            node.onerror = function () {
+	                yieldReturn();
+	            };
+	            node.onload = function () {
+	                yieldReturn();
+	            };
+	            document.getElementsByTagName('head')[0].appendChild(node);
+	            // :NOTE: casperJS doesn't trigger the onload event for link elements
+	            // and for css files, there is no requirement to wait till the file is fully loaded.
+	        }
+	    }, {
+	        key: 'injectLink',
+	        value: function injectLink(url, asyncReturn) {
+	            var yieldReturn = FN.guaranteeFunction(asyncReturn);
+	            if (typeof url !== 'string') {
+	                return yieldReturn();
+	            }
+	            // Check that the css file doesn't exist yet before attempting to load it
+	            var node;
+	            if (document.querySelectorAll('head link[href="' + url + '"]').length === 0) {
+	                node = document.createElement('link');
+	                node.rel = 'stylesheet';
+	                node.type = 'text/css';
+	                node.href = url;
+	            }
+	            FN.loadNode(node, asyncReturn);
+	        }
+	    }]);
+
+	    return FN;
+	})();
+
+	var Inject = (function () {
+	    function Inject() {
+	        _classCallCheck(this, Inject);
+	    }
+
+	    _createClass(Inject, null, [{
+	        key: 'font',
+	        value: function font(list, asyncReturn) {
+	            FN.injectLink(url, asyncReturn);
+	        }
+	    }, {
+	        key: 'css',
+	        value: function css(url, asyncReturn) {
+	            if (typeof url === 'object') {
+	                url = (url.parent.filename || '.') + '/' + url.file;
+	            }
+	            FN.injectLink(url, asyncReturn);
+	        }
+	    }, {
+	        key: 'appendStyle',
+	        value: function appendStyle(css) {
+	            var head = document.head || document.getElementsByTagName('head')[0],
+	                style = document.createElement('style');
+	            style.type = 'text/css';
+	            if (style.styleSheet) {
+	                style.styleSheet.cssText = css;
+	            } else {
+	                style.appendChild(document.createTextNode(css));
+	            }
+
+	            head.appendChild(style);
+	        }
+	    }]);
+
+	    return Inject;
+	})();
+
+	exports['default'] = Inject;
+	module.exports = exports['default'];
+	/* do nothing */
+
+/***/ },
+/* 172 */
+/***/ function(module, exports) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = injectJs;
+
+	function injectJs(list, asyncReturn) {
+	  var head = document.head || document.getElementsByTagName('head')[0];
+	  function next() {
+	    if (!list || !list.length) {
+	      if (typeof asyncReturn === 'function') {
+	        asyncReturn();
+	      }
+	      return;
+	    }
+	    var js = list.shift();
+	    var script = document.createElement('script');
+	    script.type = 'text/javascript';
+	    script.src = js;
+	    script.addEventListener('load', next);
+	    head.appendChild(script);
+	  }
+	  next();
+	}
+
+	module.exports = exports['default'];
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var StudentChart = (function () {
+	    function StudentChart() {
+	        _classCallCheck(this, StudentChart);
+	    }
+
+	    _createClass(StudentChart, null, [{
+	        key: 'getFieldColor',
+	        value: function getFieldColor(value) {}
+	    }, {
+	        key: 'getLevelColor',
+	        value: function getLevelColor(value) {
+	            var colors = {
+	                'Dip': '#FF00CC',
+	                'GDip': '#FF00CC',
+	                'B': '#00FF00',
+	                'B(Hons)': '#00FF00',
+	                'PGDip': '#FFFF00',
+	                'M': '#FF0000',
+	                'PhD': '#FF0000',
+	                'default': '#4F4F4F'
+	            };
+	            return colors[value] || colors['default'];
+	        }
+	    }, {
+	        key: 'getDefaultColor',
+
+	        // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops
+
+	        value: function getDefaultColor(valueList) {
+	            var colors = ['#0000D9', '#FF00FF', '#FF0033', '#FFCC66', '#66CC33', '#33FFCC', '#00A0AA', '#FFCCFF', '#FF9933', '#99FF99', '#00BB00', '#CCFFCC', '#333333', '#CCCCCC', '#99CCCC', '#FF0000'];
+	            var colorMap = {};
+	            (valueList || []).forEach(function (d, i) {
+	                colorMap[d] = colors[i % colors.length];
+	            });
+	            return function (value) {
+	                return colorMap[value];
+	            };
+	        }
+	    }, {
+	        key: 'getColorFn',
+	        value: function getColorFn(type, distinctValues) {
+	            var colorFns = {
+	                // "level": StudentChart.getLevelColor,
+	                // "field": StudentChart.getFieldColor,
+	                'default': StudentChart.getDefaultColor(distinctValues)
+	            };
+	            return colorFns[type] || colorFns['default'];
+	        }
+	    }, {
+	        key: 'keyFilterFn',
+	        value: function keyFilterFn(_ref) {
+	            var key = _ref.key;
+	            var type = _ref.type;
+	            var title = _ref.title;
+
+	            return key.match(/^(school|level|field|degree|study_year|final_year)/);
+	        }
+	    }, {
+	        key: 'keySortFn',
+	        value: function keySortFn(keyName) {
+	            function sortNumericAsc(a, b) {
+	                return Number(a) - Number(b);
+	            }
+	            function sortLevel(a, b) {
+	                var order = 'Dip,GDip,B,B(Hons),PGDip,M,PhD,N/A'.split(',');
+	                return order.indexOf(a) - order.indexOf(b);
+	            }
+	            function sortField(a, b) {
+	                var order = 'Com,Com/BSc,Com/Sc,A,A/Sc,Mus,Des,Des/A,Des/Com,IT,Tech,CompSc,CompSc/Des,Eng,Eng/Com,Eng/Sc,Sc,Sc/HSc,Sc/Com,Sc/Law,MathSc'.split(',');
+	                return order.indexOf(a) - order.indexOf(b);
+	            }
+	            var map = { level: sortLevel, field: sortField };
+	            return map[keyName];
+	        }
+	    }, {
+	        key: 'keyToLookup',
+	        value: function keyToLookup(keyName) {
+	            var p = (keyName || '').split(':');
+	            if (p.length === 1) {
+	                p[1] = keyName;
+	            }
+	            return { key: keyName, type: p[0], title: p[1] };
+	        }
+	    }, {
+	        key: 'addControls',
+	        value: function addControls(_ref2) {
+	            var lookups = _ref2.lookups;
+	            var lookupMap = _ref2.lookupMap;
+	            var chart = _ref2.chart;
+	            var colorLegend = _ref2.colorLegend;
+
+	            var SelectBy = __webpack_require__(174);
+	            var FilterList = __webpack_require__(175);
+
+	            function whenColorValues(keyName, distinctValues) {
+	                var _ref3 = lookupMap[keyName] || { title: '' };
+
+	                var key = _ref3.key;
+	                var type = _ref3.type;
+	                var title = _ref3.title;
+	                var fillColor = StudentChart.circleStyle.fillColor;
+
+	                var colorFn = type ? StudentChart.getColorFn(type, distinctValues) : function (d) {
+	                    return fillColor;
+	                };
+	                function colorFormat(d, i) {
+	                    return { name: d, color: colorFn(d) };
+	                }
+	                distinctValues.sort(StudentChart.keySortFn(key));
+	                colorLegend.setState({ title: title, colorList: type ? distinctValues.map(colorFormat) : null });
+	                return colorFn;
+	            }
+
+	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Color by: ', onChange: function onChange(d) {
+	                    chart.colorBy(d, whenColorValues);
+	                } }), document.getElementById('color-by'));
+
+	            _react2['default'].render(_react2['default'].createElement(SelectBy, { lookups: lookups, title: 'Group by: ', onChange: function onChange(d) {
+	                    chart.groupBy(d);
+	                } }), document.getElementById('group-by'));
+
+	            /*
+	                    React.render(
+	                        React.createElement(FilterList, {groups: lookups, onChange: function(d) { chart.use_filters(d); }}),
+	                        document.getElementById('filters')
+	                    );        
+	            */
+	        }
+	    }, {
+	        key: 'itemDump',
+	        value: function itemDump(obj, lookupMap) {
+	            if (!obj) {
+	                return;
+	            }
+	            var list = [];
+	            for (var key in obj) {
+	                var value = obj[key];
+
+	                var _ref4 = lookupMap[key] || {};
+
+	                var title = _ref4.title;
+
+	                if (title) {
+	                    list.push({ title: title, value: value });
+	                }
+	            }
+	            return { title: obj['user_id'], list: list };
+	        }
+	    }]);
+
+	    return StudentChart;
+	})();
+
+	exports['default'] = StudentChart;
+
+	StudentChart.circleStyle = { defaultStrokeColor: '#404040', selectedStrokeColor: '#DF1E21', fillColor: '#cfcfcf', radius: 7 };
+	module.exports = exports['default'];
+
+	/*
+	        var colors = {
+	          'HSc/Sc'    : 'SomeColorCloseToBlue',
+	          'Com'       : 'red1',
+	          'Com/BSc'   : 'red2',
+	          'Com/Sc'    : 'red3',
+	          'A'         : 'somewhatGreen1',
+	          'A/Sc'      : 'somewhatGreen2', 
+	          'Mus'       : 'greenishButDifferent' 
+	          'Des'       : 'typicallyGreen1'    
+	          'Des/A'     : 'typicallyGreen2'    
+	          'Des/Com'   : 'green/Red'  // not obvious how to present overlap
+	          'IT'        : 'darkGray1'
+	          'Tech'      : 'darkGray2'
+	          'CompSc'    : 'darkGray3'
+	          'CompSc/Des': 'darkGray4'
+	          'Eng'       : 'Blue1'
+	          'Eng/Com'   : 'Blue/Red'
+	          'Eng/Sc'    : 'Blue/Purple' // not obvious how to present overlap
+	          'Sc'        : 'Purple'
+	          'Sc/Com'    : 'Purple'
+	          'Sc/Law'    : 'Purple'
+	          'MathSc'    : 'SomeColorCloseToBlue'
+	        };
+	        return colors[value] || colors.default;
+	        */
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var SelectBy = (function (_Component) {
+	    _inherits(SelectBy, _Component);
+
+	    function SelectBy(props) {
+	        _classCallCheck(this, SelectBy);
+
+	        _get(Object.getPrototypeOf(SelectBy.prototype), 'constructor', this).call(this, props);
+	        var onChange = props.onChange;
+
+	        var optionChange = function optionChange(event) {
+	            onChange(event.target.value);
+	        };
+	        this.state = { optionChange: optionChange };
+	    }
+
+	    _createClass(SelectBy, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var lookups = _props.lookups;
+	            var title = _props.title;
+	            var optionChange = this.state.optionChange;
+
+	            return _react2['default'].createElement(
+	                'select-group',
+	                null,
+	                _react2['default'].createElement(
+	                    'span',
+	                    { className: 'title' },
+	                    title
+	                ),
+	                _react2['default'].createElement(
+	                    'select',
+	                    { onChange: optionChange },
+	                    _react2['default'].createElement('option', { value: '' }),
+	                    lookups.map(function (_ref) {
+	                        var key = _ref.key;
+	                        var title = _ref.title;
+	                        return _react2['default'].createElement(
+	                            'option',
+	                            { value: key },
+	                            title
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SelectBy;
+	})(Component);
+
+	exports['default'] = SelectBy;
+	module.exports = exports['default'];
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2["default"].Component;
+
+	var CheckList = (function (_Component) {
+	    _inherits(CheckList, _Component);
+
+	    function CheckList(props) {
+	        _classCallCheck(this, CheckList);
+
+	        _get(Object.getPrototypeOf(CheckList.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(CheckList, [{
+	        key: "render",
+	        value: function render() {
+	            var _props = this.props;
+	            var key = _props.key;
+	            var title = _props.title;
+	            var list = _props.list;
+
+	            return _react2["default"].createElement(
+	                "div",
+	                { "data-target": { key: key } },
+	                _react2["default"].createElement(
+	                    "h3",
+	                    null,
+	                    { title: title }
+	                ),
+	                (list || []).map(function (d) {
+	                    return _react2["default"].createElement(
+	                        "div",
+	                        null,
+	                        _react2["default"].createElement("input", { type: "checkbox", checked: "checked", value: d }),
+	                        " ",
+	                        d
+	                    );
+	                })
+	            );
+	        }
+	    }]);
+
+	    return CheckList;
+	})(Component);
+
+	exports["default"] = CheckList;
+
+	var FilterList = (function (_Component2) {
+	    _inherits(FilterList, _Component2);
+
+	    function FilterList(props) {
+	        _classCallCheck(this, FilterList);
+
+	        _get(Object.getPrototypeOf(FilterList.prototype), "constructor", this).call(this, props);
+	    }
+
+	    _createClass(FilterList, [{
+	        key: "render",
+	        value: function render() {
+	            var groups = this.props.groups;
+
+	            return _react2["default"].createElement(
+	                "div",
+	                null,
+	                _react2["default"].createElement(
+	                    "div",
+	                    { id: "clear_filters" },
+	                    _react2["default"].createElement(
+	                        "a",
+	                        { href: "#" },
+	                        "(clear)"
+	                    )
+	                ),
+	                _react2["default"].createElement(
+	                    "h2",
+	                    null,
+	                    "Filters:"
+	                ),
+	                _react2["default"].createElement(
+	                    "div",
+	                    null,
+	                    groups.map(function (_ref) {
+	                        var key = _ref.key;
+	                        var title = _ref.title;
+	                        var uniqueValues = _ref.uniqueValues;
+
+	                        return _react2["default"].createElement(CheckList, { key: key, title: title, list: uniqueValues });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return FilterList;
+	})(Component);
+
+	exports["default"] = FilterList;
+	module.exports = exports["default"];
+
+	/*
+
+	function GetDiscreteFilters () {
+	    var filters = [];
+	    $('.filter_block').each(function (index, element) {
+	        var target = $(this).attr('data-target');
+	        var removeValues = {};
+	        $(this).find('input:not(:checked)').each(function (innerIndex, innerElement) {
+	            removeValues[$(this).val()] = true;
+	        });
+	        var toAdd = {
+	            target: target,
+	            removeValues: removeValues
+	        };
+	        filters.push(toAdd);
+	    });
+	    return filters;
+	};
+	function ResetFilters () {
+	    var filters = {
+	        discrete: GetDiscreteFilters(),
+	        numeric: [] // numeric not done yet!
+	    };
+	    dispatchChange(filters)
+	};
+	*/
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var CustomTooltip = (function (_Component) {
+	    _inherits(CustomTooltip, _Component);
+
+	    function CustomTooltip(props) {
+	        _classCallCheck(this, CustomTooltip);
+
+	        _get(Object.getPrototypeOf(CustomTooltip.prototype), 'constructor', this).call(this, props);
+	        this.state = { visible: false };
+	    }
+
+	    _createClass(CustomTooltip, [{
+	        key: 'render',
+	        value: function render() {
+	            var _state = this.state;
+	            var list = _state.list;
+	            var xy = _state.xy;
+	            var title = _state.title;
+	            var visible = _state.visible;
+
+	            var _ref = xy || { x: 0, y: 0 };
+
+	            var cx = _ref.cx;
+	            var cy = _ref.cy;
+
+	            return _react2['default'].createElement(
+	                'item-tooltip',
+	                { className: visible ? '' : 'hidden', style: { left: cx + 20, top: cy + 10 } },
+	                _react2['default'].createElement(
+	                    'h3',
+	                    null,
+	                    title
+	                ),
+	                _react2['default'].createElement(
+	                    'ul',
+	                    null,
+	                    (list || []).map(function (_ref2) {
+	                        var title = _ref2.title;
+	                        var value = _ref2.value;
+
+	                        return _react2['default'].createElement(
+	                            'li',
+	                            null,
+	                            _react2['default'].createElement(
+	                                'span',
+	                                { className: 'name' },
+	                                title,
+	                                ':'
+	                            ),
+	                            _react2['default'].createElement(
+	                                'span',
+	                                { className: 'value' },
+	                                value
+	                            )
+	                        );
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return CustomTooltip;
+	})(Component);
+
+	exports['default'] = CustomTooltip;
+	module.exports = exports['default'];
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var ColorLegend = (function (_Component) {
+	    _inherits(ColorLegend, _Component);
+
+	    function ColorLegend(props) {
+	        _classCallCheck(this, ColorLegend);
+
+	        _get(Object.getPrototypeOf(ColorLegend.prototype), 'constructor', this).call(this, props);
+	        this.state = { title: '', colorList: [] };
+	    }
+
+	    _createClass(ColorLegend, [{
+	        key: 'render',
+	        value: function render() {
+	            var _state = this.state;
+	            var title = _state.title;
+	            var colorList = _state.colorList;
+
+	            if (!colorList) {
+	                return _react2['default'].createElement('div', null);
+	            } else {
+	                return _react2['default'].createElement(
+	                    'div',
+	                    null,
+	                    _react2['default'].createElement(
+	                        'h3',
+	                        null,
+	                        title
+	                    ),
+	                    _react2['default'].createElement(
+	                        'ul',
+	                        null,
+	                        (colorList || []).map(function (_ref) {
+	                            var name = _ref.name;
+	                            var color = _ref.color;
+	                            return _react2['default'].createElement(
+	                                'li',
+	                                null,
+	                                _react2['default'].createElement(
+	                                    'span',
+	                                    { style: { width: '15px', height: '15px', background: color, color: color } },
+	                                    '__'
+	                                ),
+	                                ' ',
+	                                name
+	                            );
+	                        })
+	                    )
+	                );
+	            }
+	        }
+	    }]);
+
+	    return ColorLegend;
+	})(Component);
+
+	exports['default'] = ColorLegend;
+	module.exports = exports['default'];
+
+/***/ },
+/* 178 */
+/***/ function(module, exports) {
+
+	/* jshint esnext: true */
+
+	// -------------------------
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var FN = (function () {
+	  function FN() {
+	    _classCallCheck(this, FN);
+	  }
+
+	  _createClass(FN, null, [{
+	    key: "getDistinctValues",
+	    value: function getDistinctValues(nodes, keyName, keySortFn) {
+	      var allValues, distinctValues, key, value;
+	      allValues = {};
+	      nodes.forEach(function (d) {
+	        var value = d.original[keyName];
+	        allValues[value] = true;
+	      });
+	      distinctValues = [];
+	      for (key in allValues) {
+	        value = allValues[key];
+	        distinctValues.push(key);
+	      }
+	      distinctValues.sort(keySortFn(keyName));
+	      return distinctValues;
+	    }
+	  }]);
+
+	  return FN;
+	})();
+
+	// -------------------------
+
+	var Svg = (function () {
+	  function Svg() {
+	    _classCallCheck(this, Svg);
+	  }
+
+	  _createClass(Svg, null, [{
+	    key: "listenForSelection",
+	    value: function listenForSelection(_ref) {
+	      var circles = _ref.circles;
+	      var circleStyle = _ref.circleStyle;
+	      var onItemSelection = _ref.onItemSelection;
+
+	      if (circles === undefined) {
+	        return;
+	      }
+	      if (typeof onItemSelection !== "function") {
+	        onItemSelection = function () {};
+	      }
+	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
+	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
+	      var radius = circleStyle.radius;
+
+	      circles.on("mouseover", function (d, i) {
+	        d3.select(this).attr("r", radius + 2).attr("stroke-width", 3).attr("stroke", selectedStrokeColor);
+
+	        onItemSelection(d.original, { cx: Math.round(d.x), cy: Math.round(d.y) });
+	      }).on("mouseout", function (d, i) {
+	        d3.select(this).attr("r", radius).attr("stroke-width", 1).attr("stroke", defaultStrokeColor);
+
+	        onItemSelection();
+	      });
+	    }
+	  }, {
+	    key: "mountVis",
+	    value: function mountVis(div, width, height) {
+	      var svg = d3.select(div).append("svg");
+	      svg.attr("width", width).attr("height", height);
+	      return svg;
+	    }
+	  }, {
+	    key: "appendCircles",
+	    value: function appendCircles(_ref2) {
+	      var vis = _ref2.vis;
+	      var data = _ref2.data;
+	      var circleStyle = _ref2.circleStyle;
+	      var width = _ref2.width;
+	      var height = _ref2.height;
+
+	      var svg = vis;
+	      var defaultStrokeColor = circleStyle.defaultStrokeColor;
+	      var selectedStrokeColor = circleStyle.selectedStrokeColor;
+	      var fillColor = circleStyle.fillColor;
+	      var radius = circleStyle.radius;
+
+	      var nodes = (data || []).map(function (d, i) {
+	        return {
+	          id: i,
+	          original: d,
+	          radius: radius,
+	          x: Math.random() * width,
+	          y: Math.random() * height
+	        };
+	      });
+
+	      var circles = svg.append("g").selectAll("circle").data(nodes, function (d) {
+	        return d.id;
+	      });
+
+	      circles.enter().append("circle").attr("r", radius * 3).attr("stroke-width", 1).attr("stroke", defaultStrokeColor).attr("opacity", 0).style("fill", function (d) {
+	        return fillColor;
+	      }).attr("id", function (d) {
+	        return "b_" + d.id;
+	      });
+
+	      circles.transition().duration(2000).attr("opacity", 1).attr("r", function (d) {
+	        return d.radius;
+	      });
+
+	      var force = d3.layout.force().nodes(nodes).size([width, height]);
+	      circles.call(force.drag);
+
+	      return { nodes: nodes, circles: circles, force: force };
+	    }
+	  }, {
+	    key: "getGroupData",
+	    value: function getGroupData(_ref3) {
+	      var distinctValues = _ref3.distinctValues;
+	      var width = _ref3.width;
+	      var height = _ref3.height;
+
+	      var margin = { left: 200, right: 50 };
+	      width = width - margin.left - margin.right;
+	      if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
+	        return [{ label: "", cx: width / 2, cy: height / 2 }];
+	      }
+
+	      var center = { cx: width / 2, cy: height / 2 };
+	      var numCenters = distinctValues.length;
+	      var sp = 200;
+	      return distinctValues.map(function (d, i) {
+	        var x_position = margin.left + ((width - sp * 2) * (i + 0) / (numCenters - 1) + sp);
+	        return { label: d, cx: x_position, cy: center.cy };
+	      });
+	    }
+	  }, {
+	    key: "removeTopLabels",
+	    value: function removeTopLabels(svg) {
+	      svg.selectAll(".top-labels").remove();
+	    }
+	  }, {
+	    key: "addTopLabels",
+	    value: function addTopLabels(svg, group_data) {
+	      // add labels atop each group
+	      svg.selectAll(".top-labels").remove();
+
+	      var labels = svg.append("g").attr("class", "top-labels").selectAll("g").data(group_data);
+
+	      var g = labels.enter().append("g").attr("text-anchor", "start").attr("transform", function (_ref4) {
+	        var cx = _ref4.cx;
+	        return "translate(" + cx + ",100)rotate(-35)";
+	      });
+
+	      g.append("text").attr("fill", "white").attr("stroke", "white").attr("stroke-width", "3").text(function (_ref5) {
+	        var label = _ref5.label;
+	        return label;
+	      });
+	      g.append("text").text(function (_ref6) {
+	        var label = _ref6.label;
+	        return label;
+	      });
+	      return labels;
+	    }
+	  }]);
+
+	  return Svg;
+	})();
+
+	// -------------------------
+
+	var LayoutUtils = (function () {
+	  function LayoutUtils() {
+	    _classCallCheck(this, LayoutUtils);
+	  }
+
+	  _createClass(LayoutUtils, null, [{
+	    key: "moveTowardsGroupCenter",
+	    value: function moveTowardsGroupCenter(_ref7) {
+	      var alpha = _ref7.alpha;
+	      var width = _ref7.width;
+	      var height = _ref7.height;
+	      var damper = _ref7.damper;
+	      var group_data = _ref7.group_data;
+	      var keyName = _ref7.keyName;
+
+	      var centersMap = group_data.reduce(function (acc, d) {
+	        acc[d.label] = d;d.actual = [];return acc;
+	      }, {});
+
+	      return function (d) {
+	        var value = d.original[keyName];
+	        var center = centersMap[value || ""];
+	        d.x = d.x + (center.cx - d.x) * (damper + 0.02) * alpha * 1.1;
+	        d.y = d.y + (center.cy - d.y) * (damper + 0.02) * alpha * 1.1;
+	        center.actual.push({ cx: d.x, cy: d.y });
+	      };
+	    }
+	  }, {
+	    key: "charge",
+	    value: function charge(d) {
+	      return d.radius !== 0 ? -Math.pow(d.radius, 2) : 0;
+	    }
+	  }]);
+
+	  return LayoutUtils;
+	})();
+
+	// -------------------------
+
+	var BubbleChart = (function () {
+	  function BubbleChart() {
+	    _classCallCheck(this, BubbleChart);
+
+	    this.state = {
+	      width: 1000,
+	      height: 610,
+	      forceGravity: -0.01,
+	      damper: 0.4
+	    };
+
+	    var _state = this.state;
+	    var width = _state.width;
+	    var height = _state.height;
+
+	    var div = document.createElement("div");
+	    var vis = Svg.mountVis(div, width, height);
+	    this.state.div = div;
+	    this.state.vis = vis;
+	  }
+
+	  _createClass(BubbleChart, [{
+	    key: "keySortFn",
+
+	    // public accessors
+
+	    value: function keySortFn(_) {
+	      this.state.keySortFn = _;
+	      return this;
+	    }
+	  }, {
+	    key: "circleStyle",
+	    value: function circleStyle(_) {
+	      if (!arguments.length) {
+	        return this.state.circleStyle;
+	      }
+	      this.state.circleStyle = _;
+	      return this;
+	    }
+	  }, {
+	    key: "mountIn",
+	    value: function mountIn(node) {
+	      var div = this.state.div;
+
+	      node.appendChild(div);
+	      return this;
+	    }
+	  }, {
+	    key: "plot",
+	    value: function plot(data) {
+	      if (!data || !data.length) {
+	        return;
+	      }
+	      var _state2 = this.state;
+	      var vis = _state2.vis;
+	      var width = _state2.width;
+	      var height = _state2.height;
+	      var circleStyle = _state2.circleStyle;
+	      var onItemSelection = _state2.onItemSelection;
+
+	      var _Svg$appendCircles = Svg.appendCircles({ vis: vis, data: data, circleStyle: circleStyle, width: width, height: height });
+
+	      var circles = _Svg$appendCircles.circles;
+	      var nodes = _Svg$appendCircles.nodes;
+	      var force = _Svg$appendCircles.force;
+
+	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: onItemSelection });
+	      Object.assign(this.state, { force: force, nodes: nodes, vis: vis, circles: circles });
+	      return this;
+	    }
+	  }, {
+	    key: "onItemSelection",
+	    value: function onItemSelection(_) {
+	      var _state3 = this.state;
+	      var circles = _state3.circles;
+	      var circleStyle = _state3.circleStyle;
+
+	      this.state.onItemSelection = _;
+	      Svg.listenForSelection({ circles: circles, circleStyle: circleStyle, onItemSelection: _ });
+	      return this;
+	    }
+	  }, {
+	    key: "colorBy",
+	    value: function colorBy(keyName, getColorFn) {
+	      var _state4 = this.state;
+	      var nodes = _state4.nodes;
+	      var circles = _state4.circles;
+	      var keySortFn = _state4.keySortFn;
+
+	      var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
+	      var colorFn = getColorFn(keyName, distinctValues);
+	      var duration = !keyName || !keyName.length ? 1500 : 1000;
+	      circles.transition().duration(duration).style("fill", function (d) {
+	        return colorFn(d.original[keyName]);
+	      });
+	      return this;
+	    }
+	  }, {
+	    key: "groupBy",
+	    value: function groupBy(keyName) {
+	      var _state5 = this.state;
+	      var width = _state5.width;
+	      var height = _state5.height;
+	      var forceGravity = _state5.forceGravity;
+	      var damper = _state5.damper;
+	      var force = _state5.force;
+	      var nodes = _state5.nodes;
+	      var vis = _state5.vis;
+	      var circles = _state5.circles;
+	      var keySortFn = _state5.keySortFn;
+
+	      var distinctValues = FN.getDistinctValues(nodes, keyName, keySortFn);
+	      var group_data = Svg.getGroupData({ distinctValues: distinctValues, width: width, height: height });
+	      Svg.removeTopLabels(vis);
+	      var labels = Svg.addTopLabels(vis, group_data);
+
+	      var tickCount = 0;
+	      force.gravity(forceGravity).charge(LayoutUtils.charge).friction(0.9).on("tick", function (e) {
+	        tickCount++;
+	        circles.each(LayoutUtils.moveTowardsGroupCenter({ alpha: e.alpha, width: width, height: height, damper: damper, group_data: group_data, keyName: keyName })).attr("cx", function (d) {
+	          return d.x;
+	        }).attr("cy", function (d) {
+	          return d.y;
+	        });
+
+	        if (tickCount < 5 || tickCount % 10 == 0 && tickCount < 200) {
+	          labels.attr("transform", function (_ref8) {
+	            var cx = _ref8.cx;
+	            var actual = _ref8.actual;
+
+	            var cxstats = actual.reduce(function (acc, _ref9) {
+	              var cx = _ref9.cx;
+	              var cy = _ref9.cy;
+	              acc.sum += cx, acc.n += 1;return acc;
+	            }, { sum: 0, n: 0 });
+	            var avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
+	            return "translate(" + avg + ",100)rotate(-35)";
+	          });
+	        }
+	      });
+	      force.start();
+	      return this;
+	    }
+	  }, {
+	    key: "filterStudents",
+	    value: function filterStudents(students) {
+	      var _state6 = this.state;
+	      var circleStyle = _state6.circleStyle;
+	      var force = _state6.force;
+	      var nodes = _state6.nodes;
+	      var circles = _state6.circles;
+	      var radius = circleStyle.radius;
+
+	      nodes.forEach(function (d) {
+	        var isIn = students ? students.indexOf(d.original.user_id) !== -1 : true;
+	        d.opacity = isIn ? 1 : 0;
+	      });
+	      force.start();
+	      circles.transition().duration(2000).attr("fill-opacity", function (d) {
+	        return d.opacity;
+	      });
+	      return this;
+	    }
+	  }]);
+
+	  return BubbleChart;
+	})();
+
+	exports["default"] = BubbleChart;
+	module.exports = exports["default"];
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* jshint esnext: true */
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var Component = _react2['default'].Component;
+
+	var SkillList = (function (_Component) {
+	  _inherits(SkillList, _Component);
+
+	  function SkillList() {
+	    _classCallCheck(this, SkillList);
+
+	    _get(Object.getPrototypeOf(SkillList.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(SkillList, [{
+	    key: 'render',
+	    value: function render() {
+	      var list = this.props.list;
+
+	      return _react2['default'].createElement(
+	        'skills',
+	        null,
+	        _react2['default'].createElement(
+	          'ul',
+	          null,
+	          (list || []).map(function (item) {
+	            return _react2['default'].createElement(
+	              'li',
+	              null,
+	              _react2['default'].createElement(SkillItem, { item: item })
+	            );
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SkillList;
+	})(Component);
+
+	var SkillItem = (function (_Component2) {
+	  _inherits(SkillItem, _Component2);
+
+	  function SkillItem(props) {
+	    _classCallCheck(this, SkillItem);
+
+	    _get(Object.getPrototypeOf(SkillItem.prototype), 'constructor', this).call(this, props);
+	    function handleClick(e) {
+	      this.setState({ selected: !this.state.selected });
+	    }
+	    this.state = { selected: false, handleClick: handleClick.bind(this) };
+	  }
+
+	  _createClass(SkillItem, [{
+	    key: 'render',
+	    value: function render() {
+	      var item = this.props.item;
+	      var handleClick = this.state.handleClick;
+	      var name = item.name;
+	      var type = item.type;
+	      var primary = item.primary;
+	      var secondary = item.secondary;
+	      var selected = item.selected;
+	      var students = item.students;
+
+	      var studentsQty = selected && primary ? primary.length : secondary ? secondary.users.split(' ').length.toString() : '    ';
+	      return _react2['default'].createElement(
+	        'skill',
+	        { className: 'type-' + type + (selected ? ' selected' : '') + (secondary ? ' secondary' : ''), onClick: handleClick },
+	        name,
+	        _react2['default'].createElement(
+	          'qty',
+	          null,
+	          studentsQty
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SkillItem;
+	})(Component);
+
+	function skillsByCategory(skills) {
+	  var dict = [],
+	      categories = [];
+	  (skills || []).forEach(function (_ref) {
+	    var name = _ref.name;
+	    var type = _ref.type;
+	    var category = _ref.category;
+	    var levels = _ref.levels;
+
+	    var idx = dict.indexOf(category);
+	    if (idx === -1) {
+	      idx = dict.length;
+	      dict.push(category);
+	      categories[idx] = { name: category, skills: [] };
+	    }
+	    categories[idx].skills.push({ name: name, type: type, category: category, levels: levels });
+	  });
+	  categories.forEach(function (d) {
+	    var order = 'skill;tool'.split(';');
+	    d.skills.sort(function (a, b) {});
+	    d.skills.sort(function (a, b) {
+	      var diff = order.indexOf(a.type) - order.indexOf(b.type);
+	      if (diff !== 0) return diff;
+	      return a.name < b.name ? -1 : a.name > b.name ? +1 : 0;
+	    });
+	  });
+	  var order = 'Web / Programming;Design;BA / Digital Marketing;Engineering Skills;Systems / Ops / DBA'.split(';');
+	  categories.sort(function (a, b) {
+	    return order.indexOf(a.name) - order.indexOf(b.name);
+	  });
+	  return categories;
+	}
+
+	var SkillVis = (function (_Component3) {
+	  _inherits(SkillVis, _Component3);
+
+	  function SkillVis(props) {
+	    _classCallCheck(this, SkillVis);
+
+	    _get(Object.getPrototypeOf(SkillVis.prototype), 'constructor', this).call(this, props);
+	    var _props = this.props;
+	    var secondarySkills = _props.secondarySkills;
+	    var handlePrimaryChange = _props.handlePrimaryChange;
+
+	    var level = 'Paid';
+	    function getSecondary(skill, level) {
+	      var sskill = (secondarySkills || []).filter(function (d) {
+	        return d.name === skill;
+	      })[0];
+	      var slevel = (sskill || { levels: [] }).levels.filter(function (d) {
+	        return d.name === level;
+	      })[0];
+	      return (slevel || {}).skills;
+	    }
+	    function handleClick(e) {
+	      var skill = e.target.innerText;
+	      var secSkills = getSecondary(skill, level);
+	      var secList = (secSkills || []).map(function (_ref2) {
+	        var name = _ref2.name;
+	        return name;
+	      });
+	      var list = this.state.list;
+	      var nlist = (list || []).map(function (_ref3) {
+	        var name = _ref3.name;
+	        var skills = _ref3.skills;
+
+	        var nskills = skills.map(function (_ref4) {
+	          var name = _ref4.name;
+	          var type = _ref4.type;
+	          var category = _ref4.category;
+	          var levels = _ref4.levels;
+
+	          var selected = name === skill ? true : false;
+	          var primary = (levels[level] || { user_ids: [] }).user_ids;
+	          if (selected) {
+	            handlePrimaryChange(primary);
+	          }
+	          var idx = secList.indexOf(name);
+	          var secondary = idx !== -1 ? secSkills[idx] : undefined;
+	          return { name: name, type: type, category: category, levels: levels, selected: selected, primary: primary, secondary: secondary };
+	        });
+	        return { name: name, skills: nskills };
+	      });
+	      this.setState({ list: nlist });
+	    }
+	    var primarySkills = this.props.primarySkills;
+
+	    var categorySkills = skillsByCategory(primarySkills);
+	    this.state = { list: categorySkills, handleClick: handleClick.bind(this) };
+	  }
+
+	  _createClass(SkillVis, [{
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var list = _state.list;
+	      var handleClick = _state.handleClick;
+
+	      return _react2['default'].createElement(
+	        'categories',
+	        { onClick: handleClick },
+	        (list || []).map(function (_ref5) {
+	          var name = _ref5.name;
+	          var skills = _ref5.skills;
+
+	          return _react2['default'].createElement(
+	            'div',
+	            null,
+	            _react2['default'].createElement(
+	              'h1',
+	              null,
+	              name
+	            ),
+	            _react2['default'].createElement(SkillList, { list: skills })
+	          );
+	        })
+	      );
+	    }
+	  }]);
+
+	  return SkillVis;
+	})(Component);
+
+	exports['default'] = SkillVis;
+	module.exports = exports['default'];
+
+/***/ },
+/* 180 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = "user_id\tschool\tlevel\tfield\tdegree\tdegree_details\tstudy_year\tfinal_year\n190\tVictoria University of Wellington\tB\tEng\tBE\tBE\t5\tTRUE\n219\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n603\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of Information Technology (Level 7) - Information Assurance & Security\t3\tTRUE\n614\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of Information Technology\t4\tTRUE\n877\tAuckland University\tB\tCom\tBCom\tBCom (InfoSys)\t5\tTRUE\n908\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n965\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n1026\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technologies\t3\tTRUE\n1031\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technology\t3\tTRUE\n1073\tVictoria University of Wellington\tB\tDes/A\tBDes/BA\tBachelor of Design Innovation (Media Studies) and Bachelor of Arts (Film)\t5\tTRUE\n1095\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t3\tTRUE\n1165\tMassey University (Palmerston North)\tB\tSc\tBSc\tBSc\t3\tTRUE\n1309\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1346\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1352\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n1353\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n1358\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1397\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n1403\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1409\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1411\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n1416\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tFALSE\n1418\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tFALSE\n1422\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n1424\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1426\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1430\tVictoria University of Wellington\tB\tCom\tBCom\tBachelor of Commerce - Major in Informatino Systems and E-Commerce\t4\tFALSE\n1442\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n1449\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1455\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tFALSE\n1496\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1531\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1553\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n1565\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology\t1\tTRUE\n1567\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n1575\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n1610\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n1619\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n1620\tWhitireia New Zealand\tB\tDes\tBDes\tBDes\t2\tFALSE\n1623\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n1624\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n1626\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tFALSE\n1631\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technology\t3\tTRUE\n1717\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n1761\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n1786\tMassey University (Palmerston North)\tB\tEng\tBE\tBE\t3\tFALSE\n1845\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n1866\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t3\tTRUE\n1884\tVictoria University of Wellington\tB(Hons)\tCom\tBCom(Hons)\tBachelor of Commerce (Hons) Degree - Information Systems\t4\tTRUE\n1927\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n1933\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n1995\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n2021\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n2023\tMassey University (Palmerston North)\tB\tEng\tBE\tBE\t3\tFALSE\n2029\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t4\tTRUE\n2032\tAuckland University of Technology\tB\tIT\tBIT\tBICT\t3\tTRUE\n2034\tWhitireia New Zealand\tDip\tIT\tDipIT\tDiploma in Information Technology (Level 6)\t2\tTRUE\n2044\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t3\tTRUE\n2049\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of Information Technology\t3\tTRUE\n2050\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2051\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2062\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2063\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2069\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n2071\tAuckland University\tB\tEng/Com\tBE/BCom\tBE/Bcom\t3\tFALSE\n2103\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2105\tAuckland University\tB\tSc/Com\tBSc/BCom\tBSc/BCom (compsci; economics)\t5\tTRUE\n2106\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2108\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation \t4\tTRUE\n2110\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2129\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2143\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2145\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n2149\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n2150\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2154\tUniversity of Canterbury\tB\tEng\tBE\tBE\t2\tFALSE\n2159\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n2160\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n2175\tVictoria University of Wellington\tB\tCom\tBCom\tBachelor of Commerce (BCom) Information Systems and e-Commerce Major - also Minoring in International Business\t3\tTRUE\n2177\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2180\tVictoria University of Wellington\tB\tDes\tBDes\tBDI\t3\tTRUE\n2188\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n2191\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2195\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2224\tVictoria University of Wellington\tB\tCom/BSc\tBCom/BSc\tBCom/BSc\t4\tFALSE\n2225\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2238\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2248\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2262\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation (BDI) Minor in Marketing \t3\tTRUE\n2263\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2265\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2271\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n2273\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2280\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tFALSE\n2281\tVictoria University of Wellington\tB\tEng\tBE\tBachelor of engineering ( ongoing)\t2\tFALSE\n2289\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2290\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2298\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2299\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2300\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2302\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2304\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2305\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2316\tAuckland University\tB\tCom\tBCom\tBCom\t2\tFALSE\n2317\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2323\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation - Media Design\t3\tTRUE\n2325\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2327\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2330\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2333\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2348\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2354\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t3\tTRUE\n2367\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2379\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n2383\tMassey University (Palmerston North)\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n2392\tMassey University (Wellington)\tGDip\tDes\tGDipVisCD\tGraduate Diploma of Visual Communication Design\t4\tTRUE\n2402\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2413\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2414\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2417\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2418\tVictoria University of Wellington\tB\tCom\tBCom\tBcom\t4\tTRUE\n2433\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n2435\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n2439\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n2482\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2486\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Information Sciences (Software Development Major)\t3\tFALSE\n2487\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2494\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2497\tAuckland University\tB\tEng\tBE\tBE\t4\tTRUE\n2506\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n2509\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2513\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n2539\tAuckland University\tB\tMus\tBMus\tBMus\t2\tFALSE\n2549\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPGDIT\t1\tFALSE\n2551\tVictoria University of Wellington\tB\tDes/Com\tBDes/BCom\tConjoint degree - Bachelor in design innovation & Bachelor of commerce in Marketing\t5\tTRUE\n2587\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2592\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n2593\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2595\tAuckland University\tB\tCom\tBCom\tComputer Science & Finance (BCom)\t2\tFALSE\n2607\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tTRUE\n2649\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2657\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2662\tVictoria University of Wellington\tB\tCom\tBCom\tBachelor of Commerce Majoring in Information Systems and Management\t2\tFALSE\n2669\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in IT level 7\t1\tTRUE\n2673\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n2691\tVictoria University of Wellington\tB\tEng\tBE\tBE\t4\tFALSE\n2710\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tFALSE\n2711\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n2713\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduation Diploma in Information Technology\t1\tTRUE\n2719\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPostgraduate diploma in Information Technology (level 8)\t1\tTRUE\n2734\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n2738\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n2742\tAuckland University\tB\tSc/Law\tBSc/LLB\tBSc/LLB conjoint\t3\tFALSE\n2747\tAuckland University\tB\tIT\tBIT\tBachelor of Technology in Information Technology\t2\tFALSE\n2748\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduation in IT\t1\tTRUE\n2755\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2761\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technology\t2\tFALSE\n2762\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2769\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate diploma in information technology\t5\tTRUE\n2770\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2772\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2773\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n2781\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2784\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tFALSE\n2788\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2790\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n2814\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in IT\t1\tTRUE\n2815\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Level 7)\t1\tTRUE\n2818\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology\t3\tTRUE\n2819\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2820\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n2854\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t2\tTRUE\n2881\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n2882\tAuckland University\tPGDip\tCompSc\tPGDipCompSc\tPostgraduate Diploma of Computer Ccience\t1\tTRUE\n2894\tAuckland University\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computer Science\t2\tTRUE\n2916\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation\t3\tTRUE\n2917\tWhitireia New Zealand\tDip\tCompSc\tDipCompSc\tDiploma in Advanced Software Development (Level 6)\t1\tTRUE\n2919\tMassey University (Albany)\tB\tSc\tBSc\tBSc\t3\tTRUE\n2927\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2941\tAuckland University\tB(Hons)\tEng/Sc\tBE(Hons)/BSc\tBE(Hons)/BSc in Software Engineering and Physics\t3\tFALSE\n2943\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n2955\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Assurance and Security\t1\tTRUE\n2957\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2972\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n2982\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n2986\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n2987\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGDIT (LEVEL 7)\t1\tTRUE\n2995\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPostgraduate Diplome in Information Technology\t1\tTRUE\n2998\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Technology\t1\tTRUE\n3008\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3012\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3014\tAuckland University\tB\tEng/Com\tBE/BCom\tBE/BCom(Econ/Mgmt) Conjoint\t3\tFALSE\n3027\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n3029\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3035\tAuckland University\tM\tEng\tME\tMasters In Engineering Studies - Software Engg\t5\tTRUE\n3048\tWhitireia New Zealand\tB\tEng\tBE\tBE\t1\tTRUE\n3059\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3070\tUnitec Institute of Technology\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computing (Level 7)\t1\tTRUE\n3073\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3089\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPG Diploma in IT ( Level 8 )\t1\tTRUE\n3090\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPostgraduate diploma in Information Technology\t1\tTRUE\n3092\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3094\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3102\tRegent International Education Group (Auckland) - Diploma in Information Technology\tDip\tIT\tDIT\t5\tFALSE\tNetwork Programming/Practical\n3110\tWINTEC\tGDip\tIT\tGDipIT\tGrad Dip in IT level 7\t5\tTRUE\n3122\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPG Diploma in IT ( Level 8)\t1\tTRUE\n3152\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Information Science\t3\tFALSE\n3161\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n3178\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3196\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBit majoring in programming\t3\tTRUE\n3220\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in IT\t1\tTRUE\n3260\tAuckland University\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computer Science\t2\tTRUE\n3264\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t4\tTRUE\n3265\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation Culture & Context & Marketing\t3\tTRUE\n3269\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3270\tAuckland University of Technology\tB\tA\tBCT\tBachelor of Creative Technologies\t3\tTRUE\n3272\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3274\tMassey University (Albany)\tB\tCompSc\tBCompSc\tBInfSc - Computer Science\t3\tTRUE\n3295\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3305\tWhitireia New Zealand\tDip\tCompSc\tDipCompSc\tDiploma in Computer systems technology level -5\t1\tTRUE\n3307\tUniversity of Otago\tB\tSc\tBSc\tBSc\t2\tFALSE\n3317\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t4\tTRUE\n3326\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3327\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3358\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Level 7)\t1\tTRUE\n3359\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3362\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3364\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3366\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3368\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3369\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3370\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3371\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3372\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t2\tFALSE\n3373\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3374\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3375\tVictoria University of Wellington\tB\tDes\tBDI\tBDI\t3\tFALSE\n3376\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3384\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3394\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3400\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3404\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation (BDI) and Bachelor of Commerce (BCom)\t3\tFALSE\n3407\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3409\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3414\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3417\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n3419\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3421\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3422\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3429\tAuckland University\tB\tIT\tBIT\tBachelor of Technology - Information Technology (Honours)\t4\tTRUE\n3430\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3436\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3439\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3442\tAuckland University\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Science (Computer Science)\t2\tTRUE\n3449\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3452\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3455\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3456\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3460\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3461\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3464\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3469\tAuckland University\tGDip\tCompSc\tGDipCompSc\tGraduate diploma in computer science\t1\tTRUE\n3470\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3472\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3473\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3476\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n3481\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3482\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3484\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3485\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3488\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3491\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3492\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3493\tAuckland Institute Of Technology (AIS St Helens)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Software Development) Level-7\t1\tTRUE\n3494\tAuckland Institute Of Studies\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Software Devlopment Specialization)\t2\tTRUE\n3497\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3499\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3501\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3502\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3503\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3504\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3507\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3511\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3512\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3513\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3518\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n3519\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3522\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3524\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3526\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3527\tVictoria University of Wellington\tB\tCom\tBCom\tBcomm\t3\tTRUE\n3535\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3542\tVictoria University of Wellington\tB\tSc\tSc\tApplied Physics + Computer Science\t4\tTRUE\n3548\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3549\tAuckland University of Technology\tB\tSc\tBSc\tBSc\t3\tTRUE\n3550\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3557\tVictoria University of Wellington\tGDip\tCompSc\tGDipCompSc\tGradDipSci Computer Science\t3\tTRUE\n3558\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3570\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3572\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n3573\tMassey University (Palmerston North)\tB\tSc\tBSc\tBSc\t3\tTRUE\n3574\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3580\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3581\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3586\tVictoria University of Wellington\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Science in Computer Science\t2\tFALSE\n3587\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Technology (Level 8)\t1\tTRUE\n3590\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3592\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3594\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3595\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n3596\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3597\tVictoria University of Wellington\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computer Science\t2\tFALSE\n3600\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n3602\tAuckland University of Technology\tB\tEng\tBE\tBE\t3\tTRUE\n3605\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n3606\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n3610\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3613\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3617\tVictoria University of Wellington\tB\tCompSc/Des\tBCompSc/BDes\tConjoint BSc Comp/ BDI Media Design\t4\tTRUE\n3619\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3627\tAuckland University of Technology\tPGDip\tIT\tPGDipIT\tPostgraduate Diploma in Computer and Information Science\t1\tTRUE\n3628\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3629\tMassey University (Wellington)\tB(Hons)\tDes\tBDes(Hons)\tBDes(Hons) Visual Communication Design\t3\tFALSE\n3634\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t4\tTRUE\n3636\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3637\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3640\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t3\tTRUE\n3641\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3643\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3644\tAuckland University of Technology\tM\tIT\tMIT\tMaster of Service Oriented Computing\t1\tTRUE\n3648\tYoobee School of Design\tDip\tDes\tDipDes\tDiploma of Digital Media Advanced (Level 7)\t3\tTRUE\n3649\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3651\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n3652\tVictoria University of Wellington\tB\tCom\tBCom\tBCOM\t3\tTRUE\n3654\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation - Media Design\t3\tTRUE\n3656\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t4\tTRUE\n3657\tAuckland University of Technology\tB\tEng\tBE\tBachelor of Engineering Technology / Computer and Mobile Systems Engineering\t2\tFALSE\n3664\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n3666\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3679\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3684\tAuckland University\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n3691\tAuckland University of Technology\tB\tEng\tBE\tBE\t3\tTRUE\n3692\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer Information Sciences \t3\tTRUE\n3700\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3704\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3705\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t2\tTRUE\n3707\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3708\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computing and Information Science\t3\tTRUE\n3709\tAuckland University of Technology\tB\tSc\tBSc\tBSc\t3\tTRUE\n3710\tAuckland University of Technology\tB\tEng\tBE\tBachelor of Engineering Technology\t4\tTRUE\n3711\tAuckland University of Technology\tB\tIT\tBIT\tBICT\t3\tTRUE\n3712\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Information Sciences - Major (Software Development)\t3\tTRUE\n3715\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3716\tAuckland University\tB\tSc/Com\tBSc/BCom\tBSc/BCom\t3\tFALSE\n3723\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Information Sciences\t3\tTRUE\n3724\tAuckland University of Technology\tGDip\tIT\tGDipIT\tGraduate diploma in Computer and Information Sciences\t1\tTRUE\n3725\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (minor in CompSci)\t2\tFALSE\n3726\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3727\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3729\tYoobee School of Design\tDip\tDes\tDipDes\tDiploma of Digital Media Advanced (Level 7)\t3\tTRUE\n3730\tAuckland University of Technology\tB\tMathSc\tBMathSc\tBMathSci\t3\tTRUE\n3739\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3748\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3749\tAuckland University of Technology\tB\tSc\tBSc\tBSc\t2\tFALSE\n3750\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3752\tYoobee School of Design\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n3759\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3765\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3768\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3774\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3776\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3777\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Information Science - Software Development Major\t3\tTRUE\n3778\tAuckland University\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n3782\tAuckland University of Technology\tGDip\tIT\tGDipIT\tGraduate Diploma in Computer and Information Sciences\t2\tTRUE\n3788\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t3\tTRUE\n3791\tVictoria University of Wellington\tB\tA/Sc\tBA/BSc\tConjoint BA/BSc\t3\tFALSE\n3795\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3799\tAuckland University\tB\tHSc/Sc\tBHSc/BSc\tBHSC and BSc\t5\tTRUE\n3800\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3807\tAuckland University\tB\tCom/BSc\tBCom/BSc\tBCom/BSc\t3\tFALSE\n3808\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3813\tMassey University (Albany)\tB\tSc\tBSc\tBSc\t3\tFALSE\n3817\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n3819\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n3822\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies \t1\tFALSE\n3826\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3828\tWhitireia New Zealand\tDip\tIT\tDipIT\tDICT\t2\tTRUE\n3839\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3847\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3850\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3853\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n3856\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n3863\tAuckland University of Technology\tGDip\tIT\tGDipIT\tGraduate Diploma of CIS\t1\tTRUE\n3864\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of Information Technology\t3\tFALSE\n3866\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3870\tAuckland University of Technology\tM\tCompSc\tMCompSc\tMaster's Degree of Computer Science\t1\tFALSE\n3871\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n3872\tAuckland University of Technology\tB\tIT\tBIT\tBCIS\t3\tTRUE\n3895\tAuckland University of Technology\tB\tIT\tBIT\tBICT\t3\tTRUE\n3906\tAuckland University\tB\tCom/Sc\tBCom/BSc\tCommerce and Science conjoint\t2\tFALSE\n3910\tVictoria University of Wellington\tB\tCom\tBCom\tBcom\t2\tFALSE\n3913\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n3917\tAuckland University of Technology\tB\tIT\tBIT\tBICT\t1\tFALSE\n3918\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n3925\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n3927\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3931\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t2\tFALSE\n3932\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n3933\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n3936\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3940\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n3942\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n3943\tWhitireia New Zealand\tGDip\tCom\tGDipCom\tGraduate diploma in Applied Business studies\t1\tTRUE\n3948\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3954\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n3959\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tFALSE\n3970\tAuckland University of Technology\tB\tMathSc\tBMathSc\tBachelor of Mathematical Sciences\t1\tFALSE\n3972\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n3973\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate diploma in information assurance and security. \t1\tTRUE\n3976\tVictoria University of Wellington\tB\tCom\tBCom\tBachelor of Commerce\t2\tFALSE\n3983\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor of Design Innovation (Majoring in Media Design)\t3\tTRUE\n3990\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n3992\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t2\tFALSE\n3996\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n3998\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4003\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n4007\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate diploma in information technology\t1\tTRUE\n4010\tAuckland University\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computer Science - MSc in Marketing\t5\tTRUE\n4018\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n4019\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t2\tFALSE\n4033\tAuckland University\tB\tEng\tBE\tBE\t4\tTRUE\n4035\tVision College\tDip\tIT\tDipWeb\tDiploma of Web Development (Level 6)\t1\tTRUE\n4040\tAuckland University\tB\tTech\tBTech\tBachelor of Technology\t3\tFALSE\n4041\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4042\tunitec institute of technology\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computing\t1\tTRUE\n4043\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4044\tAuckland University\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n4048\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of information technology\t3\tTRUE\n4054\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n4056\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n4057\tVictoria University of Wellington\tB\tDes\tBDes\tBDes\t2\tFALSE\n4058\tUCOL\tDip\tIT\tDipIT\tDICT\t1\tTRUE\n4059\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t4\tTRUE\n4065\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t3\tFALSE\n4080\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology Level7\t1\tTRUE\n4087\tAuckland Institute of study \tGDip\tIT\tGDipIT\tGraduate Diploma of Information Technology  \t1\tTRUE\n4099\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4104\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of Information Technology double major in Programming and Software Engineering\t3\tFALSE\n4109\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate diploma in IT (Level 7)\t1\tTRUE\n4111\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBIT\t3\tFALSE\n4118\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology\t1\tTRUE\n4120\tWellington Institute of Technology (Weltec)\tDip\tIT\tDipIT\tDiploma in information technology\t2\tTRUE\n4121\tUniversity of Canterbury\tB\tEng\tBE\tBE\t4\tTRUE\n4122\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4123\tRoyal Business College\tDip\tCom\tDipCom\tDiploma in business management level 7\t1\tTRUE\n4125\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Level 7)\t1\tTRUE\n4130\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n4132\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4137\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n4139\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in information technology\t1\tTRUE\n4140\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in information technology\t1\tTRUE\n4141\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4143\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t2\tFALSE\n4162\tAuckland University\tPhD\tEng\tDEng\tPhD in Engineering\t4\tTRUE\n4173\tUnitec Institute of Technology\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computing(Networking & Data Communication) (Level 7)\t1\tTRUE\n4174\tAvonmore tertiary institute Takapuna (Auckland)\tDip\tIT\tDipICT\tDICT\t1\tTRUE\n4176\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n4178\tWhitireia New Zealand\tDip\tCompSc\tDipCompSc\tDiploma on Advance Network Engineering (Level 7)\t5\tFALSE\n4188\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n4191\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4192\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4206\tUniversity of Otago\tB\tCom\tBCom\tBCom in Economics and Finance\t5\tTRUE\n4212\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4213\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4219\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4233\tAVONMORE TERTIARY INSTITUTE\tDip\tCompSc\tDipCompSc\tDIPLOMA IN COMPUTING AND NETWORK ENGINEERING\t1\tFALSE\n4238\tAuckland University\tB\tSc\tBSc\tBSc\t2\tFALSE\n4241\tAuckland University\tB\tSc\tBSc\tBSc\t2\tTRUE\n4243\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t3\tTRUE\n4245\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n4249\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n4252\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n4253\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n4254\tVictoria University of Wellington\tM\tIT\tMIT\tmaster of information management\t1\tFALSE\n4256\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t1\tFALSE\n4265\tVictoria University of Wellington\tN/A\tIT\tCourse\tIntroduction to Database Management and Programming at VUW\t5\tTRUE\n4270\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n4271\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tTRUE\n4274\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t2\tFALSE\n4282\tAuckland University\tB\tEng\tBE\tBE\t5\tTRUE\n4284\tVictoria University of Wellington\tB\tEng\tBE\tBE\t2\tFALSE\n4291\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n4292\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n4305\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n4308\tAuckland University\tB\tEng\tBE\tBE\t4\tTRUE\n4313\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in IT\t1\tTRUE\n4315\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4321\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n4324\tAuckland Institute of Studies\tB\tIT\tBIT\tBachelor of Information Technology\t1\tFALSE\n4325\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4329\tUnitec Institute of Technology\tDip\tDes\tDipDes\tDiploma of Digital Media Advanced (Level 7)\t1\tTRUE\n4335\tAuckland University\tM\tEng\tME\tMaster of Computer Systems Engineering \t1\tTRUE\n4338\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4344\tVictoria University of Wellington\tB\tDes\tBCT\tIndustrial and Product Design Major; Minoring in Media Design\t3\tTRUE\n4348\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4352\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGradate Diploma in Information Technology Level 7 \t1\tTRUE\n4358\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t3\tTRUE\n4362\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4363\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4373\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4375\tAuckland University\tB\tEng\tBE\tBE\t4\tFALSE\n4379\tAuckland University\tB\tEng\tBE\tBE\t4\tTRUE\n4387\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4389\tAuckland University\tM\tEng\tME\tMaster of Engineering studies (Software)\t1\tTRUE\n4391\tAuckland University\tB\tCom\tBCom/LLB\tBCom(InfoSys)/LLB\t3\tFALSE\n4400\tAuckland University\tB\tEng\tBE\tBE\t4\tFALSE\n4404\tAuckland University\tM\tEng\tME\tmaster of software engineering\t2\tTRUE\n4405\tAuckland University\tM\tEng\tME\tMaster's of Software Engineering\t2\tTRUE\n4408\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4424\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technology \t2\tFALSE\n4434\tAuckland University\tB\tTech\tBTech\tBachelor of Technology\t4\tTRUE\n4437\tAuckland University\tB\tEng\tBE\tBE\t1\tFALSE\n4443\tAuckland University\tB\tSc\tBSc\tBSc\t1\tFALSE\n4446\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4451\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4458\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4461\tWellington Institute of Technology (Weltec)\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology (Level 7)\t3\tTRUE\n4469\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t2\tFALSE\n4476\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n4483\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t2\tFALSE\n4486\tVictoria University of Wellington\tB\tDes\tBDes\tBachelor  of design innovation\t2\tFALSE\n4487\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n4494\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4495\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n4497\tAuckland University\tB\tEng/Sc\tBE/BSc\tBE and BSc\t3\tFALSE\n4500\tAuckland University\tB\tEng\tBE\tBE\t4\tTRUE\n4502\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4503\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n4506\tAuckland University of Technology\tB\tEng\tBE\tBE\t1\tTRUE\n4508\tUnitec Institute of Technology\tDip\tIT\tDipICT\tDICT\t1\tTRUE\n4523\tWhitireia New Zealand\tB\tIT\tBIT\tBachelor of Information Technology \t1\tFALSE\n4530\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t4\tFALSE\n4531\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t3\tTRUE\n4552\tMassey University (Wellington)\tB\tDes\tBDes\tBachelor in Design (honours) majoring in Graphic Design\t4\tTRUE\n4568\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4572\tWellington Institute of Technology (Weltec)\tB\tSc\tBSc\tBSc\t4\tFALSE\n4574\tVictoria University of Wellington\tM\tCompSc\tMCompSc\tMaster of Computer Science\t1\tTRUE\n4581\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t3\tFALSE\n4584\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t4\tTRUE\n4590\tWhitireia New Zealand\tB\tIT\tBIT\tBICT\t1\tTRUE\n4596\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost graduate diploma in information technology level8\t1\tTRUE\n4598\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in IT\t1\tTRUE\n4604\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology\t1\tTRUE\n4608\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate diploma in IT(Level 7)\t1\tTRUE\n4634\tAuckland University of Technology\tM\tDes\tMDes\tMaster of Design\t1\tTRUE\n4643\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Technology\t1\tTRUE\n4645\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor in IT major Information assurance and security \t1\tFALSE\n4649\tInternational college of auckland\tDip\tCompSc\tDipCompSc\tdiploma in computer system support level 7 in IT networking\t1\tTRUE\n4652\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n4669\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n4676\tWhitireia New Zealand\tDip\tCompSc\tDipCompSc\tDiploma in Advance Network Engineering\t1\tTRUE\n4679\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPostgraduate Diploma in Information Technology\t1\tTRUE\n4682\tUniversity of Canterbury\tB\tSc\tBSc\tBSc\t3\tFALSE\n4685\tWhitireia New Zealand\tGDip\tIT\tGDipIT\tGraduate diploma in IT(level 7)\t1\tFALSE\n4689\tMassey University (Albany)\tGDip\tIT\tGDipIT\tGraduate diploma in computer science\t1\tTRUE\n4692\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4693\tUnitec Institute of Technology\tDip\tIT\tDipIT\tDiploma in IT Support\t2\tTRUE\n4699\tUniversity of Canterbury\tB\tEng\tBE\tBE\t3\tFALSE\n4701\tNational Technology Institute\tDip\tCompSc\tDipCompSc\tDiploma in Computing Level 6\t2\tTRUE\n4702\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBICT\t1\tFALSE\n4707\tVictoria University of Wellington\tB\tEng\tBE\tBE\t1\tFALSE\n4712\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t2\tFALSE\n4713\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t2\tFALSE\n4717\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t3\tTRUE\n4722\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4730\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4731\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4732\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4734\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tTRUE\n4735\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4745\tThe University of Waikato\tB\tDes\tBDes\tBachelor of Computer Graphic Design\t3\tTRUE\n4746\tUniversity of Otago\tB\tA\tBA\tBachelor of Arts (double major in Politics and Communications)\t2\tFALSE\n4747\tAuckland University of Technology\tB\tDes\tBDes\tBDes\t3\tTRUE\n4748\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4753\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4759\tWellington Institute of Technology (Weltec)\tDip\tIT\tDipIT\tDiploma in Computer Servicing\t1\tFALSE\n4760\tUnitec Institute of Technology\tGDip\tCompSc\tGDipCompSc\tGraduate diploma in computing (Level 7)\t1\tTRUE\n4762\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t1\tFALSE\n4764\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Technology (Level-8)\t1\tTRUE\n4767\tUnitec Institute of Technology\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computing (Level 7)\t1\tTRUE\n4783\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4786\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t2\tFALSE\n4804\tAuckland University\tM\tEng\tME\tMaster's of engineering studies (electrical and electronics engineering)\t1\tTRUE\n4811\tVictoria University of Wellington\tPGDip\tSc\tPGDipSc\tPostgraduate Diploma in Science\t1\tTRUE\n4812\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t3\tFALSE\n4822\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4827\tVictoria University of Wellington\tB\tEng\tBE\tBE\t3\tFALSE\n4867\tAuckland University of Technology\tB\tEng\tBE\tBE\t1\tFALSE\n4872\tMassey University (Palmerston North)\tB\tSc\tBSc\tBSc\t3\tFALSE\n4873\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4876\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4883\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4886\tEnspiral Dev Academy\tN/A\tIT\tCourse\tC# Stream Enspiral Dev Academy\t3\tTRUE\n4889\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n4896\tComputer Power Plus\tDip\tCompSc\tDipCompSc\tDiploma in Software Development\t2\tTRUE\n4899\tMassey University (Wellington)\tB\tDes\tBDes\tBDes\t4\tTRUE\n4902\tAuckland University\tB\tEng\tBE\ta Bachelor of Engineering in Computer Systems (Hons)\t3\tFALSE\n4904\tAuckland University of Technology\tB\tDes\tBDes\tBDes\t3\tTRUE\n4914\tNZSE\tDip\tCompSc\tDipCompSc\tDiploma in Computing Level 7\t1\tTRUE\n4922\tNZSE\tDip\tIT\tDipICT\tDICT\t1\tTRUE\n4924\tComputer Power Plus\tDip\tCompSc\tDipCompSc\tDiploma in Software Development\t1\tTRUE\n4926\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t4\tTRUE\n4934\tAuckland University of Technology\tM\tDes\tMDes\tMaster of design\t2\tTRUE\n4938\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Communication Technology\t1\tFALSE\n4939\tUniversity of Canterbury\tB\tSc\tBSc\tBSc\t3\tTRUE\n4940\tAuckland University of Technology\tB\tDes\tBCT\tBachelor of Creative Technologies\t3\tTRUE\n4942\tVictoria University of Wellington\tPGDip\tCompSc\tPGDipCompSc\tPost Graduate Diploma of Science in Computer Science\t2\tFALSE\n4943\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n4944\tAuckland University\tM\tEng\tME\tMasters in Engineering studies (Software Engineering)\t1\tTRUE\n4958\tWellington Institute of Technology (Weltec)\tB\tCom\tBCom\tBachelor of Applied Management\t2\tFALSE\n4962\tEnspiral Dev Academy\tN/A\tIT\tCourse\tC# / .Net Stream\t1\tFALSE\n4969\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n4977\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma In Information Technology Level 8\t1\tTRUE\n4984\tUnitec Institute of Technology\tGDip\tCompSc\tGDipCompSc\tGraduate Diploma in Computing \t1\tTRUE\n4989\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Engineering Technology\t2\tFALSE\n4991\tAuckland University of Technology\tB\tIT\tBIT\tBachelors Of Engineering Technology\t2\tFALSE\n4994\tNZSE\tDip\tIT\tDipIT\tDiploma in IT (level 6)\t2\tTRUE\n4999\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t1\tFALSE\n5005\tLondon School Of Economics\tB\tSc\tBSc\tBSc\t3\tTRUE\n5009\tVictoria University of Wellington\tB\tSc\tBSc\tBSc\t2\tFALSE\n5014\tAuckland University\tM\tEng\tME\tMaster of Engineering Studies (Software Engineering)\t1\tTRUE\n5016\tAuckland University of Technology\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma (level 8) in Computer and Information Sciences\t1\tTRUE\n5018\tAuckland University\tB\tEng\tBE\tBE\t3\tFALSE\n5019\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n5039\tMassey University (Palmerston North)\tB\tIT\tBIT\tBachelor of Information Science Majoring in Software Engineering\t3\tTRUE\n5046\tUnitec Institute of Technology\tB\tEng\tBE\tBachelor in Computing Systems\t1\tFALSE\n5051\tUCOL\tB\tIT\tBIT\tBICT\t3\tTRUE\n5055\tNZSE\tDip\tIT\tDipICT\tDICT\t2\tTRUE\n5061\tAuckland University\tB\tSc\tBSc\tBSc\t3\tTRUE\n5067\tMedia Design School\tB\tA\tBA\tBachelor of Art and Design\t1\tFALSE\n5069\tNational Technology Institute (NTI)\tDip\tCompSc\tDipCompSc\tDiploma in Computing Level 6\t2\tTRUE\n5071\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPostgraduate Diploma in IT\t1\tTRUE\n5072\tEastern Institute of Technology(Auckland Campus)\tN/A\tIT\tIT\tInformation Technology\t1\tTRUE\n5073\tVictoria University of Wellington\tB\tEng\tBE\tBE\t5\tTRUE\n5075\tVictoria University of Wellington\tB\tCom\tBCom\tBcom\t5\tTRUE\n5089\tAuckland University of Technology\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma In Computer and Information Science\t1\tTRUE\n5090\tVictoria University of Wellington\tB\tCom\tBCom\tBCom (InfoSys)\t4\tTRUE\n5093\tWhitireia New Zealand\tB\tSc\tBSc\tBSc\t2\tFALSE\n5095\tAuckland University\tPGDip\tCompSc\tPGDipCompSc\tPostgraduate Diploma in Computer Science\t1\tTRUE\n5096\tMedia Design School\tB\tA\tBA\tBachelor of Media Design \t3\tTRUE\n5100\tWaikato University\tB\tSc\tBSc\tBachelor of Computing and Mathematical Sciences\t3\tFALSE\n5102\tWaikato University\tB\tEng\tBE\tBE\t3\tFALSE\n5104\tWaikato University\tB\tSc\tBSc\tBSc\t3\tTRUE\n5105\tWaikato University\tB\tSc\tBSc\tBSc\t3\tTRUE\n5113\tWhitireia New Zealand\tPGDip\tIT\tPGDipIT\tPost Graduate Diploma in Information Technology\t1\tTRUE\n5114\tWaikato University\tB\tSc\tBSc\tBSc\t3\tTRUE\n5116\tAuckland University\tB\tSc\tBSc\tBSc\t3\tFALSE\n5130\tNtec\tDip\tCompSc\tDipCompSc\tDiploma in Computing Level 7\t1\tTRUE\n5134\tNTI (NTEC)\tB\tIT\tBIT\tBICT\t5\tFALSE\n5136\tNTEC\tGDip\tIT\tGDipIT\tGraduate Diploma in Information Technology Level 7\t1\tTRUE\n5137\tNTEC\tDip\tCompSc\tDipCompSc\tDiploma of computer science (Level7)/ applied Bachelor of computer science\t2\tTRUE\n5153\tNTEC\tDip\tCompSc\tDipCompSc\tDiploma in Computing with specialization in Networking level 7\t1\tTRUE\n5154\tNTec\tDip\tCompSc\tDipCompSc\tDiploma in  computing  LEVEL 7\t1\tTRUE\n5165\tNTEC\tDip\tCompSc\tDipCompSc\tDiploma in Computing (with strands in softwares) Level 7\t1\tTRUE\n5172\tNational Tertiary Education Consortium\tDip\tCompSc\tDipCompSc\tDiploma in Computing with stands software development \t5\tTRUE\n5173\tNational Technology Institute\tDip\tCompSc\tDipCompSc\tDiploma In Computing (Strands in Development) Level \t1\tTRUE\n5183\tNational technology institute\tDip\tIT\tDipIT\tDiploma in I.T(level 5&6)\t2\tTRUE\n5187\tNtec (National Technology Institute)\tDip\tCompSc\tDipCompSc\tDiploma in Computing Level 7 Strands in Networking\t1\tTRUE\n5193\tMedia Design School\tB\tEng\tBE\tBachelor of Software Engineering\t2\tFALSE\n5194\tWellington Institute of Technology (Weltec)\tB\tIT\tBIT\tBachelor of IT\t2\tFALSE\n5196\tUniversity of Canterbury\tB\tEng\tBE\tBE\t2\tFALSE\n5201\tAuckland University of Technology\tB\tIT\tBIT\tBachelor of Computer and Informational Sciences\t3\tTRUE\n5209\tAuckland University\tB\tEng\tBE\tBE\t2\tFALSE\n5217\tMedia Design School\tGDip\tDes\tGDipCT\tGraduate Diploma in Creative Technologies (3D)\t1\tTRUE\n5239\tAuckland University\tB\tSc\tBSc\tBSc\t4\tTRUE\n5240\tMassey University (Albany)\tB\tSc\tBSc\tBSc\t3\tFALSE\n5273\tAuckland University of Technology\tB\tDes\tBCT\t(BCT) Bachelor of Creative Technologies\t1\tFALSE";
+	module.exports = exports["default"];
+
+/***/ },
+/* 181 */
+/***/ function(module, exports) {
+
+	"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports["default"] = {"names":{"dict":["AI","Android","Computer Architecture","Distributed Programming","Front-end Web Frameworks","iOS / iPhone","Linux / Unix","Network Programming","Nodejs","Responsive Web Development","SQL","Testing","Web Development","Windows Universal Apps","Actionscript / Flash","C/C++","CSS","Docker","git","HTML","Java","Javascript","MySQL",".NET (C# and VB.net)","Objective C / Swift","Oracle","Perl","PHP","Postgres","Puppet","Python","R","Ruby on Rails","SQL Server","Vagrant","3D Modelling","3D Texturing","Animation","Concept Art / Matt","FX","Interaction Design","Motion Graphics / Compositing","Photography","Rendering","Rigging / TD","Rotoscoping","Typography","User Experience","Video Editing","After Effects","CS (Creative Suite)","Illustrator","InDesign","Maya","Photoshop","Shake","Sketch","3D Printing","Analogue Circuit Design","Analogue Electronics","CAD / CAM","Communications Engineering","Control System Engineering","Digital Circuit Design","Electronic Design","Embedded Systems","Instrumentation and controls","Mechatronics","Micro-controller Programming","PCB Design","Power Electronics","Power Systems & Distribution","Process Design","Robotics","Signal Processing","Clustering","Database Administration","Distributed Computing / Virtualisation","Firewalls","Information Security","Load Balancers","Network Architecture","Network Engineering","NoSQL","Security Analysis","Switches / Routers","Systems Engineering","Systems Infrastructure","Mac OSX Admin","MySQL DBA","Oracle DBA","Postgres DBA","SQLServer DBA","Systems Administration - Unix / Linux","Systems Administration - Windows","Vmware","Agile","Business Analysis","Content Marketing","Data Analysis","Digital Marketing","Information Architecture","Project Management","Search Engine Optimisation (SEO)","Statistics","Adwords","Google Analytics"]},"types":{"dict":["skill","tool"],"list":"0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 1"},"categories":{"dict":["Web / Programming","Design","Engineering Skills","Systems / Ops / DBA","BA / Digital Marketing"],"list":"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 4 4"},"students":[{"levels":{"Interested":"190 1031 1073 1165 1309 1352 1358 1397 1403 1409 1411 1416 1418 1422 1424 1426 1442 1449 1455 1496 1531 1553 1575 1610 1619 1620 1626 1717 1761 1786 1845 1866 1927 1933 2021 2023 2032 2049 2050 2063 2069 2071 2103 2105 2110 2143 2150 2160 2191 2195 2224 2238 2248 2273 2280 2289 2290 2298 2299 2300 2302 2304 2305 2316 2317 2325 2330 2348 2383 2402 2413 2414 2417 2482 2487 2494 2497 2509 2513 2539 2551 2587 2593 2595 2607 2649 2657 2669 2673 2691 2711 2742 2748 2761 2770 2772 2781 2790 2815 2818 2819 2820 2854 2917 2919 2927 2941 2943 2955 2957 2972 2986 2987 2998 3008 3012 3014 3029 3073 3092 3094 3102 3220 3260 3270 3272 3274 3295 3305 3307 3327 3362 3366 3368 3370 3371 3372 3375 3376 3384 3394 3400 3404 3407 3409 3414 3417 3419 3429 3430 3436 3439 3442 3452 3456 3460 3461 3464 3469 3470 3472 3476 3482 3484 3485 3488 3491 3492 3501 3504 3511 3512 3519 3524 3526 3535 3542 3557 3558 3570 3572 3573 3574 3581 3586 3587 3590 3594 3596 3600 3602 3605 3606 3610 3619 3628 3636 3640 3641 3643 3651 3664 3666 3684 3700 3707 3708 3709 3711 3712 3716 3723 3725 3727 3730 3739 3748 3749 3750 3759 3765 3768 3774 3795 3813 3817 3819 3826 3839 3850 3853 3856 3863 3866 3870 3895 3913 3927 3931 3932 3933 3936 3940 3942 3948 3954 3972 3990 3992 3998 4003 4007 4010 4035 4040 4043 4048 4054 4056 4080 4104 4111 4121 4122 4130 4132 4141 4143 4188 4191 4192 4219 4241 4245 4252 4253 4270 4274 4284 4291 4292 4308 4313 4335 4338 4344 4352 4358 4362 4363 4391 4400 4405 4437 4446 4451 4476 4483 4486 4487 4494 4495 4497 4500 4503 4506 4568 4574 4581 4649 4682 4685 4692 4702 4712 4713 4717 4730 4732 4734 4748 4753 4783 4786 4811 4822 4872 4873 4876 4883 4889 4896 4902 4904 4924 4934 4938 4939 4943 4944 4969 4977 4991 4999 5016 5018 5019 5046 5051 5055 5071 5073 5075 5090 5096 5104 5105 5114 5116 5134 5136 5137 5154 5165 5193 5196 5209 5217 5239 5240","Academic":"219 877 1095 1165 1353 1358 1411 1426 1449 1553 1567 1575 1619 1717 1761 1933 2021 2063 2069 2103 2143 2150 2160 2177 2224 2248 2273 2280 2298 2299 2304 2348 2383 2414 2417 2486 2587 2607 2649 2657 2669 2748 2772 2781 2917 2957 2972 2987 2998 3027 3029 3059 3094 3161 3260 3326 3368 3370 3376 3384 3417 3429 3439 3461 3476 3482 3492 3499 3524 3542 3557 3558 3572 3573 3617 3651 3664 3708 3709 3724 3730 3748 3822 3863 3870 4007 4010 4121 4130 4176 4335 4495 4502 4652 4682 4699 4883 4939 4969 5016 5018 5100 5116 5193 5209","Practical":"1403 1418 1442 1610 1845 1927 2238 2330 2494 2691 2742 2773 2818 2919 3375 3485 3628 3711 3712 3927 4270 4634 5104 5114 5165","Paid":"1424 1496 2062 3954 5105"}},{"levels":{"Paid":"190 1403 2145 2177 2305 2414 2509 2595 2657 2747 2781 2790 2814 2818 3307 3362 3504 3847 4400 5102","Interested":"190 219 1073 1165 1309 1346 1352 1353 1358 1397 1403 1409 1416 1422 1424 1426 1442 1449 1455 1531 1553 1575 1610 1619 1620 1624 1626 1717 1761 1786 1845 1866 1927 1933 1995 2021 2023 2032 2034 2049 2050 2051 2062 2063 2103 2105 2106 2108 2129 2143 2145 2150 2154 2159 2160 2177 2180 2188 2191 2195 2224 2225 2238 2248 2263 2265 2271 2273 2289 2290 2298 2299 2300 2302 2304 2305 2316 2317 2323 2325 2327 2330 2333 2348 2383 2392 2402 2413 2414 2417 2433 2482 2486 2494 2506 2509 2513 2539 2551 2587 2592 2593 2595 2607 2649 2657 2669 2673 2691 2710 2711 2734 2738 2742 2748 2755 2762 2770 2772 2781 2788 2790 2814 2815 2818 2819 2820 2854 2881 2882 2894 2917 2919 2927 2941 2955 2957 2972 2982 2986 2987 2998 3008 3012 3014 3029 3048 3070 3073 3089 3092 3094 3152 3178 3220 3260 3264 3269 3272 3274 3295 3305 3307 3317 3326 3327 3358 3362 3364 3366 3368 3369 3370 3371 3375 3376 3384 3394 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3452 3455 3456 3460 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3493 3497 3499 3501 3504 3507 3511 3512 3518 3519 3522 3524 3526 3535 3542 3548 3550 3557 3558 3570 3572 3573 3574 3580 3581 3586 3590 3592 3595 3596 3597 3600 3602 3605 3606 3610 3613 3619 3628 3634 3636 3637 3641 3643 3657 3664 3666 3679 3684 3691 3700 3707 3708 3709 3710 3711 3712 3715 3716 3723 3725 3727 3739 3748 3749 3750 3752 3759 3765 3768 3774 3777 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3819 3826 3828 3839 3847 3850 3853 3856 3863 3864 3866 3870 3895 3910 3913 3917 3918 3925 3927 3931 3932 3933 3936 3940 3942 3948 3954 3972 3973 3976 3990 3992 3998 4003 4007 4010 4018 4033 4035 4040 4043 4044 4048 4054 4056 4080 4104 4111 4121 4125 4130 4132 4139 4140 4141 4143 4176 4188 4191 4192 4212 4219 4233 4241 4243 4245 4249 4252 4253 4256 4265 4270 4271 4274 4284 4291 4292 4308 4313 4321 4329 4335 4338 4344 4348 4352 4362 4363 4379 4387 4389 4391 4404 4405 4424 4437 4443 4446 4451 4458 4461 4476 4483 4486 4487 4494 4495 4497 4500 4502 4503 4506 4508 4530 4531 4568 4572 4574 4581 4584 4598 4634 4643 4649 4652 4669 4682 4685 4692 4693 4702 4712 4713 4717 4730 4732 4734 4735 4746 4753 4760 4783 4786 4811 4822 4827 4867 4872 4873 4876 4883 4886 4889 4896 4902 4904 4924 4926 4934 4938 4939 4940 4942 4943 4944 4962 4969 4977 4991 4994 4999 5014 5016 5018 5019 5039 5046 5051 5061 5067 5071 5095 5096 5100 5102 5104 5105 5114 5116 5134 5136 5137 5165 5172 5173 5183 5193 5196 5209 5217 5239 5240 5273","Practical":"219 877 1031 1095 1165 1309 1346 1358 1409 1422 1424 1442 1455 1610 1623 1626 1631 1761 1845 2051 2103 2105 2143 2150 2195 2248 2265 2304 2317 2333 2402 2486 2494 2497 2669 2691 2742 2748 2770 2773 2881 2917 2941 2943 2972 2986 3012 3014 3027 3035 3059 3102 3370 3371 3400 3429 3442 3464 3472 3481 3482 3485 3491 3492 3497 3499 3524 3542 3549 3580 3595 3596 3597 3602 3627 3636 3651 3708 3710 3711 3712 3715 3808 3817 3856 3917 3927 3940 4010 4018 4033 4080 4111 4176 4188 4219 4243 4358 4379 4408 4494 4685 4713 4786 4886 4924 4926 4938 4977 5046 5051 5055 5061 5089 5100 5104 5105 5154 5172 5239 5273","Academic":"908 965 1026 1416 1418 1496 1531 1553 1567 1575 1619 1624 1717 1927 1995 2021 2034 2062 2063 2129 2225 2238 2299 2323 2330 2348 2417 2482 2506 2738 2761 2815 2882 2919 2987 3094 3152 3161 3178 3366 3375 3417 3419 3439 3572 3573 3586 3590 3628 3679 3691 3692 3709 3723 3777 3782 3791 3863 3870 3972 3998 4035 4087 4121 4139 4140 4143 4241 4249 4253 4329 4352 4389 4405 4461 4495 4500 4598 4643 4652 4702 4732 5016 5039 5069 5071 5095 5113 5137 5173"}},{"levels":{"Academic":"190 908 965 1026 1346 1352 1416 1422 1424 1426 1442 1455 1496 1531 1553 1624 1631 1761 1786 1927 1933 2049 2069 2071 2103 2105 2106 2143 2150 2154 2160 2177 2248 2298 2299 2316 2317 2413 2414 2417 2486 2494 2649 2669 2748 2755 2772 2788 2790 2814 2818 2820 2854 2894 2917 2941 2957 2972 2986 2987 2998 3027 3073 3178 3260 3269 3307 3362 3368 3369 3370 3371 3400 3407 3417 3429 3442 3461 3472 3473 3476 3481 3482 3485 3491 3492 3497 3501 3504 3522 3542 3550 3570 3572 3592 3595 3610 3643 3644 3651 3657 3664 3691 3709 3715 3716 3777 3791 3813 3863 3870 3895 3931 3940 3948 3954 3959 3976 3992 3998 4007 4043 4080 4118 4121 4140 4192 4254 4282 4308 4335 4358 4389 4400 4404 4408 4451 4458 4476 4487 4500 4502 4503 4523 4598 4652 4682 4685 4702 4812 4827 4873 4902 4924 4926 4944 4991 5014 5018 5055 5069 5089 5090 5095 5100 5102 5113 5114 5136 5165 5196 5209 5239","Interested":"190 603 877 965 1031 1346 1352 1397 1403 1416 1422 1424 1430 1442 1449 1455 1531 1553 1610 1619 1620 1623 1624 1626 1761 1786 1845 1866 1927 1933 2032 2034 2051 2062 2071 2103 2105 2110 2150 2191 2224 2238 2248 2265 2271 2289 2290 2298 2299 2325 2330 2333 2413 2414 2482 2486 2487 2539 2595 2649 2669 2691 2738 2748 2755 2761 2772 2781 2784 2814 2815 2820 2854 2894 2919 2927 2943 2955 2972 2982 2986 2987 2998 3012 3029 3035 3073 3089 3092 3178 3220 3260 3269 3270 3272 3295 3305 3307 3326 3362 3368 3370 3372 3376 3384 3394 3404 3407 3409 3414 3419 3429 3430 3436 3439 3442 3456 3461 3464 3469 3470 3472 3473 3476 3482 3484 3485 3488 3491 3492 3497 3499 3501 3507 3512 3519 3524 3542 3557 3572 3573 3590 3592 3605 3606 3610 3619 3627 3636 3643 3651 3652 3664 3679 3684 3700 3707 3708 3709 3711 3712 3716 3723 3725 3727 3739 3748 3749 3750 3759 3774 3778 3795 3799 3807 3813 3839 3856 3863 3870 3871 3895 3913 3917 3925 3927 3931 3932 3936 3942 3948 3954 3972 3992 3998 4007 4010 4033 4035 4040 4043 4044 4048 4054 4056 4058 4080 4087 4099 4111 4121 4123 4125 4130 4140 4141 4143 4178 4192 4219 4241 4249 4252 4253 4254 4274 4282 4284 4292 4313 4324 4335 4363 4391 4404 4424 4437 4446 4451 4476 4483 4486 4487 4494 4495 4500 4506 4508 4530 4531 4568 4572 4574 4581 4596 4598 4652 4682 4685 4692 4693 4702 4712 4713 4732 4734 4748 4753 4783 4786 4811 4812 4822 4867 4873 4876 4886 4889 4896 4902 4904 4926 4934 4938 4943 4944 4977 4999 5016 5018 5019 5039 5046 5051 5055 5067 5071 5072 5090 5095 5104 5105 5114 5116 5134 5136 5137 5165 5173 5193 5196 5209 5239 5240 5273","Practical":"1095 1619 1845 2034 2051 2265 2304 2330 2595 2691 2742 2815 2881 2919 3102 3499 3574 3602 3627 3710 3711 3712 3808 3917 3927 4010 4111 4178 4405 4495 4649 4713 4886 4938 5039 5104 5105 5273","Paid":"1623 3035 4087 5016 5072 5134"}},{"levels":{"Practical":"190 1095 1619 1626 1845 2062 2486 2595 2691 2818 3035 3102 3196 3461 3602 3644 3708 3710 3712 3856 3870 3936 4087 4139 4329 4405 4451 4495 5014 5104 5134","Interested":"190 614 877 908 965 1031 1165 1352 1397 1409 1422 1424 1449 1455 1496 1531 1553 1575 1610 1619 1620 1623 1626 1761 1786 1845 1866 1927 1933 1995 2032 2051 2062 2071 2103 2105 2110 2143 2150 2191 2195 2224 2225 2238 2248 2299 2300 2304 2316 2325 2330 2333 2413 2414 2482 2486 2497 2509 2513 2539 2551 2595 2649 2669 2673 2691 2711 2738 2748 2781 2815 2854 2882 2894 2919 2927 2943 2972 2986 2998 3012 3029 3059 3092 3178 3196 3220 3260 3264 3272 3295 3307 3362 3368 3370 3371 3376 3384 3400 3404 3407 3414 3419 3429 3430 3436 3439 3442 3455 3456 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3493 3497 3501 3504 3519 3524 3542 3557 3572 3573 3590 3592 3595 3605 3606 3619 3627 3644 3651 3652 3657 3684 3700 3707 3709 3710 3711 3712 3716 3723 3724 3725 3727 3730 3739 3748 3749 3750 3759 3774 3777 3791 3795 3799 3807 3808 3813 3817 3819 3828 3839 3850 3856 3863 3870 3895 3913 3917 3927 3931 3932 3936 3942 3948 3972 3992 4003 4010 4018 4035 4040 4043 4048 4054 4056 4099 4121 4130 4139 4141 4143 4192 4241 4252 4253 4265 4274 4292 4305 4313 4324 4335 4363 4391 4400 4405 4424 4437 4446 4451 4476 4483 4486 4487 4494 4495 4497 4500 4506 4508 4531 4568 4574 4581 4649 4652 4685 4692 4702 4712 4730 4732 4734 4748 4753 4783 4786 4811 4822 4872 4873 4876 4883 4889 4896 4902 4904 4934 4938 4940 4943 4944 4977 4991 4994 4999 5014 5016 5018 5019 5039 5046 5051 5071 5073 5089 5090 5095 5105 5114 5116 5134 5165 5196 5239 5240","Academic":"1026 1165 1352 1422 1455 1531 1553 1623 1631 1761 1927 1933 2034 2103 2105 2160 2177 2195 2248 2304 2506 2509 2788 2790 2854 2882 2894 2917 2919 3027 3059 3161 3178 3260 3326 3368 3370 3384 3407 3417 3429 3430 3476 3481 3482 3497 3504 3542 3549 3550 3627 3664 3691 3765 3863 3895 3931 3940 4010 4140 4282 4335 4358 4389 4408 4424 4502 4685 4702 4783 4786 4924 4944 5018 5039 5051 5095 5105 5116","Paid":"2414 5016 5113"}},{"levels":{"Paid":"190 1623 2188 2224 2379 2673 2747 2755 2772 3035 3178 3362 3375 3414 3439 3472 3473 3485 3524 3542 3596 3613 3627 3628 3644 3759 3970 3998 4121 4143 4405 4500 4574 4643 4707 4811 4811 4886 4944 4962 5014 5016 5073 5102 5239","Interested":"190 1165 1309 1346 1352 1358 1397 1403 1416 1422 1424 1442 1449 1455 1531 1553 1575 1610 1619 1623 1626 1717 1761 1786 1845 1927 2050 2103 2105 2129 2143 2145 2150 2160 2180 2188 2191 2238 2248 2273 2280 2290 2298 2299 2316 2323 2325 2330 2348 2379 2383 2413 2414 2417 2439 2482 2486 2494 2497 2509 2513 2539 2549 2551 2587 2592 2595 2649 2669 2673 2691 2734 2738 2742 2747 2748 2762 2781 2814 2815 2820 2854 2882 2894 2917 2919 2927 2972 2982 2986 2987 2998 3008 3012 3029 3035 3089 3196 3220 3260 3269 3274 3307 3362 3366 3370 3371 3375 3376 3384 3404 3407 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3494 3499 3501 3504 3513 3519 3524 3542 3550 3558 3572 3573 3586 3587 3590 3592 3595 3600 3605 3606 3617 3619 3627 3628 3634 3636 3640 3641 3644 3649 3656 3657 3664 3666 3684 3700 3705 3707 3708 3711 3712 3716 3724 3725 3727 3739 3749 3750 3752 3759 3774 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3828 3839 3856 3863 3864 3870 3871 3895 3913 3917 3931 3932 3936 3940 3942 3948 3970 3972 3990 3992 3998 4007 4010 4018 4035 4040 4043 4048 4054 4056 4057 4065 4111 4121 4125 4130 4139 4140 4141 4143 4188 4192 4212 4241 4245 4253 4265 4271 4274 4284 4292 4305 4313 4324 4325 4335 4344 4348 4352 4358 4362 4363 4391 4404 4405 4424 4437 4446 4451 4461 4476 4483 4486 4494 4495 4500 4503 4506 4508 4523 4531 4568 4574 4581 4608 4634 4643 4649 4652 4669 4682 4685 4689 4702 4712 4713 4732 4734 4735 4753 4759 4767 4783 4811 4872 4873 4876 4886 4889 4896 4899 4902 4904 4926 4934 4938 4939 4940 4943 4944 4962 4969 4977 4994 4999 5014 5016 5018 5019 5039 5051 5055 5061 5071 5075 5089 5096 5102 5105 5114 5136 5137 5154 5165 5193 5209 5217 5239 5240 5273","Practical":"1026 1165 1352 1358 1610 1845 2050 2145 2177 2238 2290 2304 2325 2330 2414 2417 2486 2549 2669 2691 2781 2818 2917 2941 2986 3196 3270 3371 3400 3491 3494 3549 3558 3600 3602 3634 3636 3649 3656 3705 3708 3711 3712 3752 3782 3791 3870 3936 3948 3990 4007 4010 4018 4087 4104 4111 4139 4176 4238 4253 4329 4335 4344 4348 4389 4461 4495 4502 4608 4732 4767 4883 4899 4924 4969 5018 5039 5061 5071 5104 5154","Academic":"1422 1442 1553 1575 1619 1624 1631 1717 1761 1933 2034 2044 2051 2062 2105 2108 2143 2273 2280 2298 2299 2323 2506 2551 2592 2657 2711 2734 2738 2748 2773 2814 2854 2882 2919 2972 2998 3161 3260 3269 3370 3417 3429 3436 3476 3482 3493 3504 3557 3573 3617 3640 3651 3679 3684 3700 3707 3710 3724 3739 3788 3813 3817 3828 3863 3864 3872 3895 3917 3940 3976 3983 4065 4140 4271 4404 4458 4494 4523 4531 4590 4598 4649 4669 4682 4689 4702 4812 4902 4926 4939 4977 5051 5100 5105 5114 5134 5136"}},{"levels":{"Paid":"190 1845 3627 4827 5102 5172","Interested":"190 877 1031 1073 1165 1309 1346 1352 1358 1397 1403 1409 1416 1422 1424 1442 1449 1455 1531 1553 1567 1575 1610 1619 1620 1623 1624 1626 1631 1717 1761 1786 1845 1866 1927 1995 2032 2034 2049 2051 2063 2103 2106 2108 2129 2143 2145 2149 2150 2154 2159 2160 2177 2180 2188 2191 2195 2224 2238 2248 2263 2271 2273 2290 2299 2302 2305 2317 2325 2327 2330 2333 2348 2392 2402 2413 2414 2417 2435 2439 2482 2486 2487 2494 2539 2551 2587 2592 2593 2595 2649 2657 2669 2673 2691 2734 2738 2742 2748 2755 2761 2762 2770 2772 2781 2788 2814 2815 2818 2819 2820 2854 2881 2894 2917 2919 2941 2943 2955 2972 2982 2986 2987 2998 3008 3012 3014 3029 3059 3070 3073 3089 3161 3178 3196 3220 3260 3264 3269 3272 3295 3307 3317 3326 3327 3359 3362 3366 3368 3369 3370 3371 3374 3375 3376 3400 3404 3407 3409 3414 3419 3421 3429 3430 3436 3439 3442 3449 3452 3455 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3493 3494 3497 3499 3501 3504 3507 3512 3513 3519 3522 3535 3542 3548 3558 3570 3572 3573 3574 3580 3581 3590 3592 3594 3595 3596 3597 3600 3602 3605 3606 3610 3613 3619 3627 3628 3634 3636 3637 3643 3657 3664 3666 3679 3684 3700 3707 3708 3709 3710 3711 3712 3715 3716 3723 3725 3727 3739 3748 3749 3750 3752 3759 3768 3774 3776 3777 3782 3788 3791 3795 3799 3800 3807 3813 3817 3819 3822 3826 3828 3839 3847 3850 3856 3863 3864 3866 3870 3895 3910 3913 3917 3918 3925 3927 3931 3932 3933 3936 3940 3942 3948 3972 3976 3990 3992 3998 4003 4007 4010 4018 4033 4035 4040 4043 4044 4048 4054 4056 4057 4058 4080 4104 4111 4121 4130 4132 4137 4139 4141 4143 4188 4191 4192 4219 4233 4241 4245 4252 4253 4270 4271 4282 4284 4291 4292 4305 4308 4313 4321 4324 4325 4329 4335 4338 4344 4348 4352 4362 4363 4387 4389 4391 4404 4405 4424 4434 4437 4443 4446 4451 4458 4476 4483 4487 4495 4500 4503 4506 4508 4523 4530 4531 4552 4568 4574 4581 4584 4608 4649 4652 4669 4685 4693 4702 4712 4713 4717 4730 4732 4734 4735 4746 4753 4760 4783 4786 4811 4812 4822 4867 4872 4873 4876 4883 4886 4889 4896 4899 4902 4904 4924 4926 4934 4938 4942 4944 4962 4977 4991 4999 5014 5018 5019 5051 5067 5071 5089 5095 5096 5102 5104 5105 5114 5134 5136 5137 5165 5172 5183 5193 5196 5201 5209 5239 5240 5273","Academic":"965 1346 1403 1422 1927 2034 2044 2051 2062 2143 2238 2323 2414 2506 2551 2691 2919 3102 3178 3260 3270 3419 3482 3497 3679 3709 3712 3776 3856 3870 4056 4087 4139 4143 4253 4352 4405 4495 4531 4574 4944 5075 5095 5100","Practical":"1026 1095 1358 1623 2486 2595 2742 2773 2818 2986 2998 3027 3375 3376 3407 3421 3597 3602 3628 3634 3715 3895 3917 3936 3990 4010 4018 4054 4111 4178 4282 4344 4451 4608 4702 4713 4786 4886 4934 4940 5055 5067 5069 5089 5104 5105 5273"}},{"levels":{"Interested":"190 219 603 614 877 965 1031 1073 1165 1346 1352 1358 1397 1409 1422 1424 1426 1442 1449 1455 1531 1553 1567 1575 1610 1619 1620 1623 1624 1626 1631 1717 1761 1786 1845 1866 1927 1933 1995 2034 2050 2051 2062 2063 2071 2103 2105 2110 2129 2143 2150 2159 2160 2180 2224 2225 2248 2263 2290 2298 2299 2302 2317 2325 2330 2348 2383 2413 2414 2417 2482 2486 2487 2497 2513 2539 2551 2587 2593 2595 2607 2649 2669 2691 2738 2747 2748 2761 2762 2770 2781 2814 2815 2819 2854 2894 2917 2919 2927 2941 2955 2972 2982 2986 2998 3008 3012 3014 3029 3059 3073 3102 3161 3220 3260 3269 3272 3307 3326 3327 3362 3370 3371 3375 3376 3384 3394 3404 3407 3409 3414 3419 3429 3430 3436 3439 3442 3449 3452 3455 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3504 3511 3519 3524 3526 3542 3548 3557 3570 3572 3573 3580 3581 3590 3592 3600 3605 3610 3617 3619 3627 3641 3643 3656 3657 3664 3666 3684 3700 3707 3710 3711 3712 3715 3716 3723 3724 3725 3727 3739 3748 3749 3750 3752 3759 3768 3774 3777 3788 3791 3795 3799 3807 3808 3817 3819 3826 3839 3863 3870 3872 3895 3910 3913 3917 3918 3927 3931 3933 3936 3940 3942 3948 3954 3970 3972 3992 3998 4003 4007 4010 4033 4035 4040 4041 4042 4043 4048 4054 4058 4104 4111 4121 4130 4132 4139 4140 4141 4143 4178 4191 4192 4212 4219 4241 4245 4249 4252 4253 4254 4265 4274 4282 4284 4292 4305 4313 4324 4335 4338 4344 4348 4352 4362 4363 4389 4391 4400 4404 4405 4424 4437 4446 4451 4461 4469 4476 4483 4487 4494 4495 4500 4506 4531 4568 4574 4581 4596 4604 4649 4652 4676 4682 4685 4702 4713 4730 4732 4734 4753 4759 4760 4783 4811 4812 4822 4873 4876 4883 4886 4889 4896 4902 4904 4914 4926 4934 4938 4943 4944 4962 4969 4994 4999 5014 5018 5019 5039 5046 5051 5071 5089 5090 5093 5095 5096 5104 5105 5114 5116 5134 5136 5154 5165 5173 5193 5201 5209 5217 5239 5240","Practical":"219 908 1095 1165 1346 1358 1416 1449 1531 1610 1626 1786 1845 1933 2050 2051 2062 2063 2103 2105 2110 2143 2304 2317 2330 2333 2494 2497 2513 2691 2711 2719 2747 2755 2788 2815 2917 2919 2941 2943 2972 2982 2986 3035 3368 3375 3384 3400 3407 3414 3461 3464 3472 3499 3557 3558 3581 3590 3602 3610 3636 3708 3724 3791 3808 3870 3927 3936 3954 3998 4010 4033 4111 4139 4140 4178 4249 4265 4282 4284 4389 4405 4408 4469 4500 4531 4568 4676 4682 4685 4707 4734 4827 4873 4876 4886 4902 4924 4938 4969 5039 5046 5071 5102 5104 5154 5209 5239 5240","Academic":"603 614 965 1352 1422 1455 1496 1553 1575 1619 1623 1717 1761 1927 1995 2034 2049 2071 2129 2149 2150 2154 2160 2177 2225 2238 2248 2263 2299 2327 2383 2402 2413 2669 2710 2748 2762 2781 2784 2790 2814 2818 2819 2854 2894 2927 2957 2998 3008 3014 3027 3152 3178 3269 3295 3305 3307 3364 3370 3371 3394 3417 3439 3442 3456 3470 3476 3481 3482 3485 3497 3501 3504 3511 3518 3524 3550 3572 3574 3592 3595 3617 3644 3657 3664 3709 3710 3711 3712 3715 3716 3723 3768 3777 3817 3839 3856 3872 3895 3925 3931 3933 3948 3970 3990 4042 4043 4054 4121 4141 4143 4162 4176 4192 4212 4253 4292 4308 4324 4325 4335 4348 4352 4363 4404 4424 4451 4458 4461 4494 4495 4497 4502 4523 4574 4584 4590 4604 4649 4702 4730 4760 4783 4786 4811 4811 4812 4822 4883 4914 4926 4939 4944 4991 4994 5014 5018 5055 5069 5075 5093 5114 5116 5273","Paid":"1403 1426 1565 2032 2325 2414 2773 2995 3362 3491 3542 4087 4254 4572 5095 5105 5113 5173"}},{"levels":{"Paid":"190 1426 3627 3679 4087 4574 5113 5134","Interested":"190 614 965 1165 1346 1352 1397 1411 1416 1418 1422 1424 1426 1449 1455 1531 1553 1575 1610 1619 1620 1623 1626 1761 1786 1845 1866 1927 1995 2021 2032 2034 2044 2051 2063 2103 2105 2106 2110 2129 2143 2150 2160 2191 2225 2238 2248 2262 2271 2281 2290 2298 2299 2302 2304 2323 2325 2330 2348 2383 2413 2414 2482 2486 2497 2506 2513 2539 2549 2551 2592 2595 2607 2649 2669 2673 2691 2738 2748 2762 2790 2815 2818 2819 2820 2854 2917 2919 2927 2941 2955 2972 2982 2986 2998 3012 3029 3059 3073 3178 3220 3260 3269 3274 3295 3327 3358 3362 3368 3370 3371 3376 3384 3394 3404 3407 3409 3414 3419 3429 3430 3436 3439 3442 3456 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3502 3504 3512 3519 3524 3526 3542 3557 3558 3570 3572 3573 3581 3590 3592 3594 3605 3606 3610 3619 3627 3636 3643 3656 3664 3679 3684 3700 3707 3709 3710 3712 3716 3725 3727 3730 3739 3748 3749 3750 3759 3774 3795 3799 3807 3808 3813 3817 3828 3839 3863 3866 3870 3895 3913 3917 3918 3925 3927 3931 3932 3933 3936 3942 3948 3954 3972 3990 3992 3998 4003 4007 4010 4035 4040 4043 4048 4054 4056 4058 4099 4111 4121 4130 4141 4143 4191 4192 4219 4241 4249 4252 4253 4284 4292 4305 4308 4313 4329 4335 4352 4362 4363 4387 4389 4391 4400 4404 4405 4424 4437 4446 4451 4476 4483 4487 4494 4495 4497 4500 4506 4523 4530 4531 4568 4572 4574 4581 4604 4649 4652 4682 4685 4689 4701 4702 4712 4734 4748 4753 4759 4760 4783 4811 4812 4867 4872 4873 4876 4889 4896 4902 4904 4922 4924 4926 4934 4938 4942 4943 4944 4969 4977 4991 4994 4999 5018 5019 5039 5046 5051 5055 5071 5089 5090 5095 5105 5114 5134 5136 5165 5173 5183 5193 5196 5201 5209 5239 5240","Academic":"219 614 877 908 965 1031 1346 1352 1358 1397 1411 1416 1418 1422 1424 1496 1531 1553 1575 1619 1623 1624 1631 1717 1927 1933 1995 2021 2049 2063 2069 2103 2106 2143 2150 2159 2160 2177 2191 2224 2238 2248 2299 2325 2413 2414 2417 2482 2486 2738 2755 2788 2790 2814 2854 2882 2894 2917 2919 2943 2986 2998 3027 3094 3161 3178 3260 3326 3370 3371 3384 3394 3400 3407 3417 3430 3439 3464 3472 3476 3481 3482 3485 3497 3501 3502 3504 3542 3550 3572 3592 3643 3664 3709 3710 3711 3712 3765 3791 3839 3856 3863 3948 3959 4007 4010 4176 4249 4291 4308 4335 4348 4352 4389 4405 4408 4451 4495 4497 4523 4604 4649 4652 4682 4685 4689 4702 4707 4760 4786 4812 4827 4867 4902 4926 4944 5014 5018 5075 5095 5100 5102 5104 5114 5136 5137 5165 5183 5193 5273","Practical":"1095 1455 1761 1786 1845 2034 2062 2105 2304 2330 2333 2595 2691 2719 2784 2818 2927 3048 3362 3368 3491 3602 3708 3870 3927 4140 4329 4458 4500 4531 4922 5039"}},{"levels":{"Practical":"190 1358 1409 1927 1933 2050 2051 2062 2069 2188 2304 2417 2691 2818 2917 2986 3152 3362 3370 3414 3542 3590 3596 3711 3782 3791 3870 4335 4652 4682 4707 4827 4886 4977","Interested":"190 1165 1346 1358 1397 1409 1416 1422 1424 1449 1455 1553 1567 1610 1619 1623 1626 1717 1761 1786 1845 1927 1933 1995 2021 2050 2051 2103 2129 2143 2145 2150 2160 2177 2188 2225 2238 2248 2273 2290 2298 2299 2304 2316 2317 2323 2325 2330 2348 2383 2413 2414 2417 2482 2486 2497 2506 2509 2513 2539 2595 2649 2657 2669 2673 2691 2711 2747 2748 2755 2762 2770 2815 2820 2854 2894 2917 2919 2941 2986 2995 2998 3012 3029 3178 3220 3260 3269 3274 3307 3362 3370 3371 3375 3376 3384 3400 3404 3407 3414 3417 3419 3429 3430 3436 3439 3442 3449 3461 3469 3470 3472 3476 3482 3484 3485 3488 3492 3497 3499 3501 3504 3519 3524 3542 3557 3558 3572 3573 3586 3590 3592 3595 3596 3605 3617 3619 3627 3634 3636 3641 3644 3656 3657 3684 3700 3705 3707 3711 3712 3716 3724 3725 3727 3739 3749 3750 3752 3759 3768 3774 3777 3788 3791 3795 3799 3808 3817 3819 3839 3850 3853 3870 3895 3913 3931 3936 3940 3942 3948 3970 3972 3992 4010 4035 4040 4043 4048 4054 4104 4121 4130 4141 4143 4188 4192 4212 4219 4241 4245 4253 4292 4305 4313 4335 4362 4363 4389 4391 4405 4437 4446 4451 4461 4476 4483 4500 4503 4506 4531 4574 4581 4649 4652 4669 4682 4685 4701 4702 4734 4753 4811 4872 4873 4876 4886 4889 4896 4902 4904 4924 4926 4934 4938 4939 4940 4944 4962 4969 4977 4991 4994 5014 5018 5019 5051 5061 5071 5090 5100 5102 5105 5114 5134 5136 5137 5165 5193 5196 5239","Academic":"965 1346 1416 1422 1455 1531 1575 1619 1717 1995 2021 2177 2225 2323 2333 2348 2506 2509 2669 2673 2748 3029 3035 3059 3161 3375 3439 3482 3557 3572 3627 3704 3712 3752 3768 3808 4087 4104 4389 4405 4461 4926 5100","Paid":"1610 1845 2414 2747 2770"}},{"levels":{"Academic":"190 1416 1496 1567 1619 1631 1717 1927 2051 2062 2108 2143 2149 2150 2180 2225 2238 2273 2280 2281 2304 2323 2330 2506 2551 2649 2748 2818 2819 2854 2894 2972 3161 3295 3370 3417 3473 3476 3482 3485 3493 3504 3573 3617 3619 3640 3679 3700 3704 3707 3709 3711 3712 3716 3782 3788 3817 3819 3863 3895 3983 4057 4065 4104 4121 4140 4271 4305 4352 4389 4523 4531 4552 4584 4590 4598 4682 4902 5100 5136 5137","Interested":"190 1165 1309 1346 1352 1358 1397 1422 1424 1430 1449 1455 1553 1567 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 2051 2103 2129 2143 2145 2149 2150 2180 2188 2191 2225 2238 2248 2262 2273 2280 2281 2290 2299 2304 2316 2323 2325 2330 2379 2383 2413 2414 2439 2482 2486 2494 2506 2509 2513 2539 2549 2551 2592 2595 2649 2657 2669 2673 2691 2734 2738 2742 2747 2748 2755 2762 2781 2815 2819 2854 2881 2894 2917 2919 2927 2941 2972 2982 2986 2998 3012 3029 3178 3196 3220 3260 3265 3269 3307 3362 3370 3371 3375 3376 3384 3400 3404 3407 3414 3417 3419 3429 3430 3436 3439 3442 3449 3461 3469 3470 3472 3473 3476 3482 3484 3485 3488 3491 3492 3494 3497 3501 3504 3512 3513 3519 3524 3542 3548 3558 3572 3573 3574 3586 3587 3590 3592 3594 3595 3600 3605 3610 3617 3619 3627 3628 3634 3636 3640 3641 3649 3652 3656 3657 3679 3684 3700 3705 3707 3709 3711 3712 3716 3723 3724 3725 3727 3729 3739 3749 3750 3752 3759 3774 3778 3782 3788 3791 3795 3799 3800 3808 3813 3817 3819 3828 3839 3850 3864 3870 3895 3913 3918 3925 3931 3932 3936 3940 3942 3948 3970 3972 3976 3990 3992 3998 4003 4010 4018 4035 4040 4043 4048 4054 4057 4065 4104 4121 4130 4139 4141 4143 4192 4219 4241 4245 4252 4253 4254 4274 4284 4292 4305 4313 4335 4344 4348 4352 4362 4363 4389 4391 4404 4405 4424 4437 4446 4451 4458 4461 4476 4483 4486 4494 4495 4500 4503 4506 4531 4552 4574 4581 4584 4634 4649 4652 4669 4682 4685 4701 4702 4713 4732 4734 4735 4753 4811 4872 4873 4876 4883 4889 4896 4899 4902 4904 4934 4938 4939 4944 4962 4969 4977 4991 4994 4999 5014 5016 5018 5019 5039 5046 5051 5061 5071 5089 5090 5096 5100 5102 5105 5114 5134 5136 5137 5154 5165 5193 5209 5239 5240 5273","Practical":"1026 1403 1409 1610 1761 2103 2145 2195 2325 2486 2494 2549 2669 2691 2711 2734 2781 2917 2941 2986 2998 3035 3178 3494 3542 3549 3628 3634 3644 3649 3656 3705 3729 3752 3813 3828 3870 3936 3948 3970 3990 3998 4010 4035 4139 4143 4253 4329 4335 4344 4348 4405 4461 4495 4649 4732 4786 4811 4811 4883 4886 4924 4940 4969 4977 5018 5039 5051 5104 5105 5154 5273","Paid":"1623 1845 2188 2379 2673 2747 2755 2772 3362 3375 3439 3472 3491 3524 3596 3613 3627 3759 3791 4087 4500 4574 4652 4707 4899 4944 4962 5014 5016 5102 5239"}},{"levels":{"Paid":"190 1358 1409 1623 1717 1845 1933 2305 2333 2414 2657 2748 2755 2770 2772 2995 3035 3070 3152 3178 3362 3400 3414 3472 3572 3596 3600 3627 3652 3943 4087 4104 4121 4122 4139 4140 4389 4405 4500 4572 4574 4643 4652 4767 4811 4811 4944 5014 5016 5071 5102 5134 5173 5239","Interested":"190 219 603 965 1165 1346 1352 1358 1397 1409 1418 1422 1424 1449 1455 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 1995 2021 2050 2103 2105 2110 2129 2143 2145 2149 2150 2160 2175 2188 2191 2225 2238 2248 2280 2290 2298 2299 2300 2304 2305 2316 2317 2323 2325 2327 2330 2348 2379 2413 2414 2417 2418 2433 2482 2486 2487 2494 2506 2509 2513 2539 2549 2551 2587 2592 2595 2649 2657 2669 2673 2691 2738 2747 2748 2755 2762 2769 2781 2790 2814 2815 2819 2820 2854 2881 2882 2894 2917 2919 2927 2941 2955 2972 2986 2987 2998 3008 3012 3029 3035 3089 3090 3092 3161 3178 3196 3220 3260 3269 3272 3274 3307 3362 3366 3369 3370 3371 3375 3376 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3456 3461 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3493 3494 3497 3499 3501 3504 3511 3512 3519 3522 3524 3542 3548 3557 3572 3573 3581 3586 3590 3592 3594 3595 3596 3597 3605 3606 3617 3619 3627 3634 3641 3643 3651 3652 3656 3657 3664 3684 3700 3707 3708 3709 3712 3716 3723 3724 3725 3726 3727 3729 3739 3748 3749 3750 3752 3759 3768 3774 3777 3778 3782 3791 3795 3799 3800 3807 3808 3813 3817 3819 3822 3828 3839 3847 3850 3864 3866 3870 3871 3895 3913 3917 3925 3931 3936 3940 3942 3948 3970 3972 3990 3992 3998 4003 4010 4033 4035 4040 4043 4044 4048 4054 4058 4065 4080 4111 4118 4120 4121 4122 4130 4132 4139 4140 4141 4143 4174 4178 4188 4192 4206 4212 4219 4233 4241 4245 4249 4252 4253 4254 4265 4271 4274 4282 4284 4292 4305 4308 4313 4324 4335 4348 4352 4362 4363 4389 4391 4404 4405 4424 4437 4446 4451 4461 4476 4483 4487 4494 4495 4497 4500 4503 4506 4508 4523 4530 4531 4568 4574 4581 4596 4643 4649 4652 4682 4685 4701 4702 4713 4732 4734 4748 4753 4759 4760 4767 4783 4811 4812 4822 4872 4873 4876 4886 4889 4896 4902 4904 4926 4934 4938 4939 4944 4962 4977 4984 4991 4994 4999 5014 5016 5018 5019 5046 5051 5061 5071 5072 5089 5090 5093 5095 5100 5105 5114 5130 5134 5136 5154 5165 5172 5173 5193 5194 5196 5239 5240","Academic":"219 603 614 965 1026 1346 1411 1416 1422 1424 1430 1496 1531 1567 1575 1610 1624 1626 1631 1884 1995 2021 2034 2049 2051 2069 2103 2105 2108 2145 2149 2150 2154 2159 2160 2175 2188 2191 2224 2225 2271 2280 2289 2298 2299 2304 2316 2323 2327 2330 2348 2383 2402 2413 2418 2433 2482 2486 2487 2513 2539 2587 2649 2673 2711 2734 2738 2747 2761 2815 2819 2820 2854 2882 2894 2919 2927 2941 2972 2982 2986 3008 3014 3029 3073 3090 3220 3272 3274 3295 3370 3404 3407 3417 3429 3436 3439 3442 3456 3461 3469 3473 3476 3481 3482 3493 3499 3501 3502 3504 3511 3512 3519 3522 3524 3526 3527 3548 3557 3558 3570 3605 3606 3610 3644 3656 3657 3664 3684 3691 3692 3700 3704 3707 3709 3710 3711 3715 3716 3723 3748 3777 3778 3782 3807 3817 3819 3828 3847 3856 3863 3864 3866 3910 3913 3925 3931 3933 3948 3970 3972 4010 4048 4130 4137 4141 4174 4176 4212 4241 4245 4254 4265 4282 4324 4348 4352 4358 4391 4404 4458 4487 4494 4497 4502 4523 4530 4581 4590 4596 4598 4649 4669 4682 4693 4699 4702 4707 4732 4812 4822 4827 4876 4883 4896 4924 4926 4939 4962 4969 4984 5018 5046 5089 5093 5095 5100 5113 5130 5136 5137 5172 5183 5194 5196","Practical":"1165 1418 1442 1455 1619 1786 1927 2050 2062 2129 2143 2195 2238 2265 2317 2379 2417 2494 2506 2509 2549 2592 2595 2669 2691 2713 2719 2773 2790 2814 2818 2881 2917 2987 2998 3059 3196 3260 3269 3366 3384 3485 3491 3494 3497 3542 3549 3602 3634 3636 3708 3712 3726 3729 3752 3759 3765 3768 3791 3808 3813 3870 3927 3936 3940 3959 3990 4035 4044 4056 4111 4118 4178 4188 4249 4253 4274 4329 4335 4424 4461 4476 4495 4531 4608 4685 4886 4902 4977 5051 5061 5072 5090 5104 5105 5114 5153 5154 5165 5193"}},{"levels":{"Paid":"190 1026 1403 1409 1575 1717 1933 2333 2748 2770 2772 2917 3035 3070 3362 3491 3497 3613 3628 3644 3917 4121 4143 4652 4679 4767 4811 4811 4899 4944 5016 5093 5173","Interested":"190 1165 1346 1403 1455 1531 1553 1567 1575 1610 1619 1623 1626 1845 1927 1933 2034 2050 2103 2105 2110 2129 2143 2149 2150 2188 2191 2195 2238 2280 2289 2290 2302 2323 2325 2330 2348 2354 2413 2414 2433 2482 2487 2513 2551 2587 2592 2595 2649 2657 2669 2673 2691 2734 2748 2762 2769 2781 2815 2854 2894 2917 2919 2955 2972 2986 2987 2998 3008 3014 3029 3073 3089 3090 3092 3196 3220 3272 3305 3307 3362 3368 3374 3375 3376 3384 3407 3409 3414 3419 3429 3430 3436 3442 3460 3461 3464 3469 3470 3473 3476 3481 3482 3484 3491 3492 3494 3497 3499 3504 3512 3522 3586 3587 3590 3592 3596 3602 3613 3627 3628 3634 3643 3657 3664 3700 3707 3712 3716 3724 3725 3749 3765 3768 3777 3791 3795 3800 3813 3819 3839 3850 3856 3870 3913 3917 3931 3936 3948 3954 3972 3990 4003 4010 4018 4033 4035 4040 4043 4048 4080 4111 4121 4130 4139 4140 4143 4192 4212 4219 4241 4252 4253 4254 4271 4274 4284 4313 4335 4348 4363 4389 4391 4424 4437 4446 4451 4461 4469 4476 4483 4487 4494 4497 4500 4506 4508 4530 4531 4552 4568 4574 4581 4596 4643 4645 4649 4652 4679 4682 4685 4692 4701 4702 4713 4732 4734 4735 4746 4753 4759 4760 4767 4783 4811 4812 4822 4872 4873 4876 4886 4889 4896 4899 4902 4904 4914 4924 4926 4934 4938 4942 4943 4944 4969 4977 4984 4991 4999 5014 5016 5018 5019 5039 5051 5055 5061 5071 5072 5089 5090 5093 5096 5100 5105 5114 5134 5137 5154 5165 5172 5173 5193 5194 5196 5201 5209 5239","Academic":"614 1353 1416 1422 1496 1531 1567 1610 1623 1624 1626 1631 2103 2105 2129 2145 2150 2160 2177 2248 2280 2289 2302 2304 2325 2330 2402 2413 2482 2595 2649 2657 2734 2761 2769 2818 2854 2881 2894 2919 2927 2972 2986 3008 3014 3029 3059 3178 3196 3295 3358 3369 3370 3371 3407 3414 3430 3439 3464 3469 3470 3472 3473 3476 3481 3482 3492 3504 3512 3518 3522 3524 3548 3558 3590 3592 3595 3651 3656 3664 3666 3700 3704 3707 3709 3715 3716 3723 3724 3748 3752 3808 3826 3839 3856 3863 3913 3931 3948 3990 3998 4003 4041 4048 4080 4111 4130 4141 4192 4212 4241 4271 4274 4291 4348 4358 4363 4387 4389 4424 4446 4458 4487 4494 4497 4508 4552 4568 4574 4581 4596 4669 4682 4699 4702 4732 4753 4812 4822 4872 4873 4883 4896 4914 4926 5014 5018 5019 5055 5061 5090 5100 5116 5134 5136 5165 5196 5239","Practical":"1165 1442 1619 1845 1927 2143 2149 2188 2191 2195 2238 2494 2669 2673 2691 2781 2998 3090 3368 3375 3384 3442 3461 3494 3499 3542 3550 3594 3602 3627 3712 3765 3768 3791 3813 3870 3936 3954 4010 4035 4087 4139 4140 4249 4253 4335 4461 4469 4476 4500 4503 4531 4643 4734 4735 4786 4827 4886 4902 4969 4984 5039 5069 5071 5072 5102 5105 5154 5172 5194 5209"}},{"levels":{"Paid":"190 1358 1567 1610 1623 1845 1933 2188 2224 2333 2379 2417 2673 2747 2755 2772 2818 2995 3035 3178 3362 3375 3376 3439 3472 3476 3485 3491 3524 3542 3549 3596 3600 3613 3627 3652 3679 3759 3791 3828 3970 3998 4010 4087 4104 4121 4143 4238 4245 4389 4405 4461 4500 4523 4574 4643 4652 4707 4732 4786 4811 4811 4827 4886 4944 4962 5014 5016 5071 5073 5102 5105 5134 5239","Interested":"190 1165 1346 1352 1358 1397 1403 1409 1418 1422 1424 1442 1449 1455 1553 1567 1575 1610 1619 1624 1626 1717 1761 1786 1845 1927 1933 1995 2023 2050 2051 2103 2105 2106 2110 2129 2143 2145 2149 2150 2160 2177 2180 2188 2191 2238 2248 2262 2271 2273 2280 2281 2290 2298 2299 2300 2302 2317 2323 2325 2327 2330 2348 2354 2379 2383 2413 2414 2417 2433 2439 2482 2486 2487 2494 2506 2509 2513 2539 2549 2551 2587 2592 2595 2649 2657 2669 2673 2691 2734 2738 2742 2747 2748 2755 2762 2781 2814 2815 2819 2820 2854 2881 2882 2894 2917 2919 2927 2941 2972 2982 2986 2987 2998 3008 3012 3014 3029 3035 3073 3092 3178 3196 3220 3260 3265 3269 3272 3274 3307 3362 3369 3370 3371 3374 3375 3376 3384 3394 3407 3409 3414 3419 3429 3430 3436 3439 3442 3449 3455 3460 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3494 3497 3499 3501 3504 3507 3511 3512 3513 3519 3522 3524 3526 3535 3542 3548 3550 3557 3558 3570 3572 3573 3574 3581 3586 3587 3590 3592 3595 3600 3602 3605 3606 3610 3613 3619 3627 3628 3634 3636 3640 3641 3649 3652 3656 3657 3664 3679 3684 3691 3700 3705 3707 3708 3709 3710 3711 3712 3716 3723 3724 3725 3726 3727 3729 3739 3748 3749 3750 3752 3759 3768 3774 3776 3777 3778 3782 3788 3791 3795 3799 3800 3807 3813 3817 3819 3822 3826 3828 3839 3847 3853 3863 3864 3870 3871 3872 3895 3913 3917 3918 3925 3931 3932 3936 3940 3942 3948 3970 3972 3990 3992 3996 3998 4003 4010 4018 4035 4040 4041 4043 4044 4048 4054 4056 4057 4065 4111 4120 4121 4125 4130 4132 4139 4140 4141 4143 4188 4191 4192 4212 4219 4233 4241 4243 4245 4252 4253 4254 4256 4265 4271 4274 4284 4291 4292 4305 4308 4313 4315 4321 4324 4329 4335 4338 4344 4348 4352 4362 4363 4387 4389 4391 4404 4405 4408 4424 4437 4446 4451 4461 4476 4483 4487 4494 4495 4497 4500 4503 4506 4508 4530 4531 4568 4574 4581 4584 4598 4608 4634 4643 4649 4652 4669 4682 4685 4689 4701 4702 4713 4731 4732 4734 4735 4746 4753 4759 4760 4764 4767 4811 4822 4872 4873 4876 4886 4889 4896 4899 4902 4904 4926 4934 4938 4939 4942 4944 4962 4969 4977 4984 4991 4994 4999 5014 5016 5018 5019 5039 5046 5051 5055 5061 5067 5071 5089 5090 5096 5100 5102 5105 5114 5116 5136 5137 5154 5165 5172 5173 5193 5196 5239 5240 5273","Academic":"965 1346 1353 1409 1411 1416 1424 1553 1575 1631 1717 2021 2034 2044 2105 2108 2129 2149 2150 2159 2160 2180 2191 2248 2273 2280 2281 2298 2299 2316 2323 2383 2402 2413 2433 2439 2482 2487 2551 2592 2649 2657 2738 2761 2819 2854 2882 2894 2919 2927 2957 2987 3008 3014 3029 3161 3260 3270 3295 3307 3327 3358 3366 3368 3369 3374 3400 3417 3429 3442 3473 3481 3493 3497 3501 3502 3518 3527 3548 3558 3570 3572 3573 3581 3586 3605 3606 3617 3619 3636 3640 3651 3664 3666 3684 3691 3692 3700 3704 3707 3710 3716 3723 3739 3774 3782 3788 3807 3817 3819 3847 3863 3864 3872 3895 3913 3917 3925 3933 3940 3959 3976 3983 3992 4003 4044 4048 4057 4125 4130 4206 4243 4249 4254 4265 4271 4274 4282 4284 4291 4305 4308 4352 4362 4404 4424 4476 4494 4497 4508 4530 4584 4590 4596 4598 4669 4685 4689 4693 4699 4702 4812 4822 4867 4876 4896 4926 4939 4994 4999 5018 5067 5090 5100 5137 5172 5173 5196","Practical":"1026 1165 1352 1403 1418 1496 1619 1624 1626 1927 2050 2051 2062 2103 2106 2143 2145 2177 2195 2238 2304 2317 2325 2330 2414 2486 2494 2506 2549 2595 2669 2691 2711 2734 2742 2748 2770 2773 2781 2881 2917 2941 2972 2982 2986 2998 3152 3196 3370 3371 3384 3404 3407 3414 3461 3464 3482 3494 3504 3557 3595 3602 3610 3628 3634 3644 3648 3649 3656 3657 3705 3708 3711 3712 3724 3726 3729 3752 3808 3813 3856 3870 3927 3936 3948 3954 3990 4018 4035 4054 4111 4120 4139 4140 4141 4176 4188 4253 4329 4335 4344 4348 4458 4495 4502 4503 4531 4568 4608 4649 4682 4764 4767 4872 4883 4902 4924 4940 4969 4977 5039 5051 5061 5104 5114 5154 5165 5193 5273"}},{"levels":{"Interested":"190 877 1031 1073 1346 1352 1358 1397 1422 1424 1449 1455 1496 1531 1553 1567 1610 1619 1626 1631 1761 1786 1845 1866 1927 2032 2034 2044 2051 2103 2105 2143 2150 2160 2191 2238 2248 2299 2304 2323 2325 2330 2333 2348 2402 2413 2414 2482 2486 2494 2513 2539 2549 2551 2592 2593 2595 2649 2669 2691 2711 2738 2747 2748 2761 2762 2770 2772 2814 2815 2819 2854 2882 2917 2919 2943 2972 2982 2986 2987 2995 2998 3012 3029 3035 3070 3102 3260 3264 3272 3274 3295 3307 3317 3326 3327 3358 3370 3371 3376 3400 3407 3409 3414 3419 3429 3430 3436 3439 3442 3455 3461 3464 3469 3470 3472 3476 3482 3484 3485 3488 3492 3494 3497 3501 3504 3512 3519 3522 3526 3542 3558 3570 3572 3573 3574 3581 3590 3592 3597 3602 3605 3606 3619 3628 3634 3636 3651 3652 3657 3664 3666 3679 3684 3700 3707 3709 3710 3716 3725 3727 3739 3748 3749 3750 3759 3768 3774 3777 3778 3782 3788 3799 3807 3808 3813 3817 3839 3856 3870 3895 3913 3917 3925 3931 3932 3936 3942 3948 3972 3976 3990 3992 4003 4010 4035 4040 4043 4048 4054 4104 4111 4121 4123 4125 4130 4140 4143 4188 4191 4192 4241 4245 4252 4253 4265 4274 4284 4292 4308 4313 4321 4335 4344 4363 4387 4389 4391 4405 4437 4446 4451 4458 4476 4494 4500 4506 4531 4574 4581 4584 4649 4652 4685 4701 4702 4713 4730 4734 4746 4753 4783 4811 4822 4867 4873 4876 4883 4889 4896 4902 4904 4924 4934 4938 4939 4942 4944 4991 4999 5014 5016 5018 5019 5039 5051 5055 5071 5089 5096 5100 5102 5104 5105 5114 5116 5134 5154 5165 5193 5196 5209 5239 5240 5273","Academic":"1026 1424 1619 1620 2323 2506 2592 2711 2747 2788 2854 2882 2917 2919 3027 3029 3482 3542 3664 3791 3856 3870 3972 4130 4405 4531 4590 4999 5016 5183 5209","Practical":"1095 1346 1409 1455 1496 1623 1761 1845 2069 2143 2160 2486 2513 2539 2982 3376 3485 3494 3524 3549 3570 3628 3729 3778 3799 3807 4010 4054 4087 4140 4241 4335 4494 4786 4822 4924 5039 5055 5089 5102 5104 5105 5240","Paid":"2595 2762 3035 3497 4500 5014 5071 5193"}},{"levels":{"Academic":"190 1496 1761 2129 2177 2180 2238 2280 2323 2413 3370 3372 3374 3375 3404 3460 3476 3482 3542 3557 3581 3596 3634 3651 3708 3782 3788 3819 3870 4018 4044 4054 4140 4270 4745 4899 5075 5100 5114 5136","Interested":"1352 1358 1397 1403 1422 1449 1553 1567 1619 1626 1786 1845 1927 2021 2129 2143 2150 2160 2180 2248 2263 2290 2299 2300 2316 2323 2325 2330 2333 2413 2439 2482 2486 2539 2551 2649 2669 2691 2738 2748 2755 2814 2854 2986 2987 2998 3012 3029 3073 3220 3260 3270 3368 3370 3374 3376 3404 3407 3409 3417 3419 3429 3430 3436 3460 3464 3469 3470 3476 3482 3484 3485 3488 3492 3501 3504 3512 3519 3526 3542 3570 3572 3573 3574 3600 3602 3605 3606 3610 3619 3634 3643 3652 3684 3700 3707 3708 3716 3725 3727 3730 3748 3749 3750 3759 3768 3782 3788 3795 3799 3800 3817 3819 3839 3870 3895 3913 3931 3936 3942 3948 3970 3972 3976 3992 4010 4033 4035 4040 4043 4048 4054 4104 4111 4121 4130 4141 4143 4162 4191 4192 4219 4241 4252 4253 4270 4274 4284 4292 4313 4335 4344 4363 4387 4391 4437 4446 4451 4458 4476 4483 4486 4494 4495 4500 4506 4523 4531 4574 4581 4649 4652 4685 4702 4717 4730 4734 4753 4786 4811 4812 4822 4872 4873 4876 4896 4902 4904 4924 4934 4938 4939 4943 4944 4991 4994 4999 5014 5018 5019 5051 5071 5104 5105 5114 5134 5165 5193 5196","Practical":"1358 2143 2300 2333 2551 2987 2998 3368 3485 3600 3602 3970 4104 4494 4495 4500 4523 4649 4652 5014 5104 5105","Paid":"2062 2224 3035"}},{"levels":{"Academic":"190 219 614 908 965 1165 1346 1352 1353 1358 1397 1409 1411 1416 1422 1430 1496 1531 1553 1567 1575 1610 1619 1620 1623 1717 1761 1927 1995 2021 2044 2049 2069 2071 2103 2105 2106 2110 2129 2150 2159 2160 2177 2188 2224 2225 2248 2265 2273 2280 2289 2298 2299 2304 2317 2325 2327 2348 2383 2402 2413 2417 2482 2486 2487 2497 2506 2509 2513 2551 2587 2595 2649 2657 2673 2710 2747 2755 2762 2769 2770 2772 2773 2784 2814 2815 2818 2819 2820 2854 2894 2917 2941 2943 2957 2982 2986 2987 2995 2998 3008 3027 3029 3059 3090 3092 3102 3161 3178 3260 3274 3295 3317 3327 3364 3366 3369 3370 3371 3375 3376 3409 3417 3419 3429 3430 3439 3456 3469 3470 3472 3473 3482 3484 3485 3488 3491 3492 3497 3501 3502 3503 3504 3507 3512 3518 3519 3522 3524 3526 3535 3548 3550 3572 3573 3580 3581 3586 3590 3592 3596 3610 3617 3627 3641 3643 3651 3664 3691 3712 3715 3716 3730 3739 3749 3759 3765 3777 3782 3791 3807 3813 3826 3839 3856 3864 3870 3895 3913 3917 3925 3931 3933 3940 3948 3970 3972 3976 3990 3992 4003 4018 4040 4041 4043 4056 4080 4109 4121 4130 4132 4137 4141 4143 4162 4174 4176 4191 4192 4212 4213 4238 4243 4253 4254 4270 4274 4284 4291 4292 4305 4308 4315 4321 4325 4338 4348 4358 4362 4363 4373 4375 4387 4389 4405 4408 4424 4434 4446 4451 4458 4483 4487 4494 4497 4502 4506 4523 4531 4568 4574 4581 4669 4689 4699 4701 4702 4707 4712 4730 4732 4745 4753 4783 4804 4812 4822 4827 4867 4876 4926 4939 4969 4991 5018 5019 5039 5061 5073 5075 5089 5102 5114 5116 5136 5137 5193 5194 5196 5240","Interested":"190 877 1073 1165 1309 1346 1352 1358 1397 1403 1411 1418 1422 1424 1430 1442 1449 1455 1531 1553 1567 1610 1619 1620 1623 1624 1626 1631 1717 1761 1786 1845 1927 1933 2021 2023 2032 2051 2063 2071 2103 2105 2106 2110 2129 2143 2149 2150 2154 2160 2191 2195 2224 2225 2238 2248 2263 2271 2290 2298 2299 2300 2302 2304 2317 2323 2325 2330 2333 2348 2354 2383 2413 2414 2435 2482 2486 2487 2494 2506 2513 2539 2551 2587 2593 2595 2607 2649 2669 2691 2738 2742 2748 2761 2762 2769 2772 2781 2790 2814 2815 2818 2820 2854 2919 2927 2957 2972 2982 2986 2987 2998 3008 3012 3029 3035 3059 3073 3089 3090 3094 3178 3196 3220 3260 3264 3269 3270 3272 3274 3295 3307 3326 3327 3362 3364 3366 3368 3370 3371 3374 3375 3376 3394 3404 3407 3409 3414 3417 3419 3429 3430 3436 3439 3442 3452 3456 3460 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3502 3504 3511 3512 3519 3522 3524 3526 3542 3557 3558 3570 3572 3573 3574 3580 3586 3587 3590 3592 3594 3595 3596 3600 3605 3606 3610 3613 3619 3634 3636 3640 3641 3643 3651 3652 3657 3664 3666 3684 3692 3700 3707 3708 3709 3710 3711 3712 3716 3723 3725 3727 3730 3739 3748 3749 3750 3759 3765 3768 3777 3778 3782 3788 3795 3799 3807 3808 3817 3819 3822 3839 3850 3853 3856 3864 3866 3870 3871 3895 3913 3917 3918 3925 3927 3931 3932 3936 3940 3942 3948 3954 3970 3972 3990 3992 3998 4003 4010 4019 4033 4035 4040 4043 4048 4054 4080 4099 4104 4111 4121 4122 4130 4132 4137 4139 4140 4141 4143 4162 4174 4188 4191 4192 4206 4212 4219 4241 4243 4245 4249 4252 4254 4256 4265 4270 4274 4282 4284 4291 4292 4305 4308 4313 4315 4335 4338 4348 4362 4363 4373 4375 4387 4391 4400 4424 4437 4443 4446 4451 4469 4476 4483 4486 4487 4494 4495 4500 4502 4503 4506 4508 4523 4530 4531 4568 4572 4574 4581 4596 4608 4643 4649 4652 4669 4682 4685 4689 4692 4702 4712 4713 4730 4731 4732 4734 4735 4746 4748 4753 4783 4804 4811 4812 4822 4872 4873 4876 4883 4889 4896 4902 4904 4924 4926 4934 4938 4939 4942 4943 4944 4969 4977 4989 4994 4999 5014 5018 5019 5039 5046 5051 5061 5071 5075 5090 5095 5096 5105 5114 5116 5137 5154 5165 5193 5194 5196 5209 5217 5239 5240","Practical":"603 1031 1095 1309 1403 1418 1424 1426 1442 1455 1786 1845 1866 1933 2023 2051 2062 2063 2108 2143 2149 2154 2191 2195 2238 2263 2300 2302 2330 2333 2414 2494 2669 2691 2719 2742 2748 2788 2790 2881 2919 2927 3035 3073 3094 3196 3269 3307 3362 3368 3384 3394 3400 3407 3436 3442 3461 3464 3476 3481 3499 3557 3570 3574 3595 3602 3636 3644 3657 3708 3710 3711 3748 3768 3808 3927 3936 3954 3998 4010 4099 4104 4111 4122 4139 4140 4219 4241 4249 4252 4282 4335 4400 4469 4476 4495 4500 4503 4608 4649 4652 4682 4786 4873 4883 4902 4940 4943 4944 4977 4989 5014 5069 5104 5105 5154 5165 5209 5239","Paid":"1449 2607 3542 4379 4596 4643 5095 5113 5134"}},{"levels":{"Paid":"190 1403 1409 1567 1610 1623 1933 2149 2188 2224 2348 2379 2673 2747 2748 2755 2770 2772 2818 2995 3178 3270 3362 3375 3376 3439 3472 3476 3485 3491 3524 3542 3549 3596 3600 3613 3627 3759 3791 3828 3970 3998 4010 4087 4121 4238 4405 4500 4503 4523 4574 4596 4643 4652 4707 4767 4811 4811 4886 4899 4944 4962 5014 5016 5039 5073 5102 5239","Interested":"190 1165 1309 1352 1358 1397 1403 1411 1418 1422 1424 1430 1449 1455 1553 1567 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 2021 2050 2063 2071 2103 2105 2129 2143 2145 2149 2150 2160 2175 2177 2180 2188 2191 2225 2238 2248 2262 2273 2280 2281 2290 2298 2299 2302 2304 2323 2325 2330 2348 2354 2379 2383 2413 2414 2417 2418 2433 2435 2439 2482 2486 2487 2494 2506 2509 2513 2539 2549 2551 2592 2649 2657 2662 2669 2673 2691 2734 2738 2742 2747 2748 2762 2781 2814 2815 2819 2820 2854 2882 2894 2917 2927 2941 2972 2982 2986 2987 2998 3008 3012 3029 3073 3089 3152 3178 3196 3220 3260 3265 3270 3272 3274 3359 3362 3364 3368 3370 3371 3374 3375 3376 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3456 3460 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3493 3497 3501 3504 3507 3512 3513 3519 3524 3526 3542 3558 3572 3573 3581 3586 3590 3592 3594 3595 3600 3605 3606 3610 3619 3627 3628 3634 3636 3637 3640 3641 3644 3649 3654 3656 3657 3679 3684 3700 3705 3707 3708 3709 3711 3712 3716 3723 3724 3725 3726 3727 3729 3739 3749 3750 3752 3759 3768 3774 3776 3778 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3819 3828 3839 3850 3853 3856 3870 3895 3913 3917 3918 3925 3931 3932 3936 3940 3942 3948 3970 3972 3990 3992 3996 4003 4010 4018 4033 4035 4040 4043 4044 4048 4054 4057 4059 4065 4111 4121 4125 4130 4132 4139 4141 4143 4162 4174 4188 4191 4192 4212 4219 4241 4245 4252 4253 4254 4256 4265 4274 4282 4284 4291 4292 4305 4313 4324 4335 4344 4348 4352 4363 4387 4391 4404 4424 4437 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4503 4506 4508 4523 4530 4531 4552 4568 4574 4581 4584 4596 4604 4608 4634 4643 4649 4652 4682 4685 4689 4702 4713 4717 4730 4732 4734 4745 4746 4753 4760 4783 4811 4812 4822 4872 4873 4876 4883 4886 4889 4896 4899 4902 4904 4926 4934 4938 4939 4943 4944 4962 4969 4977 4991 4999 5014 5016 5018 5019 5039 5046 5051 5061 5067 5071 5089 5090 5093 5096 5100 5104 5105 5114 5134 5136 5137 5165 5172 5193 5196 5209 5217 5239 5240 5273","Academic":"965 1352 1353 1411 1416 1422 1424 1430 1455 1496 1553 1631 1761 1884 1995 2021 2034 2044 2105 2108 2129 2159 2160 2180 2248 2262 2265 2273 2280 2281 2298 2304 2316 2323 2327 2354 2367 2383 2402 2413 2418 2433 2435 2439 2482 2487 2551 2592 2595 2649 2657 2662 2711 2738 2742 2773 2781 2819 2820 2854 2882 2927 2941 2957 2987 2998 3008 3014 3059 3092 3161 3260 3272 3295 3327 3359 3370 3374 3394 3417 3421 3422 3429 3436 3456 3460 3469 3481 3482 3484 3492 3493 3497 3502 3504 3512 3513 3557 3572 3573 3594 3605 3606 3610 3617 3619 3628 3640 3651 3654 3666 3679 3684 3692 3700 3704 3707 3716 3723 3739 3750 3774 3782 3788 3800 3807 3808 3819 3822 3853 3856 3863 3866 3870 3871 3895 3910 3913 3917 3925 3933 3972 3976 3983 3992 4003 4018 4019 4041 4043 4044 4048 4059 4109 4125 4174 4206 4212 4243 4245 4249 4254 4265 4271 4274 4284 4291 4352 4362 4389 4404 4458 4469 4476 4483 4494 4497 4530 4552 4584 4682 4689 4693 4717 4745 4822 4827 4876 4889 4896 4926 4939 4994 4999 5067 5090 5093 5096 5100 5136 5137 5172 5196 5217","Practical":"1026 1165 1358 1418 1442 1449 1619 1620 1624 1626 1717 1845 2050 2062 2103 2106 2143 2145 2175 2177 2195 2238 2300 2302 2317 2325 2330 2414 2417 2486 2494 2506 2513 2539 2549 2669 2691 2734 2762 2790 2881 2894 2917 2972 2982 2986 3029 3152 3196 3307 3366 3368 3371 3384 3400 3404 3414 3442 3461 3464 3470 3473 3488 3494 3518 3527 3548 3558 3570 3581 3586 3595 3602 3634 3636 3644 3649 3656 3657 3705 3708 3711 3712 3724 3725 3726 3727 3729 3752 3768 3778 3795 3813 3817 3918 3927 3940 3948 3954 3990 4035 4054 4057 4065 4104 4111 4130 4139 4143 4176 4188 4241 4253 4282 4305 4329 4335 4344 4348 4363 4424 4461 4495 4531 4568 4604 4608 4649 4701 4732 4734 4786 4872 4883 4902 4924 4940 4969 4977 5018 5046 5051 5061 5071 5104 5105 5114 5134 5154 5165 5240 5273"}},{"levels":{"Practical":"1409 3491 3870 4682","Interested":"1409 1553 1567 1619 2150 2248 2348 2379 2551 2669 2734 2761 2815 2854 2917 2986 2995 2998 3407 3414 3429 3491 3524 3592 3634 3656 3700 3707 3791 4048 4104 4111 4121 4249 4335 4682 4734 4811 5071 5136 5239","Academic":"2917 3791"}},{"levels":{"Practical":"1026 1165 1352 1424 1575 1623 1626 1845 1927 1933 2050 2103 2105 2110 2129 2145 2154 2188 2224 2238 2248 2304 2317 2333 2379 2383 2494 2497 2506 2513 2673 2691 2734 2742 2748 2894 2927 2982 2986 3152 3269 3362 3370 3371 3407 3414 3436 3442 3449 3472 3481 3492 3524 3548 3558 3602 3634 3636 3641 3649 3656 3657 3710 3712 3715 3723 3724 3748 3778 3782 3791 3808 3850 3927 3940 3954 3970 3990 4143 4219 4329 4348 4379 4502 4503 4568 4652 4682 4702 4811 4811 4812 4883 4886 4902 4924 4926 4944 4962 4969 5018 5039 5046 5095 5165","Interested":"1165 1309 1358 1403 1409 1426 1442 1553 1567 1575 1610 1619 1623 1624 1626 1717 1845 1933 2034 2050 2103 2105 2110 2129 2150 2154 2188 2248 2273 2280 2290 2298 2302 2304 2348 2379 2383 2414 2497 2513 2551 2587 2649 2657 2669 2673 2691 2742 2748 2770 2781 2815 2820 2854 2882 2894 2917 2919 2927 2982 2986 3008 3073 3178 3220 3269 3362 3370 3371 3407 3409 3414 3419 3429 3430 3436 3442 3449 3470 3476 3481 3491 3492 3494 3497 3499 3519 3535 3550 3586 3590 3592 3613 3634 3641 3643 3649 3656 3700 3707 3712 3715 3716 3723 3724 3725 3748 3768 3777 3778 3782 3791 3808 3839 3850 3856 3863 3913 3927 3931 3940 3948 3954 3970 3990 4003 4010 4019 4041 4048 4111 4121 4143 4191 4192 4212 4219 4241 4245 4253 4313 4335 4348 4363 4379 4437 4476 4483 4494 4506 4508 4568 4652 4669 4682 4692 4702 4732 4734 4753 4760 4783 4811 4812 4822 4872 4873 4876 4883 4896 4899 4902 4904 4926 4934 4938 4939 4942 4944 4962 4969 4991 4994 4999 5014 5016 5018 5019 5039 5046 5051 5071 5089 5090 5095 5105 5114 5116 5136 5137 5165 5193 5196 5209 5239 5240 5273","Paid":"1358 1403 1426 1610 1717 2348 2414 2595 2657 2770 2772 2781 2917 3178 3491 3497 3613 4010 4121 4707 4827 5016 5102 5193 5239","Academic":"1409 1416 1418 1422 1567 1619 2071 2106 2150 2225 2273 2280 2298 2302 2316 2587 2818 2882 2919 3008 3059 3404 3429 3439 3460 3494 3499 3504 3586 3592 3594 3640 3651 3700 3707 3725 3765 3768 3788 3839 3863 3931 3948 3998 4003 4141 4176 4212 4253 4363 4400 4494 4497 4669 4699 4734 4876 5069 5073 5105 5136 5137 5196 5209"}},{"levels":{"Paid":"190 1403 1409 1567 1610 1623 1933 2149 2188 2224 2333 2348 2379 2417 2673 2747 2748 2755 2770 2772 2818 2917 2995 3035 3178 3270 3362 3375 3376 3439 3472 3476 3485 3491 3524 3542 3549 3596 3600 3613 3627 3759 3791 3828 3970 3998 4010 4087 4104 4121 4143 4238 4405 4500 4503 4523 4574 4643 4652 4707 4732 4767 4811 4811 4827 4899 4938 4944 4962 5014 5016 5071 5073 5102 5105 5134 5173 5239","Interested":"190 614 1165 1346 1352 1358 1397 1403 1411 1418 1422 1424 1430 1449 1455 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 2021 2034 2050 2063 2071 2103 2105 2143 2145 2149 2150 2160 2175 2177 2180 2188 2191 2225 2238 2248 2262 2271 2273 2280 2281 2289 2290 2298 2299 2300 2316 2323 2325 2330 2348 2354 2379 2383 2413 2414 2417 2418 2433 2435 2439 2482 2486 2494 2506 2509 2513 2539 2549 2551 2587 2592 2595 2649 2657 2662 2669 2673 2691 2734 2738 2742 2747 2748 2762 2781 2814 2815 2819 2820 2854 2882 2894 2917 2919 2927 2941 2972 2982 2986 2987 3008 3012 3029 3035 3059 3073 3152 3178 3196 3220 3260 3265 3270 3272 3274 3359 3362 3364 3366 3368 3369 3370 3371 3374 3375 3376 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3456 3460 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3494 3497 3499 3501 3504 3507 3512 3513 3519 3522 3524 3526 3535 3542 3550 3558 3570 3572 3573 3574 3581 3586 3587 3590 3592 3594 3595 3597 3600 3605 3606 3610 3613 3619 3627 3628 3634 3636 3637 3640 3641 3643 3644 3649 3654 3656 3657 3664 3679 3684 3700 3705 3707 3708 3709 3711 3712 3716 3724 3725 3726 3727 3729 3730 3739 3748 3749 3750 3752 3759 3768 3774 3776 3777 3778 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3819 3822 3826 3828 3839 3847 3850 3853 3856 3863 3864 3866 3870 3872 3895 3913 3917 3918 3925 3927 3931 3932 3936 3940 3942 3948 3970 3972 3990 3992 4003 4010 4018 4033 4035 4040 4043 4044 4048 4054 4056 4057 4059 4065 4080 4111 4121 4122 4125 4130 4132 4139 4140 4141 4143 4162 4174 4188 4191 4192 4212 4219 4241 4245 4252 4253 4254 4256 4265 4271 4274 4282 4284 4292 4305 4308 4313 4324 4325 4335 4338 4344 4348 4352 4363 4387 4389 4391 4404 4408 4424 4437 4443 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4503 4506 4508 4523 4531 4552 4568 4574 4581 4584 4596 4598 4604 4608 4634 4643 4652 4682 4685 4689 4702 4712 4713 4717 4730 4731 4732 4734 4745 4746 4748 4753 4759 4762 4764 4786 4811 4812 4822 4872 4873 4876 4889 4896 4899 4902 4904 4914 4926 4934 4938 4939 4942 4943 4944 4962 4969 4977 4994 4999 5005 5014 5016 5018 5019 5039 5046 5051 5061 5067 5071 5090 5093 5096 5100 5104 5105 5113 5114 5116 5134 5136 5137 5165 5172 5193 5196 5209 5217 5239 5240 5273","Academic":"614 965 1309 1346 1352 1353 1411 1416 1422 1424 1430 1455 1496 1553 1631 1786 1884 1927 1995 2021 2034 2044 2049 2063 2069 2105 2108 2150 2159 2160 2180 2225 2248 2262 2265 2271 2273 2280 2281 2298 2299 2302 2304 2316 2323 2327 2367 2402 2413 2418 2433 2435 2439 2551 2592 2595 2649 2657 2662 2711 2738 2742 2773 2815 2819 2820 2854 2882 2927 2941 2957 3008 3014 3059 3092 3161 3220 3260 3265 3272 3295 3327 3359 3369 3372 3374 3394 3417 3419 3421 3422 3429 3436 3452 3456 3460 3469 3481 3484 3492 3493 3497 3499 3502 3512 3519 3572 3573 3574 3605 3606 3610 3617 3619 3628 3637 3640 3643 3651 3654 3666 3679 3684 3692 3700 3704 3707 3709 3710 3716 3723 3739 3750 3774 3776 3782 3788 3799 3800 3807 3819 3847 3850 3853 3856 3863 3864 3866 3871 3872 3895 3910 3913 3917 3925 3933 3972 3976 3983 3992 4003 4018 4019 4033 4041 4043 4044 4048 4056 4059 4080 4109 4125 4162 4174 4206 4212 4243 4245 4249 4252 4254 4265 4271 4284 4291 4308 4315 4321 4352 4358 4362 4404 4408 4469 4476 4483 4494 4497 4508 4530 4552 4581 4584 4596 4598 4676 4689 4693 4699 4717 4745 4753 4786 4812 4822 4867 4876 4889 4896 4914 4926 4939 4994 5067 5089 5090 5093 5096 5100 5116 5136 5137 5172 5196 5217","Practical":"1026 1165 1358 1418 1442 1449 1531 1619 1620 1624 1626 1717 1761 1845 2050 2062 2103 2106 2129 2143 2145 2175 2177 2195 2238 2290 2300 2317 2325 2330 2354 2383 2414 2482 2486 2494 2497 2506 2513 2539 2549 2669 2691 2734 2762 2781 2790 2881 2894 2919 2955 2972 2982 2986 2987 2998 3029 3152 3196 3307 3366 3368 3370 3371 3373 3384 3400 3404 3407 3414 3442 3449 3461 3464 3470 3473 3482 3488 3494 3504 3513 3518 3527 3548 3557 3558 3570 3581 3586 3590 3594 3595 3597 3602 3634 3636 3644 3649 3656 3657 3705 3708 3711 3712 3724 3725 3726 3727 3729 3730 3748 3752 3768 3778 3795 3808 3813 3817 3822 3870 3918 3927 3936 3940 3948 3954 3959 3990 3996 4035 4054 4057 4065 4111 4130 4139 4140 4141 4176 4188 4241 4253 4274 4282 4305 4329 4335 4344 4348 4363 4389 4424 4458 4461 4495 4502 4531 4568 4604 4608 4649 4682 4701 4734 4760 4764 4872 4883 4886 4902 4924 4940 4969 4977 4999 5018 5039 5046 5051 5061 5069 5104 5114 5154 5165 5240 5273"}},{"levels":{"Paid":"190 1403 1409 1424 1449 1610 2062 2145 2177 2302 2305 2330 2417 2509 2595 2657 2781 2917 2927 2957 3029 3178 3362 3542 4087 4121 4212 4389 4400 4405 4574 4734 4767 4827 4944 5239","Interested":"190 219 1073 1165 1346 1352 1358 1397 1403 1411 1418 1422 1424 1430 1442 1449 1455 1531 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 2021 2034 2049 2050 2051 2063 2071 2103 2105 2106 2110 2129 2143 2145 2150 2154 2160 2180 2188 2191 2195 2225 2238 2248 2262 2263 2271 2273 2280 2281 2290 2298 2299 2300 2302 2304 2316 2317 2323 2325 2330 2333 2348 2354 2379 2383 2392 2413 2414 2417 2433 2435 2439 2482 2486 2494 2506 2509 2539 2551 2587 2595 2607 2649 2669 2673 2691 2738 2742 2748 2762 2770 2781 2784 2790 2814 2815 2819 2820 2854 2882 2894 2917 2919 2927 2941 2957 2972 2982 2986 2998 3008 3012 3014 3029 3073 3089 3090 3094 3178 3196 3220 3260 3264 3269 3270 3272 3274 3362 3364 3368 3370 3371 3374 3375 3376 3394 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3452 3456 3460 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3502 3503 3507 3512 3519 3522 3524 3526 3542 3558 3570 3572 3573 3574 3580 3581 3586 3590 3592 3594 3595 3596 3597 3600 3605 3606 3610 3617 3619 3628 3634 3636 3640 3643 3644 3652 3654 3657 3664 3679 3684 3700 3705 3707 3710 3711 3712 3715 3716 3723 3724 3725 3726 3727 3730 3739 3748 3749 3750 3759 3765 3768 3774 3777 3782 3788 3791 3795 3799 3800 3807 3808 3817 3822 3828 3839 3847 3850 3856 3863 3864 3866 3870 3872 3895 3913 3917 3918 3925 3927 3931 3932 3936 3940 3948 3959 3970 3972 3976 3990 3992 3996 3998 4003 4010 4018 4033 4035 4040 4043 4044 4048 4054 4056 4080 4099 4104 4111 4121 4122 4125 4130 4132 4139 4140 4141 4143 4162 4188 4191 4192 4212 4219 4241 4243 4249 4252 4253 4254 4256 4265 4270 4271 4274 4282 4284 4291 4292 4305 4308 4321 4324 4329 4335 4338 4344 4348 4362 4363 4379 4387 4389 4391 4400 4404 4424 4437 4443 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4503 4506 4508 4531 4552 4568 4572 4574 4581 4590 4596 4608 4634 4652 4669 4685 4689 4692 4702 4712 4713 4717 4730 4732 4734 4735 4748 4753 4759 4764 4783 4786 4811 4812 4822 4872 4873 4876 4889 4896 4899 4902 4904 4914 4926 4934 4938 4939 4942 4943 4944 4969 4977 4989 4994 4999 5005 5014 5018 5019 5039 5046 5051 5061 5071 5090 5093 5095 5096 5100 5102 5104 5105 5113 5114 5116 5134 5136 5137 5165 5193 5196 5209 5217 5239 5240","Academic":"219 1095 1352 1358 1397 1411 1416 1422 1430 1496 1531 1553 1575 1624 1631 1717 1995 2021 2044 2069 2071 2103 2106 2108 2110 2150 2159 2160 2224 2265 2271 2273 2280 2281 2290 2298 2299 2304 2323 2327 2348 2354 2367 2379 2402 2413 2414 2433 2482 2487 2539 2551 2587 2607 2649 2662 2710 2711 2747 2755 2761 2772 2815 2819 2820 2854 2882 2943 3008 3035 3048 3070 3092 3102 3152 3161 3272 3274 3295 3326 3327 3358 3364 3366 3369 3370 3376 3409 3417 3419 3429 3430 3436 3449 3452 3456 3460 3469 3470 3473 3482 3488 3492 3501 3502 3503 3504 3507 3511 3512 3518 3519 3522 3524 3526 3535 3548 3550 3557 3572 3573 3580 3581 3587 3590 3592 3596 3597 3605 3610 3617 3640 3641 3643 3651 3654 3664 3691 3692 3707 3716 3723 3724 3725 3739 3748 3759 3782 3799 3808 3813 3817 3819 3826 3839 3853 3863 3864 3866 3871 3872 3895 3906 3913 3925 3931 3932 3933 3942 3948 3954 3970 3972 3990 3992 4003 4018 4019 4033 4041 4043 4048 4054 4057 4080 4109 4132 4191 4192 4249 4254 4256 4270 4284 4291 4292 4308 4313 4321 4325 4335 4338 4348 4358 4363 4387 4424 4434 4446 4461 4469 4487 4494 4497 4502 4596 4598 4669 4676 4682 4699 4702 4707 4712 4730 4731 4732 4753 4811 4811 4812 4876 4883 4889 4896 4914 4939 4942 4991 4994 5005 5016 5018 5019 5046 5071 5073 5090 5095 5100 5136 5137 5194 5196 5240","Practical":"877 908 965 1026 1031 1165 1309 1346 1353 1418 1426 1442 1455 1567 1619 1620 1623 1626 1761 1845 1866 1927 1933 2032 2050 2051 2063 2105 2129 2143 2154 2188 2191 2195 2225 2238 2248 2263 2289 2300 2317 2325 2333 2383 2486 2494 2497 2506 2513 2669 2673 2691 2742 2748 2770 2773 2788 2790 2814 2818 2881 2894 2919 2941 2972 2982 2986 2987 2998 3014 3027 3059 3073 3094 3196 3260 3269 3307 3368 3371 3375 3384 3394 3400 3407 3414 3439 3442 3455 3461 3464 3472 3476 3481 3485 3491 3497 3499 3549 3558 3570 3574 3586 3594 3595 3600 3602 3634 3636 3644 3657 3666 3708 3709 3710 3711 3712 3715 3726 3730 3765 3768 3777 3791 3807 3822 3847 3856 3870 3927 3936 3940 3998 4010 4056 4099 4104 4111 4130 4137 4139 4140 4141 4143 4176 4188 4219 4241 4243 4252 4253 4282 4305 4329 4379 4404 4458 4476 4495 4500 4503 4531 4568 4590 4608 4649 4652 4717 4764 4786 4822 4872 4873 4902 4924 4926 4969 4977 4989 5014 5039 5051 5061 5102 5104 5105 5114 5116 5134 5154 5201 5209"}},{"levels":{"Practical":"190 1026 1165 1309 1346 1352 1358 1403 1418 1442 1619 1624 1626 1927 2050 2062 2069 2106 2143 2145 2177 2188 2195 2225 2238 2325 2330 2333 2379 2486 2494 2506 2509 2513 2539 2669 2691 2734 2742 2762 2781 2790 2814 2818 2881 2894 2972 2982 2986 2987 2998 3029 3035 3059 3152 3196 3307 3370 3371 3384 3400 3436 3442 3449 3464 3492 3549 3558 3594 3595 3634 3636 3641 3644 3649 3656 3657 3705 3708 3711 3712 3729 3748 3752 3778 3807 3808 3813 3856 3870 3927 3948 3954 3990 4035 4056 4111 4139 4140 4141 4143 4176 4282 4329 4335 4344 4405 4424 4458 4461 4495 4502 4523 4531 4568 4608 4649 4682 4701 4732 4764 4812 4827 4883 4886 4924 4977 5046 5051 5096 5104 5105 5114 5134 5154","Interested":"190 614 1165 1346 1358 1397 1403 1409 1411 1418 1422 1424 1442 1449 1455 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 1995 2021 2034 2050 2051 2063 2071 2103 2105 2106 2129 2143 2145 2149 2150 2160 2177 2180 2188 2191 2225 2238 2248 2262 2273 2280 2289 2290 2298 2299 2300 2302 2304 2316 2317 2323 2325 2330 2333 2348 2379 2383 2413 2414 2417 2433 2435 2439 2482 2486 2494 2506 2509 2513 2539 2549 2551 2587 2592 2649 2657 2669 2673 2691 2734 2738 2742 2747 2748 2762 2770 2781 2814 2815 2819 2820 2854 2882 2894 2917 2927 2972 2982 2986 2987 2998 3008 3012 3014 3029 3073 3152 3178 3196 3220 3260 3269 3270 3272 3274 3359 3362 3364 3368 3369 3370 3371 3374 3375 3376 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3456 3460 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3503 3504 3518 3519 3522 3524 3526 3542 3550 3557 3558 3572 3573 3574 3586 3587 3590 3592 3594 3595 3597 3600 3606 3610 3613 3617 3619 3627 3628 3634 3636 3640 3641 3643 3644 3649 3652 3654 3656 3657 3664 3666 3679 3684 3700 3705 3707 3709 3711 3712 3716 3724 3725 3726 3727 3729 3730 3739 3748 3749 3750 3752 3759 3765 3768 3774 3777 3778 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3819 3822 3826 3828 3839 3850 3853 3856 3863 3864 3866 3870 3895 3913 3917 3918 3925 3927 3931 3932 3933 3936 3940 3942 3948 3970 3972 3976 3990 3992 3996 4003 4007 4010 4033 4035 4040 4041 4043 4044 4048 4054 4059 4065 4080 4104 4111 4121 4122 4130 4132 4139 4140 4141 4143 4162 4174 4188 4191 4192 4212 4219 4241 4245 4252 4253 4254 4256 4265 4282 4284 4291 4292 4305 4308 4313 4321 4329 4335 4338 4344 4348 4352 4362 4363 4387 4389 4391 4404 4424 4437 4443 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4502 4503 4506 4508 4523 4531 4552 4568 4574 4581 4584 4608 4634 4649 4652 4669 4682 4685 4702 4713 4717 4730 4732 4734 4753 4759 4760 4764 4786 4811 4812 4822 4872 4873 4876 4886 4889 4896 4899 4902 4904 4926 4934 4938 4939 4942 4943 4944 4962 4969 4977 4994 4999 5005 5014 5016 5018 5019 5046 5051 5061 5071 5090 5096 5100 5102 5104 5105 5114 5116 5134 5136 5137 5165 5193 5196 5209 5217 5239 5273","Academic":"965 1353 1411 1416 1422 1424 1496 1531 1553 1575 1631 1717 1761 1995 2021 2044 2051 2063 2105 2108 2129 2149 2150 2180 2273 2280 2298 2299 2302 2304 2316 2323 2367 2383 2402 2433 2482 2497 2549 2551 2595 2657 2711 2738 2773 2815 2819 2854 2882 2919 2927 2941 2957 3008 3014 3161 3260 3269 3270 3272 3295 3394 3404 3417 3429 3456 3469 3473 3476 3481 3482 3497 3499 3513 3522 3527 3548 3557 3570 3572 3573 3586 3602 3617 3628 3640 3648 3651 3654 3679 3684 3692 3700 3704 3707 3709 3710 3716 3723 3724 3726 3739 3765 3768 3782 3788 3817 3828 3863 3864 3895 3940 3972 3983 3992 3998 4019 4044 4048 4057 4059 4080 4109 4174 4238 4253 4254 4256 4271 4305 4348 4352 4358 4404 4469 4494 4497 4584 4598 4669 4676 4689 4699 4731 4762 4786 4822 4867 4876 4889 4896 4926 4939 4969 4991 4994 5018 5061 5100 5136 5137 5209","Paid":"1409 1455 1567 1610 1623 1845 1933 2224 2348 2414 2417 2673 2747 2748 2755 2770 2772 2917 2995 3178 3362 3375 3414 3439 3472 3485 3491 3524 3542 3596 3600 3613 3627 3759 3791 3970 4010 4087 4104 4121 4389 4500 4574 4596 4643 4652 4707 4767 4811 4811 4899 4944 4962 5014 5016 5069 5071 5073 5102 5239"}},{"levels":{"Interested":"190 603 1165 1346 1352 1358 1397 1422 1424 1430 1449 1455 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 2021 2023 2034 2050 2063 2071 2103 2105 2108 2129 2143 2145 2149 2150 2159 2160 2180 2188 2191 2225 2238 2248 2271 2280 2290 2298 2299 2304 2317 2325 2327 2330 2333 2348 2379 2383 2413 2414 2418 2482 2486 2494 2506 2513 2539 2551 2587 2592 2649 2669 2673 2691 2734 2738 2748 2762 2770 2781 2814 2815 2819 2820 2854 2882 2894 2917 2927 2972 2986 2987 2998 3008 3012 3029 3035 3073 3089 3161 3178 3196 3220 3260 3269 3270 3272 3274 3307 3362 3366 3370 3371 3375 3376 3384 3394 3404 3407 3409 3414 3417 3419 3429 3430 3436 3439 3442 3449 3456 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3494 3497 3499 3501 3504 3512 3518 3519 3522 3524 3542 3548 3550 3557 3570 3572 3573 3581 3586 3590 3592 3594 3595 3597 3605 3606 3610 3613 3619 3627 3634 3641 3643 3644 3649 3651 3652 3656 3657 3664 3666 3679 3684 3700 3705 3707 3709 3711 3712 3716 3723 3724 3725 3726 3727 3729 3730 3739 3748 3749 3750 3752 3759 3768 3777 3778 3782 3788 3795 3799 3807 3808 3813 3817 3819 3828 3839 3850 3863 3864 3866 3870 3895 3913 3917 3918 3925 3927 3931 3933 3936 3940 3942 3943 3948 3972 3976 3983 3990 3992 4003 4007 4010 4033 4035 4040 4043 4048 4054 4057 4058 4065 4104 4111 4120 4121 4122 4125 4130 4132 4139 4140 4141 4143 4162 4178 4188 4191 4192 4206 4212 4219 4241 4243 4245 4252 4253 4254 4265 4271 4274 4284 4292 4305 4308 4335 4348 4352 4362 4363 4389 4391 4404 4424 4437 4443 4446 4451 4461 4476 4483 4486 4494 4495 4500 4503 4506 4508 4523 4530 4531 4572 4574 4581 4596 4608 4649 4652 4679 4685 4689 4702 4730 4732 4734 4753 4759 4764 4767 4783 4811 4812 4822 4872 4873 4876 4886 4889 4896 4902 4904 4914 4926 4934 4938 4939 4944 4962 4977 4994 4999 5014 5018 5019 5046 5051 5061 5071 5089 5090 5093 5096 5100 5105 5114 5134 5136 5137 5165 5173 5193 5196 5209 5239 5240","Academic":"965 1416 1422 1424 1430 1567 1575 1610 1624 1631 1761 1786 1927 2021 2034 2049 2051 2103 2108 2143 2149 2154 2160 2224 2225 2265 2280 2316 2317 2327 2348 2383 2402 2413 2418 2482 2486 2506 2513 2539 2673 2711 2738 2747 2773 2854 2882 2894 2919 2927 2941 2982 2986 3008 3014 3029 3073 3260 3272 3295 3370 3404 3407 3417 3436 3439 3456 3473 3476 3481 3482 3493 3497 3499 3501 3502 3504 3512 3519 3522 3524 3527 3548 3572 3573 3605 3606 3610 3664 3666 3684 3691 3692 3700 3704 3707 3710 3723 3726 3765 3777 3782 3788 3791 3807 3808 3813 3817 3819 3828 3847 3856 3863 3864 3866 3895 3910 3913 3925 3931 3936 3940 3948 3970 3972 3992 4048 4056 4109 4137 4143 4238 4241 4243 4245 4265 4271 4284 4305 4335 4348 4358 4389 4391 4404 4458 4469 4483 4494 4497 4568 4581 4590 4598 4643 4676 4679 4689 4699 4702 4812 4822 4827 4876 4883 4889 4914 4926 4939 4962 4969 5016 5018 5061 5071 5090 5093 5100 5136 5137 5183 5194","Practical":"1026 1165 1418 1442 1619 1620 1626 2050 2062 2129 2238 2304 2333 2379 2417 2494 2509 2595 2669 2691 2719 2734 2748 2790 2814 2815 2987 2998 3196 3269 3307 3366 3384 3400 3414 3485 3491 3494 3542 3549 3557 3558 3570 3602 3634 3636 3649 3656 3705 3708 3709 3711 3712 3729 3730 3759 3768 3870 3927 3959 3990 4035 4087 4111 4120 4130 4139 4140 4188 4253 4274 4329 4424 4461 4476 4495 4523 4531 4608 4649 4652 4685 4767 4811 4811 4886 4924 4977 4984 5014 5046 5051 5104 5105 5114 5154 5173 5193 5239","Paid":"1358 1623 1717 1845 1933 2414 2755 2770 2772 2818 2917 2995 3035 3178 3362 3472 3596 3600 3613 3627 3943 4010 4104 4121 4405 4500 4574 4707 4732 4944 5102 5134"}},{"levels":{"Academic":"190 877 965 1416 1418 1430 1496 1553 1624 1631 1717 1927 1995 2021 2029 2034 2062 2103 2129 2150 2159 2175 2224 2248 2273 2280 2281 2298 2299 2317 2330 2348 2379 2418 2433 2482 2494 2506 2513 2592 2649 2662 2673 2691 2711 2738 2747 2761 2769 2770 2854 2882 2919 2972 2986 2998 3102 3161 3260 3264 3272 3274 3326 3327 3370 3371 3429 3439 3464 3476 3481 3482 3493 3499 3501 3518 3542 3548 3570 3581 3605 3606 3652 3664 3708 3716 3748 3765 3791 3808 3871 3910 3913 3931 3933 3936 3940 3959 3972 3976 4010 4035 4048 4087 4104 4109 4130 4143 4162 4243 4245 4253 4254 4265 4271 4313 4329 4404 4405 4461 4476 4483 4523 4530 4574 4669 4676 4689 4702 4896 4940 4944 4962 5061 5090 5100 5105 5116 5136 5137 5165 5173 5209","Interested":"190 219 614 1073 1165 1346 1352 1358 1397 1409 1416 1418 1422 1424 1430 1442 1449 1455 1496 1531 1553 1567 1575 1610 1619 1620 1624 1626 1717 1761 1786 1845 1927 1933 1995 2021 2032 2049 2050 2051 2062 2071 2103 2105 2110 2143 2145 2150 2160 2175 2191 2195 2238 2248 2273 2280 2281 2290 2298 2299 2317 2325 2330 2333 2348 2379 2383 2413 2414 2418 2433 2482 2486 2487 2494 2497 2506 2513 2539 2551 2592 2593 2595 2607 2649 2669 2673 2691 2738 2742 2747 2748 2762 2770 2781 2790 2814 2815 2818 2819 2820 2854 2882 2894 2917 2919 2941 2943 2957 2972 2982 2986 2998 3012 3029 3035 3073 3089 3178 3220 3260 3269 3272 3274 3295 3307 3327 3362 3364 3369 3370 3371 3375 3376 3384 3400 3404 3407 3409 3414 3419 3421 3429 3430 3436 3439 3442 3456 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3494 3497 3499 3501 3504 3511 3512 3519 3526 3542 3557 3558 3572 3573 3581 3590 3592 3594 3595 3596 3597 3600 3602 3605 3613 3619 3627 3636 3644 3652 3657 3664 3666 3684 3692 3700 3707 3708 3710 3711 3712 3716 3723 3725 3727 3730 3739 3748 3749 3750 3759 3768 3777 3782 3799 3807 3808 3813 3817 3828 3839 3850 3856 3863 3864 3870 3895 3913 3917 3925 3927 3931 3932 3933 3936 3940 3942 3948 3972 3990 3992 4003 4007 4010 4033 4035 4040 4043 4048 4054 4104 4111 4121 4122 4130 4132 4139 4140 4141 4143 4162 4188 4191 4192 4212 4219 4233 4241 4243 4245 4252 4253 4254 4256 4265 4271 4274 4292 4308 4335 4338 4348 4363 4387 4389 4391 4404 4405 4437 4443 4446 4451 4458 4476 4483 4486 4494 4495 4500 4502 4503 4506 4508 4530 4531 4568 4574 4581 4590 4598 4608 4643 4649 4652 4682 4685 4689 4701 4702 4717 4730 4734 4753 4767 4783 4811 4822 4872 4873 4876 4883 4896 4902 4904 4926 4934 4938 4939 4943 4944 4962 4969 4977 4994 4999 5014 5016 5018 5019 5051 5061 5071 5089 5090 5093 5100 5102 5104 5105 5113 5114 5116 5134 5136 5137 5154 5165 5173 5193 5209 5239 5240","Practical":"908 1026 1031 1095 1309 1346 1358 1409 1424 1442 1455 1575 1619 1623 1626 1761 1845 1866 2069 2108 2143 2160 2195 2304 2486 2539 2549 2669 2742 2748 2784 2790 2814 2818 2941 3029 3178 3269 3362 3384 3442 3461 3485 3492 3494 3524 3549 3550 3597 3657 3710 3730 3768 3782 3807 3813 3817 3828 3856 3870 3927 4139 4140 4188 4219 4241 4274 4358 4424 4495 4502 4590 4598 4608 4649 4652 4682 4717 4764 4767 4783 4811 4811 4889 4924 4969 4977 5051 5104 5113 5114 5154 5240","Paid":"1426 1933 2497 2595 2755 2762 2788 2917 2995 3027 3035 3152 3414 3497 3627 3644 4335 4400 4500 4643 4886 5014 5016 5071 5073 5102 5134 5193 5239"}},{"levels":{"Paid":"190 3627 4087 4827 5172","Interested":"190 1352 1358 1397 1403 1409 1416 1422 1424 1449 1455 1531 1553 1567 1575 1610 1619 1623 1626 1631 1717 1786 1845 1927 1933 1995 2021 2051 2062 2063 2103 2105 2129 2143 2145 2150 2177 2188 2225 2238 2248 2290 2299 2300 2317 2325 2330 2333 2413 2414 2417 2482 2486 2494 2539 2551 2595 2649 2669 2691 2711 2738 2742 2748 2755 2781 2814 2815 2818 2820 2854 2894 2917 2941 2972 2986 2998 3012 3029 3059 3073 3178 3196 3220 3260 3269 3270 3272 3307 3370 3371 3375 3376 3400 3404 3407 3409 3414 3419 3421 3429 3430 3436 3439 3452 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3494 3497 3499 3501 3504 3507 3512 3519 3522 3535 3542 3549 3572 3573 3581 3590 3592 3594 3595 3600 3602 3605 3619 3627 3634 3636 3666 3684 3692 3700 3707 3711 3712 3715 3716 3725 3727 3739 3749 3750 3759 3768 3777 3782 3799 3807 3808 3813 3817 3819 3839 3850 3863 3895 3913 3917 3918 3925 3927 3931 3936 3940 3942 3948 3972 3990 3992 3998 4003 4007 4010 4033 4035 4040 4043 4048 4056 4057 4099 4104 4111 4121 4122 4130 4132 4141 4143 4162 4188 4192 4219 4241 4245 4252 4253 4265 4274 4282 4284 4292 4305 4321 4329 4335 4348 4362 4363 4387 4389 4391 4404 4405 4424 4437 4443 4446 4451 4476 4483 4486 4487 4494 4500 4503 4506 4531 4568 4574 4581 4649 4652 4685 4701 4702 4717 4730 4734 4753 4783 4811 4822 4872 4873 4876 4883 4896 4902 4904 4924 4926 4934 4938 4939 4943 4944 4969 4994 4999 5014 5018 5019 5051 5071 5089 5095 5096 5104 5105 5114 5134 5136 5154 5165 5172 5193 5196 5239 5240","Practical":"1358 1623 1626 1845 2486 2595 2814 2818 2986 3375 3376 3407 3542 3602 3634 3715 3990 4010 4140 4282 4702","Academic":"2051 2238 2280 2691 2748 2919 3260 3270 3419 3482 3494 3748 3768 3782 3856 3936 3998 4007 4056 4104 4109 4363 4405 4483 4649 4886 4991 5095 5104 5105"}},{"levels":{"Academic":"603 614 1619 2049 2238 2248 2316 2383 2815 2854 2894 3417 3482 3549 3709 3710 3723 3777 3782 3864 3925 3931 4007 4109 4130 4243 4254 4282 4352 4358 4461 4487 4682 4685 4702 4944 5102 5165 5173 5194","Interested":"603 1352 1358 1397 1422 1442 1449 1455 1553 1567 1619 1626 1631 1717 1761 1786 1845 1927 2062 2143 2150 2160 2238 2248 2299 2325 2330 2348 2413 2414 2482 2486 2539 2551 2592 2595 2649 2669 2691 2748 2814 2815 2854 2894 2917 2986 2987 2998 3012 3029 3035 3073 3178 3196 3220 3260 3272 3307 3362 3370 3375 3376 3400 3404 3407 3417 3419 3429 3430 3436 3442 3461 3464 3470 3472 3476 3482 3484 3485 3488 3492 3497 3501 3504 3512 3519 3524 3542 3558 3572 3573 3590 3592 3605 3619 3636 3652 3684 3692 3700 3707 3708 3711 3716 3723 3724 3725 3727 3748 3749 3750 3759 3777 3799 3807 3817 3839 3850 3863 3870 3871 3895 3913 3917 3931 3936 3942 3948 3972 3990 3992 4007 4010 4033 4035 4040 4043 4044 4048 4054 4104 4111 4121 4122 4123 4130 4132 4139 4140 4141 4143 4162 4191 4192 4219 4241 4243 4252 4253 4254 4265 4271 4274 4284 4292 4308 4335 4352 4363 4389 4391 4437 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4506 4508 4531 4574 4581 4649 4652 4685 4701 4702 4730 4734 4753 4760 4783 4811 4812 4822 4872 4873 4876 4883 4886 4896 4902 4904 4924 4934 4938 4942 4944 4977 4991 4994 4999 5014 5018 5019 5051 5071 5089 5090 5105 5114 5134 5136 5137 5165 5173 5193 5201 5209 5239","Practical":"1761 2748 2755 2814 2818 2987 2998 3196 3602 3870 4104 4111 4405 4649 5104 5105 5154","Paid":"2917 3035 3644 3652 4087 4139 4140 4389 4572 4574 5071"}},{"levels":{"Interested":"190 614 877 1031 1073 1352 1358 1397 1409 1416 1422 1449 1455 1531 1553 1567 1610 1619 1620 1623 1626 1717 1786 1845 1866 1927 2021 2032 2062 2069 2105 2143 2150 2238 2248 2263 2290 2298 2299 2325 2330 2413 2414 2482 2494 2539 2551 2595 2649 2669 2691 2711 2742 2748 2755 2761 2770 2814 2815 2854 2894 2919 2943 2972 2986 2998 3012 3014 3029 3073 3089 3161 3178 3220 3260 3269 3270 3274 3295 3307 3326 3327 3362 3371 3375 3376 3400 3404 3407 3414 3419 3429 3430 3436 3439 3449 3461 3464 3469 3470 3472 3476 3482 3484 3485 3488 3491 3492 3497 3501 3504 3519 3524 3542 3572 3573 3590 3592 3594 3596 3605 3619 3636 3652 3664 3684 3692 3700 3707 3711 3716 3725 3727 3739 3749 3750 3759 3768 3777 3799 3807 3808 3817 3839 3850 3895 3913 3917 3927 3931 3933 3936 3942 3948 3972 3992 4010 4033 4035 4040 4043 4048 4054 4058 4104 4111 4121 4122 4130 4141 4143 4162 4192 4219 4241 4252 4253 4265 4274 4284 4292 4335 4352 4363 4391 4437 4446 4451 4476 4483 4486 4487 4494 4495 4500 4506 4531 4574 4581 4649 4652 4685 4702 4730 4734 4753 4760 4811 4822 4872 4873 4876 4886 4896 4902 4904 4924 4934 4938 4942 4944 4969 4991 4994 4999 5014 5018 5019 5051 5071 5089 5090 5096 5105 5114 5116 5136 5154 5165 5193 5209 5239","Academic":"1095 1845 2062 3482 3791 4104 4109 4495 4649 4994 5016","Practical":"1717 1933 3711 4111 5051","Paid":"3504 4087"}},{"levels":{"Interested":"190 614 1073 1165 1352 1358 1397 1416 1418 1422 1424 1449 1455 1553 1567 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 2021 2032 2063 2069 2143 2145 2150 2188 2195 2224 2225 2238 2248 2263 2280 2289 2290 2299 2305 2325 2330 2379 2383 2413 2414 2439 2482 2486 2494 2506 2509 2539 2551 2587 2592 2595 2649 2669 2673 2691 2734 2738 2748 2761 2770 2772 2814 2815 2819 2854 2894 2919 2927 2941 2943 2972 2986 2987 2998 3008 3012 3029 3073 3089 3102 3152 3161 3178 3220 3260 3269 3270 3295 3326 3327 3371 3374 3375 3376 3384 3404 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3456 3461 3464 3469 3470 3472 3473 3476 3482 3485 3488 3492 3497 3499 3501 3504 3512 3518 3519 3524 3542 3558 3572 3573 3590 3592 3595 3600 3605 3613 3619 3634 3636 3640 3643 3649 3652 3656 3657 3664 3666 3679 3684 3700 3705 3707 3708 3709 3711 3712 3716 3723 3725 3726 3727 3729 3730 3739 3749 3750 3752 3759 3768 3777 3778 3782 3788 3791 3795 3799 3807 3808 3813 3817 3819 3828 3839 3850 3853 3856 3863 3864 3870 3895 3913 3917 3918 3925 3927 3931 3932 3933 3936 3940 3942 3948 3972 3983 3990 3992 3998 4007 4010 4033 4035 4040 4043 4044 4048 4054 4065 4104 4111 4121 4122 4125 4130 4132 4139 4140 4141 4143 4162 4188 4192 4212 4213 4219 4241 4252 4253 4265 4271 4274 4284 4292 4305 4324 4335 4344 4348 4352 4362 4363 4387 4389 4391 4424 4437 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4503 4506 4508 4523 4530 4531 4574 4581 4584 4608 4634 4649 4652 4669 4685 4689 4701 4702 4730 4732 4734 4753 4760 4764 4767 4811 4812 4822 4872 4873 4876 4896 4899 4902 4904 4914 4924 4934 4938 4940 4943 4944 4962 4969 4977 4984 4991 4994 4999 5014 5018 5019 5039 5046 5051 5071 5089 5090 5096 5100 5102 5105 5114 5134 5136 5137 5154 5165 5173 5193 5196 5209 5239","Academic":"219 877 965 1095 1624 1631 1845 2049 2108 2159 2238 2265 2325 2383 2413 2414 2595 2738 2788 2854 2987 3270 3417 3456 3482 3485 3497 3573 3581 3692 3700 3704 3707 3723 3725 3726 3739 3748 3782 3813 3817 3819 3828 3863 3864 3895 3948 3970 3972 3992 3998 4048 4109 4111 4121 4125 4143 4305 4315 4329 4352 4405 4469 4483 4495 4497 4508 4584 4590 4598 4689 4699 4702 4745 4811 4811 4914 4939 4944 4962 4984 4994 5014 5039 5071 5100","Practical":"908 1026 1031 1165 1352 1565 1619 1620 1626 1761 1866 2062 2379 2486 2593 2669 2711 2734 2748 2755 2770 2784 2790 2815 2881 2941 2986 3027 3035 3196 3307 3376 3407 3436 3491 3542 3557 3634 3649 3656 3705 3708 3711 3712 3729 3752 3759 3808 3870 3927 3990 4007 4035 4087 4139 4140 4238 4324 4389 4461 4523 4531 4608 4649 4734 4827 4977 5046 5061 5096 5102 5104 5105 5114 5134 5154","Paid":"1358 1623 1927 1933 2188 2305 2333 2818 3178 3362 3375 3400 3472 3524 3549 3596 3600 3613 3791 4010 4104 4500 4652 4707 4732 5239"}},{"levels":{"Practical":"190 1418 1442 1927 1933 2062 2154 2238 2333 2486 2691 2814 3059 3362 3400 3491 4811 4811 5173","Interested":"190 1165 1346 1352 1358 1397 1418 1422 1442 1449 1455 1553 1567 1575 1610 1619 1626 1717 1761 1786 1845 1927 1933 2021 2110 2143 2150 2191 2238 2248 2299 2325 2330 2333 2379 2414 2417 2482 2486 2539 2551 2595 2649 2669 2691 2748 2755 2814 2815 2854 2894 2917 2919 2927 2972 2986 2987 3012 3029 3073 3220 3260 3307 3362 3371 3375 3376 3404 3407 3414 3419 3429 3430 3436 3461 3464 3470 3472 3476 3482 3485 3488 3491 3492 3501 3504 3519 3524 3542 3572 3573 3586 3590 3605 3619 3641 3656 3684 3700 3705 3707 3709 3716 3724 3725 3727 3748 3749 3750 3752 3759 3791 3799 3807 3808 3817 3839 3850 3895 3913 3931 3936 3942 3948 3972 3992 4010 4033 4035 4040 4043 4048 4054 4111 4121 4122 4130 4141 4143 4192 4219 4241 4252 4253 4274 4292 4335 4363 4389 4391 4437 4446 4451 4476 4483 4486 4494 4500 4506 4574 4581 4649 4652 4685 4702 4730 4734 4753 4811 4822 4872 4873 4876 4896 4902 4904 4924 4926 4934 4938 4944 4991 4994 4999 5019 5051 5071 5089 5090 5105 5114 5136 5165 5173 5193 5239","Academic":"219 965 1346 1358 1409 1416 1422 1455 1531 1575 1995 2129 2150 2225 2417 2657 2673 2917 3482 3504 3572 3788 3936 4111 4253 4405 4926","Paid":"1717 1845 3791 4122 4389 4500"}},{"levels":{"Interested":"1567 1619 2110 2150 2248 2348 2379 2551 2669 2734 2761 2815 2854 2917 2919 2986 2995 2998 3089 3407 3414 3429 3491 3492 3524 3592 3634 3656 3700 3707 3791 3870 4048 4104 4111 4121 4335 4530 4734 4811 5071 5136 5239","Academic":"2917 3791","Practical":"3491 3870"}},{"levels":{"Academic":"190 219 603 614 877 965 1073 1095 1165 1346 1352 1353 1397 1403 1411 1418 1422 1449 1496 1531 1553 1567 1575 1610 1717 1761 1927 1995 2021 2023 2032 2049 2071 2103 2105 2145 2149 2150 2159 2160 2180 2188 2191 2224 2225 2248 2265 2273 2280 2289 2298 2299 2304 2316 2323 2325 2327 2330 2348 2367 2413 2482 2487 2506 2509 2513 2551 2587 2607 2649 2710 2747 2761 2772 2819 2882 2917 2927 2941 2957 3008 3014 3073 3092 3161 3178 3220 3270 3272 3317 3326 3327 3364 3369 3370 3376 3384 3407 3409 3417 3419 3429 3430 3439 3442 3452 3455 3464 3469 3470 3472 3476 3481 3482 3484 3492 3497 3501 3502 3503 3504 3507 3511 3512 3518 3519 3522 3524 3526 3535 3550 3572 3573 3580 3586 3590 3592 3596 3610 3617 3636 3641 3651 3666 3708 3724 3725 3739 3748 3759 3807 3817 3826 3839 3850 3856 3870 3871 3872 3895 3906 3913 3925 3933 3942 3948 3972 3998 4003 4033 4035 4043 4054 4104 4109 4111 4137 4139 4238 4252 4282 4284 4291 4292 4305 4308 4324 4363 4391 4400 4434 4443 4495 4497 4500 4508 4531 4568 4652 4669 4699 4702 4730 4753 4786 4812 4827 4867 4876 4926 4984 5014 5018 5046 5061 5095 5105 5114 5116 5196 5239","Interested":"190 219 603 614 908 1031 1165 1309 1346 1352 1358 1397 1403 1409 1411 1416 1418 1422 1424 1426 1449 1455 1531 1553 1567 1610 1619 1620 1623 1624 1626 1717 1761 1786 1845 1866 1927 1933 1995 2021 2049 2051 2063 2069 2071 2103 2105 2106 2108 2110 2129 2143 2145 2150 2154 2159 2160 2180 2224 2225 2248 2263 2290 2298 2299 2300 2302 2304 2317 2323 2325 2330 2333 2348 2379 2383 2392 2413 2414 2417 2482 2486 2494 2509 2513 2539 2551 2587 2593 2595 2607 2649 2657 2669 2673 2691 2711 2734 2738 2742 2747 2748 2755 2762 2770 2772 2781 2790 2814 2815 2819 2820 2854 2882 2894 2917 2919 2927 2941 2955 2972 2986 2998 3008 3012 3014 3029 3059 3073 3089 3152 3178 3196 3220 3260 3269 3270 3274 3295 3327 3362 3366 3368 3370 3371 3375 3376 3384 3394 3407 3409 3414 3417 3419 3421 3429 3430 3436 3439 3442 3449 3452 3456 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3492 3497 3499 3501 3503 3504 3507 3511 3512 3518 3519 3522 3524 3542 3550 3557 3558 3572 3573 3574 3580 3581 3586 3590 3592 3594 3595 3596 3600 3605 3606 3610 3613 3619 3634 3636 3641 3643 3652 3656 3664 3679 3684 3700 3704 3705 3707 3708 3709 3710 3711 3712 3715 3716 3723 3724 3725 3727 3739 3748 3749 3750 3752 3759 3768 3777 3788 3791 3799 3800 3807 3808 3817 3828 3839 3850 3863 3864 3870 3872 3895 3913 3917 3918 3925 3927 3931 3932 3933 3936 3940 3942 3948 3954 3972 3990 3992 4003 4007 4010 4019 4033 4035 4040 4043 4048 4054 4058 4099 4104 4111 4121 4122 4130 4132 4139 4141 4143 4162 4176 4188 4191 4192 4212 4219 4241 4245 4249 4252 4253 4256 4265 4274 4282 4284 4291 4292 4305 4308 4321 4324 4335 4338 4348 4352 4362 4363 4375 4387 4389 4391 4400 4405 4437 4446 4451 4476 4483 4486 4487 4494 4497 4500 4503 4506 4508 4530 4531 4568 4574 4581 4649 4652 4669 4682 4685 4701 4702 4717 4730 4731 4734 4753 4760 4783 4786 4811 4812 4822 4872 4873 4876 4883 4886 4889 4896 4899 4902 4904 4924 4926 4934 4938 4939 4940 4942 4943 4944 4969 4984 4991 4994 4999 5014 5018 5019 5039 5046 5051 5061 5071 5089 5090 5095 5096 5100 5102 5105 5114 5136 5137 5165 5193 5196 5209 5239","Paid":"1358 1409 1426 1933 2773 2781 2972 2995 3400 3491 3542 3791 3936 4121 4939 5102","Practical":"1424 1442 1455 1619 1786 1845 2051 2062 2063 2106 2110 2143 2177 2195 2238 2263 2300 2302 2317 2333 2383 2414 2417 2486 2494 2497 2539 2595 2657 2673 2691 2719 2742 2770 2788 2790 2818 2820 2881 2894 2919 2943 2955 2982 2986 3027 3269 3307 3362 3366 3368 3371 3375 3394 3414 3436 3449 3499 3548 3557 3574 3581 3594 3595 3691 3712 3715 3716 3768 3782 3808 3822 3927 3940 3954 4010 4040 4176 4219 4241 4249 4253 4358 4375 4476 4574 4682 4872 4889 4902 5039"}},{"levels":{"Academic":"1165 1411 1426 1786 2023 2062 2071 2367 2402 2539 2592 2755 2772 2818 2919 2927 2941 2982 3073 3152 3178 3400 3439 3472 3476 3482 3485 3491 3492 3497 3511 3524 3542 3558 3636 3709 3716 3936 3948 3954 3972 3990 3998 4040 4041 4056 4130 4132 4141 4162 4191 4192 4213 4219 4282 4308 4325 4338 4348 4362 4363 4373 4375 4379 4387 4446 4451 4458 4495 4497 4500 4502 4508 4568 4685 4702 4753 4783 4822 4873 4883 4902 4939 4969 5005 5014 5018 5019 5090","Interested":"1165 1352 1358 1397 1411 1422 1426 1442 1449 1455 1531 1553 1567 1610 1619 1623 1626 1717 1786 1845 1927 2021 2063 2103 2143 2150 2248 2299 2304 2325 2330 2348 2414 2482 2539 2551 2587 2595 2649 2669 2691 2748 2770 2815 2854 2881 2894 2919 2941 3012 3073 3196 3220 3260 3270 3274 3307 3370 3371 3375 3376 3404 3407 3414 3419 3429 3430 3436 3442 3464 3469 3470 3472 3476 3482 3484 3485 3488 3492 3501 3504 3511 3519 3524 3542 3572 3573 3590 3594 3597 3605 3619 3641 3664 3684 3700 3707 3709 3716 3725 3727 3739 3749 3750 3759 3768 3799 3807 3808 3839 3850 3895 3913 3931 3936 3942 3948 3972 3990 3992 4007 4010 4033 4035 4040 4043 4048 4054 4104 4121 4122 4130 4141 4143 4162 4188 4191 4192 4206 4219 4241 4252 4274 4284 4292 4308 4329 4335 4363 4373 4375 4379 4387 4391 4405 4437 4446 4451 4476 4483 4486 4494 4500 4506 4508 4568 4574 4581 4649 4652 4685 4701 4702 4730 4734 4753 4767 4783 4811 4822 4872 4873 4876 4896 4902 4904 4924 4934 4938 4944 4969 4991 4994 4999 5005 5014 5018 5019 5051 5071 5089 5090 5105 5114 5136 5165 5193 5209 5240","Practical":"1442 1619 2770 3595 3749 4122 5209","Paid":"3808"}},{"levels":{"Paid":"190 2772 4500 5239","Interested":"190 614 877 1031 1073 1165 1346 1352 1358 1397 1403 1409 1416 1418 1422 1424 1442 1449 1455 1496 1531 1553 1567 1575 1610 1619 1620 1623 1624 1626 1631 1717 1761 1786 1845 1866 1927 1933 2021 2032 2044 2050 2051 2062 2069 2103 2105 2108 2110 2129 2143 2145 2150 2177 2188 2191 2225 2238 2248 2263 2280 2281 2290 2298 2299 2300 2302 2304 2317 2325 2330 2348 2379 2392 2413 2414 2417 2482 2486 2487 2494 2497 2506 2513 2539 2549 2551 2587 2595 2607 2649 2657 2669 2673 2691 2711 2742 2748 2755 2761 2770 2772 2781 2814 2815 2819 2854 2881 2894 2917 2919 2943 2957 2972 2986 2995 2998 3012 3029 3059 3073 3152 3161 3178 3196 3220 3260 3265 3270 3274 3295 3307 3326 3327 3359 3366 3368 3369 3370 3371 3375 3376 3384 3400 3404 3407 3409 3414 3419 3429 3430 3436 3439 3442 3449 3456 3461 3464 3469 3470 3472 3473 3476 3482 3485 3488 3491 3492 3499 3501 3502 3503 3504 3507 3512 3518 3519 3524 3526 3542 3548 3557 3572 3573 3574 3581 3586 3590 3592 3595 3596 3597 3605 3606 3610 3613 3617 3619 3628 3634 3636 3641 3643 3649 3652 3656 3657 3679 3684 3700 3704 3705 3707 3709 3710 3712 3716 3723 3724 3725 3727 3739 3748 3749 3750 3752 3759 3768 3777 3782 3788 3791 3795 3799 3800 3807 3808 3813 3817 3819 3826 3839 3853 3870 3871 3895 3913 3917 3918 3931 3932 3933 3936 3942 3948 3954 3972 3983 3990 3992 4003 4007 4010 4018 4019 4033 4035 4040 4043 4048 4054 4104 4111 4121 4122 4130 4132 4139 4141 4143 4162 4188 4192 4219 4241 4245 4252 4253 4256 4265 4271 4274 4284 4292 4305 4321 4329 4335 4338 4344 4348 4352 4363 4387 4389 4391 4405 4437 4443 4446 4451 4461 4476 4483 4486 4487 4494 4495 4500 4503 4506 4508 4530 4574 4581 4649 4652 4682 4685 4701 4702 4730 4734 4753 4760 4811 4812 4822 4827 4872 4873 4876 4886 4896 4899 4902 4904 4926 4934 4938 4939 4944 4969 4991 4994 4999 5016 5018 5019 5051 5071 5089 5096 5105 5114 5136 5154 5165 5193 5196 5239 5273","Practical":"908 1352 1358 1442 1575 1845 2050 2149 2177 2486 2773 2788 2986 3152 3307 3370 3371 3375 3436 3491 3542 3641 3724 3782 3791 4018 4139 4358 4682 4924","Academic":"1095 1619 2051 2129 2238 2248 2280 2289 2299 2673 2748 2818 2917 3482 3586 3656 3712 3788 3808 3817 3853 3936 4104 4111 4121 4143 4702 5016 5105"}},{"levels":{"Paid":"190 908 1409 1845 1933 2224 2748 2755 2917 3027 3035 3070 3178 3414 3572 3627 4122 4500 4574 4643 4767 4811 4811 5014 5016 5071 5102 5134","Interested":"603 614 1073 1165 1346 1352 1358 1397 1411 1416 1418 1422 1430 1442 1449 1455 1531 1553 1567 1575 1610 1619 1623 1624 1626 1717 1761 1786 1845 1927 1933 2021 2032 2034 2050 2103 2105 2108 2110 2143 2150 2160 2175 2191 2225 2238 2248 2290 2299 2304 2325 2327 2330 2333 2348 2379 2413 2414 2417 2418 2482 2486 2487 2494 2539 2549 2551 2587 2592 2595 2649 2669 2691 2713 2738 2748 2762 2769 2772 2781 2814 2815 2819 2820 2854 2882 2894 2917 2919 2943 2972 2986 2987 2998 3012 3029 3035 3073 3089 3161 3178 3196 3220 3260 3269 3270 3272 3274 3295 3307 3362 3364 3370 3371 3375 3376 3400 3404 3407 3409 3414 3417 3419 3429 3430 3436 3439 3442 3456 3461 3464 3469 3470 3472 3473 3476 3482 3484 3485 3488 3492 3494 3497 3499 3501 3504 3512 3518 3519 3522 3524 3542 3548 3572 3573 3581 3586 3590 3592 3594 3597 3602 3605 3606 3613 3619 3627 3634 3652 3656 3657 3664 3679 3684 3700 3705 3707 3708 3709 3712 3716 3724 3725 3727 3729 3739 3748 3749 3750 3752 3759 3768 3777 3782 3799 3807 3808 3813 3817 3828 3839 3850 3870 3871 3895 3913 3917 3925 3931 3936 3940 3942 3948 3972 3990 3992 3998 4003 4007 4010 4018 4033 4035 4040 4043 4044 4048 4057 4058 4104 4111 4118 4121 4122 4130 4132 4139 4140 4141 4143 4162 4174 4178 4191 4192 4206 4219 4241 4245 4252 4253 4265 4271 4274 4282 4292 4308 4324 4335 4352 4363 4389 4391 4404 4405 4424 4437 4443 4446 4451 4476 4483 4486 4487 4494 4500 4506 4508 4523 4530 4531 4574 4581 4598 4643 4649 4652 4682 4685 4701 4702 4730 4732 4734 4748 4753 4760 4811 4812 4822 4872 4873 4876 4896 4902 4904 4926 4934 4938 4944 4977 4991 4994 4999 5014 5016 5018 5019 5046 5051 5071 5090 5093 5105 5114 5130 5136 5137 5165 5172 5173 5193 5196 5201 5239 5240","Practical":"877 1026 1031 1095 1346 1442 1455 1565 1620 1626 1866 2143 2195 2333 2497 2549 2592 2593 2595 2669 2691 2713 2719 2742 2784 2788 2814 2815 2818 2987 2995 2998 3048 3362 3542 3549 3602 3657 3710 3712 3729 3759 3870 4010 4087 4118 4139 4140 4178 4405 4495 4523 4531 4649 4682 4685 4886 4924 4977 5051 5104 5105 5114 5153 5154 5239","Academic":"965 1358 1411 1416 1418 1422 1430 1496 1553 1567 1575 1610 1619 1623 1624 1631 1717 1761 2021 2029 2034 2049 2062 2103 2159 2160 2175 2238 2299 2316 2317 2383 2413 2418 2433 2482 2486 2506 2539 2673 2711 2738 2761 2770 2819 2854 2882 2894 3059 3102 3152 3196 3264 3269 3272 3295 3326 3327 3370 3407 3417 3439 3476 3482 3493 3494 3497 3504 3519 3527 3605 3652 3664 3704 3707 3709 3752 3768 3782 3813 3828 3910 3925 3931 3936 3940 3972 4007 4048 4056 4130 4174 4176 4233 4243 4265 4271 4274 4282 4324 4358 4389 4391 4404 4458 4461 4502 4530 4581 4590 4598 4652 4669 4702 4732 4812 4896 4926 4944 4962 4969 4984 5018 5046 5089 5090 5093 5130 5136 5137 5172 5173 5183"}},{"levels":{"Interested":"1409 1553 1567 1619 2110 2150 2248 2348 2379 2551 2669 2734 2761 2815 2854 2917 2919 2986 2995 2998 3407 3414 3429 3491 3524 3592 3634 3656 3700 3705 3707 3791 4048 4104 4111 4121 4249 4335 4530 4734 4811 5071 5136 5154 5239","Academic":"2917 3656","Practical":"2986 3362 4827","Paid":"3491 5239"}},{"levels":{"Practical":"219 1095 1309 1442 1620 1845 1927 2023 2063 2265 2290 2300 2304 2354 2414 2486 2551 2607 2691 2742 3368 3372 3404 3449 3461 3570 3595 3657 3700 3727 3748 3870 3927 3998 4003 4111 4122 4162 4219 4249 4282 4344 4379 4424 4451 4476 4494 4531 4652 4717 4735 4867 4940 4943 4989 5067 5069 5104 5105 5116","Interested":"603 1031 1309 1353 1358 1416 1422 1442 1449 1553 1567 1619 1626 1631 1761 1845 1866 1927 2049 2063 2069 2071 2103 2106 2129 2150 2180 2238 2265 2271 2289 2290 2298 2300 2302 2323 2325 2333 2354 2414 2418 2482 2486 2539 2551 2593 2595 2607 2649 2662 2669 2691 2738 2748 2755 2770 2815 2854 2941 2943 2957 2972 3012 3029 3073 3161 3260 3264 3265 3269 3270 3295 3326 3366 3368 3370 3371 3373 3375 3376 3404 3407 3409 3419 3421 3429 3430 3436 3449 3455 3464 3469 3472 3476 3482 3484 3499 3501 3504 3507 3519 3524 3526 3542 3558 3570 3572 3587 3595 3597 3602 3610 3617 3619 3628 3636 3640 3643 3654 3657 3664 3666 3684 3700 3705 3707 3708 3709 3710 3716 3725 3726 3727 3739 3748 3749 3750 3759 3768 3774 3788 3799 3822 3839 3856 3870 3913 3918 3931 3936 3948 3972 3976 4003 4010 4035 4040 4043 4048 4054 4104 4111 4121 4122 4130 4143 4162 4188 4191 4192 4219 4241 4249 4252 4256 4282 4284 4291 4292 4308 4321 4325 4335 4338 4344 4352 4363 4373 4375 4379 4387 4391 4408 4424 4437 4446 4451 4486 4495 4500 4506 4530 4531 4574 4652 4685 4692 4701 4712 4717 4730 4732 4735 4753 4762 4783 4822 4872 4873 4883 4886 4902 4904 4926 4934 4938 4944 4969 4989 5018 5019 5046 5051 5067 5073 5089 5090 5104 5105 5116 5136 5137 5154 5165 5209 5217","Academic":"1073 1358 1426 1619 1623 1624 1761 2044 2051 2071 2106 2108 2149 2150 2160 2177 2180 2191 2289 2299 2323 2333 2418 2494 2509 2587 2748 2919 2941 2986 3027 3370 3373 3374 3375 3376 3407 3417 3476 3482 3484 3485 3499 3504 3524 3557 3572 3596 3602 3619 3628 3634 3636 3640 3643 3651 3654 3691 3705 3709 3711 3739 3788 3822 3839 3932 3942 3948 3954 4041 4044 4054 4057 4104 4121 4192 4252 4284 4291 4308 4348 4373 4375 4437 4458 4486 4500 4506 4523 4574 4634 4734 4783 4822 4902 4904 4944 5019 5039 5073 5217","Paid":"1449 3270 3542 4649 4786"}},{"levels":{"Interested":"1031 1309 1353 1358 1416 1422 1442 1449 1553 1619 1626 1631 1761 1845 1866 1927 2049 2063 2069 2071 2103 2129 2150 2180 2238 2265 2289 2290 2298 2300 2302 2323 2325 2354 2414 2482 2486 2539 2551 2593 2595 2607 2649 2662 2669 2691 2738 2748 2755 2854 2943 2957 2972 3029 3073 3161 3260 3264 3265 3269 3270 3295 3326 3366 3368 3370 3371 3372 3373 3374 3375 3376 3404 3409 3419 3429 3430 3436 3449 3455 3464 3469 3472 3476 3482 3484 3497 3501 3504 3507 3519 3524 3526 3542 3558 3570 3572 3587 3595 3597 3602 3610 3619 3628 3636 3640 3643 3654 3664 3666 3684 3700 3705 3707 3710 3716 3725 3726 3727 3739 3748 3749 3750 3759 3768 3774 3788 3799 3822 3826 3839 3870 3913 3918 3927 3931 3936 3942 3948 3972 4003 4010 4035 4040 4043 4048 4054 4104 4111 4121 4130 4143 4162 4188 4191 4192 4219 4241 4249 4252 4256 4282 4284 4291 4292 4321 4325 4335 4344 4352 4363 4387 4391 4408 4437 4446 4451 4486 4495 4500 4506 4531 4574 4652 4685 4692 4712 4717 4732 4735 4753 4762 4783 4822 4872 4873 4883 4902 4904 4926 4934 4938 4944 4969 5018 5019 5051 5067 5089 5104 5105 5116 5136 5137 5154 5165 5209 5217","Academic":"1073 1358 1619 1623 1624 1761 2044 2051 2108 2150 2160 2180 2323 2494 2509 2748 2919 2941 3027 3270 3368 3373 3375 3404 3407 3482 3497 3557 3595 3634 3636 3640 3651 3691 3710 3711 3727 3788 3932 4104 4121 4282 4291 4344 4458 4506 4574 4783 4822 4904 5039 5217","Practical":"1095 1620 1927 2265 2290 2300 2304 2354 2414 2486 2551 2742 3035 3449 3461 3542 3700 3708 3748 3870 4003 4054 4111 4249 4476 4531 4652 4717 4867 4940 5067 5069 5104 5105 5116","Paid":"4649 4786"}},{"levels":{"Interested":"1031 1073 1358 1403 1409 1416 1422 1442 1449 1496 1553 1567 1619 1623 1626 1631 1761 1845 1866 1927 2063 2069 2071 2103 2150 2180 2238 2265 2271 2273 2289 2290 2298 2300 2323 2325 2333 2354 2413 2414 2418 2439 2482 2486 2487 2539 2551 2587 2592 2593 2595 2649 2662 2669 2734 2738 2748 2755 2770 2814 2815 2854 2917 2943 2955 2957 2972 2998 3012 3029 3073 3161 3260 3264 3270 3295 3326 3368 3370 3371 3372 3373 3376 3404 3409 3419 3421 3429 3430 3436 3452 3455 3464 3469 3472 3476 3482 3484 3497 3501 3503 3504 3507 3513 3518 3519 3524 3526 3535 3542 3570 3572 3587 3602 3610 3617 3619 3636 3637 3640 3643 3664 3666 3684 3700 3705 3707 3708 3712 3715 3716 3725 3726 3727 3739 3748 3749 3750 3759 3768 3774 3776 3788 3799 3800 3807 3819 3822 3826 3839 3847 3856 3864 3870 3910 3913 3918 3927 3931 3936 3942 3948 3972 3973 3976 3990 3998 4003 4010 4035 4040 4043 4048 4054 4065 4104 4109 4121 4130 4143 4162 4188 4191 4192 4219 4241 4245 4252 4256 4270 4284 4291 4292 4321 4325 4335 4338 4344 4352 4379 4387 4391 4408 4424 4437 4446 4451 4458 4486 4495 4500 4506 4523 4530 4531 4568 4574 4652 4685 4701 4712 4717 4730 4732 4735 4753 4762 4811 4867 4872 4873 4883 4902 4904 4926 4934 4940 4944 4969 5018 5019 5046 5051 5067 5089 5104 5105 5134 5136 5137 5154 5165 5209 5217 5240","Practical":"1095 1358 1496 1927 2063 2290 2304 2354 2414 2486 2551 2814 2955 3035 3372 3461 3600 3679 3700 3727 3748 3776 3788 3870 4019 4044 4054 4424 4523 4531 4924 5104 5105 5116","Academic":"1619 1620 1623 1624 1761 1845 2044 2108 2150 2160 2180 2323 2333 2418 2435 2439 2494 2509 2607 2748 2854 2916 2917 2919 2941 2987 3048 3373 3374 3375 3404 3482 3484 3513 3617 3619 3634 3640 3654 3691 3708 3710 3712 3750 3782 3819 3998 4003 4057 4065 4104 4121 4253 4270 4291 4506 4652 4712 4717 4904 5067 5217 5240","Paid":"2998 3421 3497 3932 4649 4786"}},{"levels":{"Interested":"1073 1422 1449 1553 1620 1626 1845 1866 1927 2069 2071 2150 2180 2265 2273 2289 2290 2323 2325 2354 2414 2482 2486 2539 2551 2593 2595 2649 2662 2669 2738 2748 2755 2772 2854 2943 3073 3260 3270 3295 3326 3371 3372 3373 3375 3376 3404 3409 3417 3419 3422 3429 3430 3436 3449 3464 3469 3472 3473 3476 3482 3484 3501 3519 3524 3526 3535 3542 3587 3602 3610 3619 3636 3643 3654 3664 3684 3700 3707 3710 3716 3725 3727 3749 3750 3759 3768 3774 3788 3799 3800 3819 3839 3847 3870 3913 3931 3936 3942 3948 3972 4003 4010 4019 4035 4048 4054 4057 4059 4065 4104 4121 4130 4143 4162 4192 4241 4245 4252 4284 4291 4292 4325 4335 4344 4352 4391 4408 4437 4446 4451 4486 4500 4506 4531 4574 4649 4652 4685 4712 4717 4722 4732 4735 4753 4762 4811 4872 4873 4883 4902 4904 4934 4938 5014 5019 5046 5051 5067 5096 5105 5136 5137 5154 5165 5209 5217 5273","Academic":"1095 1927 2323 2354 2435 3374 3482 3610 3617 3619 3707 3727 3983 4104 4143 4531 4649 4904 4940","Paid":"2325 2486 4786","Practical":"2551 3373 3404 3449 3570 3666 3700 3748 3788 4059 4252 4292 4717 4762 4867 5217 5273"}},{"levels":{"Interested":"1031 1073 1358 1422 1449 1553 1619 1620 1626 1761 1845 1866 1927 2021 2063 2069 2071 2150 2180 2238 2265 2289 2290 2323 2354 2414 2439 2482 2486 2539 2551 2593 2595 2649 2662 2669 2748 2755 2854 2943 2972 2998 3073 3260 3270 3295 3326 3370 3371 3372 3373 3374 3375 3376 3400 3404 3409 3417 3419 3421 3429 3430 3436 3449 3464 3469 3472 3476 3482 3501 3507 3513 3519 3524 3535 3542 3570 3572 3602 3619 3640 3643 3684 3700 3705 3707 3716 3725 3727 3749 3750 3759 3774 3788 3799 3800 3822 3839 3856 3913 3931 3936 3942 3948 3972 3983 4003 4010 4019 4035 4043 4048 4054 4104 4121 4130 4132 4143 4162 4188 4192 4219 4241 4249 4252 4256 4284 4292 4325 4335 4344 4363 4391 4408 4437 4446 4451 4486 4500 4506 4574 4652 4685 4712 4713 4732 4735 4753 4762 4786 4811 4872 4873 4883 4902 4904 4934 4938 4944 5018 5019 5051 5067 5105 5134 5136 5154 5165 5209","Academic":"1095 1927 2354 2919 2941 3482 4104 4904 5067","Paid":"2063 3421 4649","Practical":"2551 3373 3375 3570 3705 3727 3748 3788 3826 4732 4762 5136"}},{"levels":{"Interested":"614 1031 1309 1358 1403 1409 1416 1422 1449 1553 1567 1610 1619 1623 1626 1631 1717 1761 1845 1927 1995 2069 2103 2129 2143 2150 2180 2238 2262 2265 2290 2323 2325 2354 2414 2439 2482 2486 2539 2551 2593 2595 2649 2662 2669 2734 2738 2748 2755 2788 2814 2854 2894 2916 2917 2943 2972 2986 2998 3073 3152 3161 3260 3265 3269 3295 3326 3359 3371 3372 3373 3375 3376 3404 3409 3417 3419 3421 3422 3429 3430 3436 3449 3464 3469 3470 3472 3476 3482 3484 3491 3492 3494 3497 3501 3513 3519 3524 3535 3542 3550 3558 3572 3574 3586 3587 3597 3600 3602 3627 3628 3629 3634 3636 3640 3643 3649 3654 3656 3679 3684 3700 3705 3707 3712 3715 3716 3725 3727 3749 3750 3752 3759 3774 3776 3778 3788 3791 3795 3799 3800 3822 3839 3870 3913 3918 3931 3936 3942 3948 3970 3972 3973 4003 4010 4019 4035 4040 4043 4048 4054 4057 4059 4065 4109 4121 4125 4130 4143 4162 4188 4191 4192 4219 4241 4245 4252 4284 4292 4321 4325 4335 4344 4348 4352 4379 4391 4405 4408 4424 4437 4446 4451 4486 4495 4500 4506 4508 4530 4531 4552 4568 4574 4581 4584 4652 4685 4692 4712 4713 4717 4735 4753 4762 4811 4867 4872 4873 4883 4899 4902 4904 4934 4938 4944 4969 5018 5019 5046 5051 5061 5067 5089 5090 5096 5102 5104 5105 5136 5154 5165 5209 5217 5240 5273","Academic":"908 1073 1403 1430 1496 1610 1624 1717 1845 1866 1927 2044 2103 2108 2143 2160 2180 2238 2323 2325 2354 2439 2662 2738 2748 3260 3265 3270 3371 3372 3373 3374 3400 3404 3417 3421 3473 3482 3494 3513 3557 3573 3619 3640 3656 3666 3707 3712 3727 3739 3752 3782 3788 3791 3795 3983 4065 4087 4121 4125 4253 4348 4352 4391 4405 4458 4486 4523 4634 4712 4732 4747 4904 4934 5061 5096 5102","Practical":"1095 1619 1620 2290 2435 2551 2595 2691 2734 2772 2781 2814 2941 3035 3375 3628 3679 3705 3715 3774 3776 3870 3996 4059 4143 4344 4649 4713 4735 4762 4899 4940 5067 5104 5105 5136 5273","Paid":"2392 3497 3524 3600 3627 3970 4786"}},{"levels":{"Interested":"1031 1073 1358 1403 1416 1422 1449 1553 1567 1619 1626 1631 1761 1845 1866 1927 2063 2069 2129 2150 2180 2238 2265 2289 2290 2323 2325 2354 2413 2414 2439 2482 2486 2539 2551 2593 2595 2649 2662 2669 2738 2748 2755 2854 2916 2943 2972 2998 3073 3260 3270 3274 3295 3326 3368 3371 3372 3373 3374 3375 3376 3400 3404 3407 3409 3417 3419 3421 3429 3430 3436 3464 3469 3472 3476 3482 3491 3501 3513 3519 3524 3535 3542 3570 3572 3587 3602 3610 3619 3640 3643 3664 3666 3684 3705 3707 3712 3716 3725 3727 3748 3749 3750 3759 3774 3776 3788 3791 3799 3800 3839 3847 3856 3870 3913 3931 3936 3942 3948 3954 3972 3976 4003 4010 4019 4035 4043 4048 4054 4065 4111 4121 4130 4143 4162 4191 4192 4241 4249 4252 4256 4282 4284 4292 4325 4335 4363 4391 4408 4424 4437 4446 4451 4458 4486 4495 4500 4506 4531 4574 4652 4685 4712 4730 4732 4753 4762 4811 4867 4872 4873 4883 4902 4904 4934 4938 4944 5018 5019 5046 5051 5067 5089 5096 5105 5136 5137 5154 5165 5209 5217","Academic":"1095 1358 1620 1845 2044 2160 2180 2323 2354 2435 2748 3373 3482 3513 3600 3640 3656 3748 3983 4065 4143 4531 4634 4899 4904 5096 5104","Practical":"1927 2392 2486 2551 3375 3679 3705 3727 3788 3870 4249 4451 4762 5105 5136","Paid":"2063 2919 3421 4649 4732 4786"}},{"levels":{"Practical":"603 1409 1619 2149 2180 2289 2330 2354 2435 2439 2486 2513 2551 2607 2662 2773 2814 2815 2818 2917 2955 2998 3035 3073 3260 3265 3270 3384 3404 3407 3417 3464 3491 3497 3587 3634 3643 3705 3725 3727 3729 3750 3774 3788 3819 3822 3826 3853 3870 3918 3932 3954 3976 3996 4035 4044 4054 4057 4109 4118 4121 4140 4238 4249 4344 4387 4405 4424 4437 4649 4713 4722 4731 4762 4786 4873 4899 4922 4924 4938 4939 4940 5089 5096 5104 5105 5116 5136 5217 5273","Interested":"603 614 1397 1409 1422 1449 1553 1619 1626 1631 1845 1927 2063 2069 2110 2129 2149 2180 2238 2262 2265 2289 2290 2354 2414 2482 2486 2513 2539 2551 2595 2607 2649 2662 2669 2691 2734 2738 2748 2755 2814 2815 2854 2917 2941 2998 3073 3260 3269 3270 3358 3372 3373 3375 3376 3400 3404 3407 3417 3419 3421 3422 3429 3430 3436 3449 3464 3472 3476 3482 3491 3497 3501 3503 3504 3519 3524 3535 3542 3558 3572 3586 3587 3602 3610 3619 3627 3634 3637 3643 3656 3684 3705 3707 3708 3716 3725 3727 3729 3749 3750 3752 3759 3774 3776 3788 3791 3795 3799 3819 3828 3839 3853 3864 3870 3913 3918 3927 3931 3936 3942 3948 3954 3972 3973 3998 4010 4035 4043 4048 4054 4056 4057 4121 4125 4140 4143 4162 4192 4219 4241 4245 4249 4252 4274 4292 4321 4325 4335 4344 4362 4391 4405 4408 4424 4437 4446 4451 4458 4486 4500 4503 4506 4531 4552 4568 4574 4584 4652 4685 4702 4712 4713 4722 4731 4732 4745 4746 4753 4762 4811 4867 4872 4873 4899 4902 4904 4914 4922 4934 4938 4939 4944 4962 4969 5018 5019 5046 5051 5061 5067 5089 5105 5114 5116 5136 5137 5154 5165 5201 5217","Paid":"2063 2919 3269 3375 3421 3472 3600 3627 3628 3679 3707 3776 3795 3800 3828 4056 4104 4143 4245 4552 4702 4732 4735 4962 5209","Academic":"2595 2916 3373 3374 3376 3449 3482 3501 3513 3549 3602 3617 3619 3629 3640 3648 3656 3708 3709 3752 3791 3998 4019 4252 4256 4451 4486 4503 4531 4574 4584 4712 4745 4747 4867 4904 4914 4926 5069"}},{"levels":{"Interested":"1031 1073 1309 1358 1422 1449 1553 1567 1619 1623 1626 1631 1845 1866 1927 2063 2069 2103 2110 2150 2180 2238 2265 2271 2289 2290 2300 2323 2325 2330 2333 2354 2413 2414 2482 2486 2539 2551 2587 2593 2595 2607 2649 2662 2669 2691 2748 2755 2815 2854 2943 2972 3029 3059 3073 3260 3265 3269 3270 3295 3326 3368 3370 3372 3373 3374 3375 3376 3404 3407 3409 3417 3419 3421 3429 3430 3436 3455 3464 3469 3472 3476 3482 3501 3513 3519 3524 3526 3542 3572 3602 3619 3628 3636 3640 3643 3654 3684 3705 3707 3710 3716 3725 3727 3748 3749 3750 3759 3774 3788 3799 3839 3847 3856 3870 3913 3918 3927 3936 3942 3948 3972 4003 4010 4035 4043 4048 4054 4111 4121 4143 4162 4188 4191 4192 4241 4249 4252 4256 4284 4291 4292 4321 4325 4335 4344 4379 4391 4408 4424 4437 4446 4451 4486 4500 4506 4531 4574 4652 4685 4692 4712 4732 4735 4753 4762 4811 4812 4867 4872 4873 4883 4902 4904 4934 4938 4942 4944 5014 5018 5019 5046 5051 5067 5105 5136 5154 5165 5193 5209 5217","Academic":"1095 1358 1416 1553 1610 1620 1623 1624 1761 2044 2103 2108 2150 2160 2180 2238 2298 2299 2325 2333 2435 2494 2607 2748 2755 2773 2916 2919 2941 3073 3265 3270 3370 3371 3373 3375 3407 3409 3470 3482 3497 3512 3513 3557 3572 3596 3597 3617 3636 3640 3651 3788 3822 3839 3913 3932 3948 4003 4054 4104 4121 4437 4458 4476 4486 4495 4574 4732 4734 4812 4899 4904 5193 5217","Practical":"1309 1845 1927 2023 2062 2300 2323 2330 2354 2486 2551 2986 3035 3368 3372 3542 3574 3708 3727 3748 3870 4249 4344 4424 4531 4634 4652 4762 4940 5067 5104 5105","Paid":"2063 3421 4649 4786"}},{"levels":{"Interested":"1031 1073 1358 1422 1449 1553 1567 1619 1626 1845 1866 1927 2150 2180 2238 2265 2290 2304 2323 2354 2414 2482 2486 2539 2551 2593 2595 2649 2662 2669 2748 2755 2854 2919 2943 2972 3073 3260 3295 3326 3372 3373 3375 3376 3404 3419 3421 3429 3430 3436 3469 3472 3476 3482 3519 3524 3542 3572 3619 3640 3684 3707 3716 3725 3727 3749 3750 3759 3774 3788 3799 3839 3870 3913 3927 3932 3936 3942 3948 3972 4003 4010 4035 4043 4048 4054 4121 4143 4162 4192 4241 4252 4256 4292 4325 4335 4391 4408 4424 4437 4446 4451 4486 4500 4506 4574 4649 4652 4685 4712 4717 4732 4753 4762 4811 4872 4873 4902 4904 4934 4938 4944 5019 5051 5067 5105 5136 5154 5165 5217","Practical":"1095 1927 2354 2551 3727 5105","Academic":"1358 1620 1623 2044 2108 2180 2323 3373 3375 3482 3640 3654 3788 3870 3932 4717 4904 5104 5217","Paid":"4786"}},{"levels":{"Interested":"1073 1358 1422 1449 1553 1619 1620 1626 1845 1866 1927 2063 2069 2150 2180 2265 2289 2323 2354 2414 2482 2513 2539 2551 2593 2595 2649 2662 2669 2748 2755 2854 2943 2972 3073 3260 3269 3295 3326 3372 3373 3374 3375 3376 3404 3419 3421 3429 3430 3436 3469 3472 3476 3482 3501 3519 3524 3542 3572 3617 3619 3640 3684 3707 3716 3725 3727 3749 3750 3759 3774 3788 3799 3800 3822 3839 3913 3936 3942 3948 3972 4010 4035 4043 4048 4054 4121 4143 4162 4192 4241 4249 4252 4284 4292 4321 4325 4335 4391 4408 4424 4437 4446 4451 4486 4500 4506 4574 4652 4685 4712 4732 4753 4762 4811 4872 4873 4902 4904 4934 4938 4944 5019 5046 5051 5067 5105 5136 5154 5165 5217","Academic":"1095 1845 2323 2354 2486 3373 3482 3788 4904","Practical":"1927 2919 3727 3826 4786","Paid":"2063 3421 4649 4732"}},{"levels":{"Interested":"190 1422 1449 1553 1619 1626 1845 1927 2044 2150 2180 2262 2265 2290 2323 2325 2354 2414 2439 2482 2486 2539 2551 2595 2649 2662 2669 2738 2748 2755 2854 2916 2917 2986 3073 3152 3260 3270 3372 3373 3374 3375 3376 3404 3419 3421 3422 3429 3430 3436 3464 3469 3472 3476 3482 3491 3501 3504 3513 3518 3519 3524 3535 3542 3572 3592 3600 3602 3610 3613 3619 3628 3634 3637 3640 3649 3654 3656 3679 3684 3707 3710 3716 3724 3725 3727 3729 3749 3750 3752 3759 3774 3776 3778 3782 3788 3791 3795 3799 3819 3839 3870 3913 3918 3936 3942 3948 3972 4010 4035 4043 4048 4054 4057 4059 4111 4121 4143 4162 4192 4241 4245 4249 4252 4274 4292 4321 4325 4335 4344 4352 4362 4363 4391 4408 4424 4437 4446 4451 4486 4495 4500 4503 4506 4531 4552 4574 4584 4649 4652 4685 4712 4713 4717 4732 4734 4735 4745 4746 4753 4762 4786 4811 4872 4873 4899 4902 4904 4934 4938 4944 5018 5019 5046 5051 5067 5096 5105 5136 5154 5165 5217 5273","Academic":"2323 2354 2435 2738 2916 3178 3270 3373 3374 3422 3436 3476 3482 3619 3634 3637 3654 3666 3724 3752 3782 3791 3822 3870 4059 4121 4344 4584 4712 4713 4745 4904 4934 5067 5217","Paid":"2439 2919 3375 3513 3600 3628 3649 3656 3679 3707 3776 3788 3795 4104 4552 4899","Practical":"2551 2662 3265 3359 3371 3404 3421 3472 3491 3497 3629 3648 3705 3727 3729 3750 3759 3774 3800 3918 3996 4019 4035 4054 4143 4732 4762 5089 5273"}},{"levels":{"Academic":"190 908 1353 1416 1430 1496 1553 1575 1623 1624 1717 1761 1866 1927 2044 2103 2105 2145 2150 2160 2175 2191 2273 2280 2298 2323 2325 2354 2379 2402 2433 2435 2506 2539 2592 2649 2662 2711 2738 2748 2773 2894 2927 2941 2986 2995 3014 3178 3260 3359 3371 3373 3374 3384 3400 3404 3407 3417 3439 3464 3473 3476 3481 3482 3504 3519 3557 3558 3572 3581 3606 3619 3634 3636 3637 3640 3649 3654 3684 3707 3716 3725 3726 3752 3777 3778 3782 3788 3791 3795 3799 3800 3813 3822 3910 3933 3948 3983 3998 4054 4059 4065 4104 4121 4125 4130 4245 4271 4348 4391 4405 4458 4494 4500 4523 4552 4568 4574 4634 4712 4713 4732 4745 4786 4934 4939 4969 5016 5039 5061 5096 5102 5240","Interested":"190 614 1031 1073 1309 1353 1358 1397 1403 1422 1449 1553 1567 1619 1626 1631 1717 1761 1786 1845 1927 1995 2032 2069 2103 2105 2110 2129 2143 2145 2150 2175 2177 2180 2224 2238 2265 2273 2280 2290 2323 2325 2348 2354 2379 2413 2414 2433 2439 2482 2486 2487 2494 2497 2506 2513 2539 2551 2587 2592 2593 2595 2649 2662 2669 2734 2738 2747 2748 2755 2772 2788 2814 2815 2820 2854 2894 2916 2917 2927 2941 2943 2972 2986 3012 3014 3059 3073 3089 3152 3178 3260 3264 3265 3270 3295 3326 3359 3369 3370 3371 3372 3373 3374 3375 3376 3404 3407 3409 3417 3419 3421 3422 3429 3430 3436 3449 3455 3464 3469 3470 3472 3476 3482 3484 3485 3488 3491 3492 3497 3501 3504 3513 3519 3524 3542 3548 3550 3558 3572 3573 3574 3581 3586 3587 3595 3597 3600 3602 3610 3613 3617 3619 3627 3628 3634 3636 3637 3640 3643 3649 3654 3656 3664 3666 3679 3684 3707 3712 3715 3716 3724 3725 3726 3727 3739 3748 3749 3750 3752 3759 3774 3777 3778 3782 3788 3791 3795 3799 3800 3807 3819 3839 3847 3853 3864 3870 3871 3913 3918 3927 3933 3936 3940 3942 3948 3954 3970 3972 3990 3998 4003 4010 4035 4043 4048 4054 4059 4065 4104 4111 4121 4125 4130 4132 4143 4162 4188 4192 4219 4241 4245 4249 4252 4253 4271 4274 4284 4292 4321 4325 4335 4344 4348 4352 4362 4363 4379 4391 4405 4408 4424 4437 4446 4451 4461 4486 4500 4503 4506 4508 4530 4531 4552 4574 4584 4652 4676 4685 4692 4712 4713 4717 4732 4734 4745 4753 4762 4786 4811 4872 4873 4876 4883 4886 4899 4902 4904 4924 4934 4938 4939 4944 4991 4999 5014 5016 5018 5019 5039 5046 5051 5061 5067 5089 5090 5096 5102 5105 5136 5154 5165 5201 5217 5240 5273","Practical":"1095 1352 1403 1409 1619 1620 1626 1845 2143 2238 2290 2330 2392 2439 2494 2551 2595 2781 2917 3035 3270 3375 3421 3472 3485 3513 3542 3595 3597 3602 3629 3656 3705 3712 3715 3727 3750 3759 3774 3776 3870 3940 3996 4010 4035 4087 4143 4253 4344 4358 4424 4461 4531 4649 4652 4735 4899 4924 4940 5089 5273","Paid":"2317 2772 3491 3497 3524 3596 3600 3627 3628 3679 3913 3970 4508 4676"}},{"levels":{"Academic":"603 1353 1403 1619 2023 2044 2051 2108 2180 2238 2439 2509 2916 3260 3265 3359 3373 3374 3419 3476 3482 3485 3504 3513 3592 3610 3617 3619 3628 3629 3640 3651 3654 3684 3707 3710 3712 3739 3776 3942 3970 3983 4003 4065 4256 4291 4424 4486 4495 4523 4531 4692 4693 4712 4717 4886 4904 4914 4940 5069 5114 5217","Interested":"603 1031 1346 1358 1403 1422 1449 1496 1553 1619 1620 1626 1631 1761 1845 1866 1927 2021 2063 2150 2159 2180 2238 2262 2265 2289 2290 2323 2330 2354 2413 2414 2482 2486 2513 2539 2551 2593 2595 2649 2662 2669 2738 2748 2755 2770 2814 2815 2854 2941 2943 2955 2957 2972 2998 3012 3027 3029 3073 3260 3264 3270 3295 3326 3327 3368 3370 3372 3373 3374 3375 3376 3400 3404 3407 3409 3417 3419 3421 3422 3429 3430 3436 3449 3464 3469 3470 3472 3476 3482 3491 3501 3503 3504 3513 3519 3524 3526 3542 3558 3570 3572 3573 3586 3587 3602 3610 3619 3628 3634 3636 3637 3640 3643 3664 3684 3705 3707 3708 3709 3712 3716 3725 3727 3739 3748 3749 3750 3752 3759 3774 3776 3782 3788 3799 3800 3819 3822 3828 3839 3864 3870 3913 3917 3918 3927 3936 3942 3948 3972 3973 3976 3990 3998 4003 4010 4033 4035 4043 4044 4048 4054 4057 4065 4104 4121 4123 4125 4132 4143 4162 4191 4192 4219 4241 4249 4252 4274 4284 4291 4292 4313 4321 4325 4335 4352 4389 4391 4408 4424 4437 4446 4451 4458 4476 4486 4495 4500 4503 4506 4523 4531 4552 4574 4652 4685 4692 4702 4712 4713 4722 4732 4745 4753 4762 4786 4811 4867 4872 4873 4883 4899 4902 4904 4914 4924 4934 4938 4944 4969 4989 5018 5019 5051 5067 5096 5104 5105 5114 5136 5137 5154 5165 5209 5217","Practical":"1073 1095 1346 1358 1409 1416 1761 1845 1927 2289 2290 2304 2323 2354 2435 2486 2494 2539 2551 2748 2773 2814 2941 2955 2986 3012 3269 3372 3375 3376 3384 3407 3409 3464 3491 3570 3602 3606 3634 3643 3648 3656 3679 3705 3708 3716 3727 3774 3782 3788 3799 3822 3826 3853 3870 3917 3918 3932 3940 4019 4033 4044 4054 4109 4121 4143 4249 4252 4253 4313 4389 4437 4568 4649 4702 4713 4722 4731 4762 4786 4873 4899 4938 4989 5067 5089 5102 5104 5165 5273","Paid":"2063 2330 2392 2513 2919 3035 3270 3404 3421 3549 3600 3828 3998 4057 4574 4732 4735 4745 5105"}},{"levels":{"Interested":"1031 1358 1422 1449 1553 1619 1620 1626 1761 1845 1866 1927 2021 2063 2069 2071 2180 2238 2262 2265 2289 2290 2323 2354 2413 2414 2482 2486 2513 2539 2551 2593 2595 2649 2662 2669 2738 2748 2755 2854 2916 2943 2972 3029 3073 3178 3260 3265 3270 3295 3326 3366 3368 3370 3372 3373 3374 3375 3376 3404 3409 3417 3419 3421 3429 3430 3436 3464 3469 3472 3476 3482 3497 3501 3513 3519 3524 3535 3542 3570 3572 3587 3590 3597 3602 3605 3610 3634 3636 3637 3640 3654 3666 3684 3700 3705 3707 3708 3712 3716 3725 3727 3739 3749 3750 3759 3774 3776 3782 3788 3799 3800 3813 3822 3828 3839 3870 3913 3918 3925 3942 3948 3972 3976 3990 4003 4010 4035 4043 4048 4054 4056 4065 4104 4121 4125 4132 4143 4162 4191 4192 4241 4252 4284 4291 4292 4321 4335 4391 4424 4437 4446 4451 4486 4494 4495 4500 4503 4506 4531 4552 4574 4581 4584 4652 4685 4712 4713 4722 4732 4746 4753 4762 4811 4867 4872 4873 4899 4902 4904 4934 4938 4944 5019 5046 5051 5067 5096 5104 5105 5114 5136 5154 5165 5193 5196 5201 5209 5217","Academic":"1073 1845 2044 2108 2180 2323 2435 2439 2509 2773 3359 3373 3374 3404 3482 3513 3617 3619 3629 3637 3640 3651 3654 3684 3750 3774 3776 3795 3800 3828 3853 3870 3932 3983 3998 4019 4057 4059 4065 4104 4143 4291 4899 4904 5114 5217","Practical":"1095 1352 1358 1409 1761 1927 2071 2354 2392 2414 2486 2513 2551 2814 3372 3375 3491 3602 3634 3648 3705 3727 3739 3782 3788 3807 3826 3918 3996 4503 4531 4649 4652 4713 4735 4762 4786 4873 4940 5096 5104 5105 5136 5273","Paid":"2063 2919 3421 4574 4732 4745"}},{"levels":{"Interested":"603 1031 1073 1358 1416 1422 1449 1553 1567 1619 1620 1623 1626 1761 1845 1866 1927 2021 2063 2069 2180 2262 2265 2290 2323 2325 2354 2413 2414 2482 2486 2513 2539 2551 2593 2595 2649 2662 2669 2738 2748 2755 2788 2815 2854 2916 2972 2998 3029 3073 3152 3178 3260 3265 3270 3295 3317 3326 3366 3370 3372 3373 3374 3375 3376 3404 3409 3417 3419 3421 3422 3429 3430 3436 3464 3469 3470 3472 3476 3482 3491 3494 3497 3501 3504 3513 3519 3524 3542 3572 3587 3590 3597 3600 3602 3605 3610 3628 3629 3634 3636 3640 3649 3654 3656 3664 3679 3684 3700 3705 3707 3712 3716 3725 3727 3739 3749 3750 3752 3759 3768 3774 3776 3788 3791 3795 3799 3800 3807 3813 3822 3828 3839 3870 3913 3918 3925 3936 3942 3948 3970 3972 3973 3990 3998 4003 4010 4035 4040 4043 4048 4054 4059 4065 4111 4121 4125 4132 4139 4143 4162 4192 4219 4241 4252 4274 4284 4292 4308 4335 4344 4362 4391 4437 4446 4451 4458 4486 4500 4503 4506 4531 4574 4581 4584 4652 4685 4692 4712 4713 4717 4732 4746 4753 4762 4786 4811 4867 4872 4873 4899 4902 4904 4934 4938 4942 4944 4962 4999 5018 5019 5046 5051 5067 5096 5105 5114 5134 5136 5154 5165 5193 5196 5217 5273","Academic":"1095 2129 2160 2280 2323 2402 2413 2439 3035 3260 3359 3372 3374 3422 3476 3482 3513 3518 3619 3637 3640 3654 3700 3750 3800 3826 3870 3917 3925 3970 3983 4019 4054 4057 4308 4344 4552 4584 4712 4747 4904 4999 5100 5217","Practical":"1358 1416 1927 2435 2486 2513 2549 2595 2734 2943 3265 3375 3404 3464 3472 3491 3497 3504 3570 3602 3617 3628 3634 3648 3705 3727 3739 3752 3776 3788 3791 3822 3828 3918 3996 3998 4058 4059 4143 4162 4238 4494 4500 4503 4634 4649 4713 4717 4934 4938 4940 5104 5105 5116 5273","Paid":"2044 2063 2392 2551 2919 3270 3373 3421 3600 3649 3656 3679 3707 3774 3795 4104 4121 4139 4574 4581 4732 4735 4745 4899 4962"}},{"levels":{"Interested":"1031 1358 1416 1422 1449 1553 1619 1620 1623 1626 1631 1761 1845 1866 1927 2021 2049 2063 2069 2145 2149 2180 2262 2265 2273 2290 2323 2325 2354 2413 2414 2482 2486 2513 2539 2551 2593 2595 2649 2662 2669 2734 2748 2755 2770 2788 2815 2854 2894 2917 2943 2955 2972 2987 2998 3029 3073 3260 3265 3270 3295 3317 3326 3366 3372 3373 3374 3375 3376 3404 3407 3409 3417 3419 3421 3422 3429 3430 3436 3464 3469 3472 3476 3482 3491 3497 3501 3513 3519 3524 3535 3542 3572 3587 3590 3597 3602 3605 3613 3628 3634 3636 3640 3643 3649 3654 3656 3664 3666 3679 3684 3700 3705 3707 3710 3716 3727 3729 3739 3748 3749 3750 3752 3759 3768 3774 3776 3788 3791 3795 3799 3807 3813 3822 3839 3870 3913 3936 3942 3948 3970 3972 3976 4003 4010 4035 4043 4048 4054 4056 4059 4065 4104 4111 4121 4132 4143 4162 4192 4241 4252 4274 4284 4292 4308 4335 4344 4362 4391 4437 4446 4451 4476 4486 4494 4500 4502 4503 4506 4508 4531 4552 4574 4581 4652 4685 4712 4713 4717 4722 4732 4735 4745 4746 4753 4762 4767 4811 4872 4873 4899 4902 4904 4934 4938 4944 4962 5018 5019 5046 5051 5067 5089 5096 5104 5105 5114 5136 5137 5154 5165 5193 5196 5217 5273","Academic":"1073 1353 1496 1567 1623 1761 1927 2021 2129 2149 2262 2265 2280 2323 2325 2773 2916 2917 3027 3260 3265 3270 3374 3376 3404 3422 3482 3518 3613 3617 3619 3637 3640 3654 3700 3826 3850 3925 3983 4003 4019 4048 4054 4057 4065 4104 4143 4162 4253 4291 4308 4523 4531 4552 4584 4645 4712 4717 4732 4745 4904 4926 5114 5217","Practical":"1095 1309 1352 1358 1416 2063 2145 2180 2354 2392 2414 2435 2486 2513 2595 2987 3359 3362 3372 3375 3491 3497 3549 3570 3572 3587 3629 3636 3705 3727 3729 3739 3750 3752 3759 3791 3822 3870 3918 3927 3996 4018 4058 4059 4121 4284 4344 4476 4486 4494 4500 4574 4634 4649 4652 4713 4722 4762 4867 4940 5018 5067 5096 5104 5105 5116 5273","Paid":"2044 2439 2551 2919 3373 3421 3513 3600 3628 3648 3649 3656 3679 3707 3774 3776 3788 3795 3800 3828 3970 4581 4786 4899 4934 4962"}},{"levels":{"Interested":"1073 1358 1422 1449 1553 1567 1619 1623 1626 1631 1761 1845 1866 1927 2021 2063 2069 2180 2262 2265 2290 2323 2325 2354 2413 2414 2482 2486 2539 2551 2593 2595 2649 2662 2669 2734 2748 2755 2788 2815 2854 2916 2917 2943 3008 3029 3073 3260 3265 3270 3295 3326 3372 3373 3374 3375 3376 3404 3407 3417 3419 3421 3422 3429 3430 3436 3464 3469 3472 3476 3482 3485 3491 3497 3501 3513 3519 3524 3535 3542 3558 3572 3587 3590 3597 3600 3602 3605 3613 3628 3634 3636 3637 3640 3649 3656 3679 3684 3700 3705 3707 3716 3725 3727 3729 3739 3749 3750 3752 3759 3774 3776 3788 3791 3795 3799 3813 3822 3839 3870 3913 3925 3932 3936 3942 3948 3972 3998 4003 4010 4035 4043 4048 4054 4059 4065 4121 4132 4143 4162 4188 4192 4241 4245 4252 4284 4292 4308 4335 4344 4362 4379 4391 4437 4446 4451 4486 4494 4500 4502 4503 4506 4508 4531 4552 4574 4581 4649 4652 4685 4712 4713 4722 4732 4745 4746 4753 4762 4811 4867 4872 4873 4883 4899 4902 4904 4934 4938 4944 4969 4999 5019 5046 5051 5067 5089 5096 5104 5105 5114 5134 5136 5154 5165 5193 5196 5217","Academic":"1095 1496 1620 1845 2021 2129 2160 2280 2354 2402 2413 2747 2917 3008 3372 3374 3376 3422 3482 3518 3574 3613 3619 3640 3651 3654 3666 3788 3819 3850 3917 3970 3983 3998 4019 4054 4057 4065 4104 4162 4308 4379 4552 4584 4645 4712 4745 4747 4786 4883 4904 4934 5096 5114","Practical":"1358 2435 2486 2551 2595 2669 3035 3110 3359 3366 3368 3404 3461 3472 3491 3570 3572 3629 3636 3637 3649 3705 3727 3750 3759 3791 3822 3864 3870 3996 4035 4058 4059 4121 4132 4188 4192 4284 4494 4500 4634 4649 4722 4732 4746 4940 5067 5104 5136 5217 5273","Paid":"2044 2392 2439 2919 3260 3270 3373 3421 3513 3600 3628 3648 3656 3679 3707 3729 3774 3776 3795 3800 4143 4581 4735 4899 5105"}},{"levels":{"Interested":"1031 1309 1358 1422 1449 1553 1567 1619 1620 1626 1761 1845 1866 1927 2063 2069 2150 2180 2238 2262 2265 2280 2289 2290 2300 2304 2323 2325 2354 2414 2482 2486 2539 2551 2592 2593 2595 2649 2662 2669 2748 2755 2814 2815 2854 2943 2957 2972 2998 3029 3073 3260 3270 3295 3326 3370 3371 3372 3373 3374 3375 3376 3404 3409 3419 3421 3429 3430 3436 3449 3464 3469 3472 3476 3482 3491 3497 3501 3519 3524 3526 3542 3572 3587 3590 3597 3605 3617 3619 3636 3640 3654 3684 3700 3705 3707 3716 3725 3727 3730 3739 3748 3749 3750 3759 3774 3788 3799 3813 3839 3864 3870 3913 3925 3927 3936 3942 3948 3972 3973 4003 4010 4019 4035 4043 4048 4054 4104 4111 4121 4132 4143 4162 4192 4241 4249 4252 4256 4291 4292 4308 4335 4344 4363 4391 4437 4446 4451 4458 4486 4494 4500 4506 4531 4552 4574 4581 4584 4652 4685 4692 4712 4717 4732 4753 4760 4762 4811 4872 4873 4902 4904 4934 4938 4944 5014 5019 5051 5067 5104 5105 5136 5154 5165 5193 5196 5217","Academic":"1073 1095 1358 1761 2044 2063 2108 2180 2333 3373 3375 3482 3617 3634 3640 3651 3654 3739 3788 4003 4253 4291 4494 4523 4574 4712 4747 4904 5217","Practical":"1927 2323 2354 2551 2742 2814 3035 3372 3404 3461 3700 3727 3870 4249 4358 5014 5104 5105","Paid":"3932 4649 4786"}},{"levels":{"Practical":"603 1095 1309 1346 1352 1353 1409 1416 1449 1567 1761 1845 1927 2145 2180 2188 2265 2280 2289 2304 2317 2323 2354 2414 2435 2486 2509 2513 2549 2593 2595 2662 2669 2691 2734 2742 2748 2814 2815 2854 2894 2917 2941 2955 2986 2987 2998 3035 3073 3260 3269 3327 3359 3362 3366 3368 3370 3371 3372 3404 3407 3409 3461 3464 3476 3485 3491 3493 3497 3503 3504 3518 3519 3542 3549 3570 3572 3581 3587 3590 3595 3596 3627 3629 3634 3636 3637 3666 3705 3709 3727 3739 3748 3750 3752 3759 3791 3807 3822 3826 3853 3864 3870 3913 3918 3927 3976 3996 3998 4003 4007 4010 4018 4035 4040 4044 4054 4058 4059 4109 4111 4118 4162 4188 4219 4253 4274 4284 4313 4344 4358 4363 4387 4408 4424 4494 4500 4503 4523 4531 4574 4604 4634 4652 4682 4702 4713 4717 4722 4746 4762 4767 4811 4811 4827 4873 4883 4922 4924 4938 4939 4940 4944 5014 5018 5039 5102 5104 5105 5114 5116 5165 5201 5209 5217 5273","Interested":"603 614 908 1031 1346 1358 1403 1416 1422 1449 1455 1553 1610 1619 1623 1626 1631 1761 1845 1927 2021 2023 2049 2063 2069 2145 2149 2159 2180 2238 2262 2265 2273 2280 2289 2290 2323 2325 2348 2354 2413 2414 2482 2486 2509 2513 2539 2549 2551 2595 2649 2662 2669 2691 2734 2738 2747 2748 2755 2762 2788 2814 2815 2854 2894 2917 2941 2943 2955 2957 2972 2986 2987 2998 3008 3014 3029 3073 3152 3178 3220 3260 3264 3269 3295 3317 3326 3327 3368 3370 3371 3372 3373 3374 3375 3376 3404 3407 3409 3417 3419 3421 3422 3429 3430 3436 3449 3464 3469 3470 3472 3473 3476 3482 3484 3485 3491 3493 3497 3501 3503 3504 3512 3513 3524 3526 3527 3542 3548 3558 3570 3572 3581 3587 3590 3597 3600 3602 3605 3610 3613 3627 3628 3634 3636 3637 3640 3643 3649 3654 3656 3657 3664 3679 3684 3700 3705 3707 3708 3709 3710 3712 3716 3727 3729 3730 3739 3748 3749 3750 3752 3759 3768 3774 3776 3782 3788 3791 3795 3799 3807 3813 3819 3822 3828 3839 3853 3864 3870 3872 3913 3925 3936 3942 3948 3970 3972 3973 3990 3998 4003 4007 4010 4033 4035 4040 4043 4044 4048 4054 4056 4059 4065 4111 4121 4125 4132 4139 4143 4162 4188 4192 4219 4241 4245 4249 4252 4270 4271 4274 4284 4291 4292 4308 4313 4321 4335 4344 4352 4362 4363 4387 4391 4424 4437 4446 4451 4458 4476 4486 4494 4500 4502 4503 4506 4508 4523 4531 4552 4574 4581 4596 4604 4643 4652 4685 4702 4712 4713 4717 4722 4732 4745 4753 4762 4767 4811 4867 4872 4873 4883 4899 4902 4904 4922 4934 4938 4939 4942 4944 4962 4969 5014 5018 5019 5039 5046 5051 5067 5089 5096 5102 5104 5105 5114 5134 5136 5137 5154 5165 5193 5196 5217 5273","Academic":"1073 1430 1496 1620 1623 1624 1866 2021 2108 2129 2149 2177 2238 2262 2325 2402 2413 2482 2747 2773 2972 3027 3029 3220 3270 3376 3422 3436 3439 3482 3484 3499 3512 3535 3610 3613 3619 3640 3651 3654 3700 3708 3710 3712 3782 3819 3863 3872 3917 3925 3933 3983 4019 4048 4057 4065 4174 4245 4256 4270 4291 4308 4352 4362 4451 4461 4486 4487 4552 4584 4590 4643 4692 4693 4707 4712 4731 4745 4747 4904 4926 5051 5096","Paid":"1358 2044 2063 2290 2392 2439 2551 2916 2919 3265 3373 3374 3375 3417 3421 3472 3513 3600 3617 3628 3648 3649 3656 3679 3707 3729 3774 3776 3788 3795 3800 3828 3932 3970 4056 4104 4121 4139 4143 4238 4572 4581 4649 4732 4735 4786 4899 4934 4962 5067"}},{"levels":{"Interested":"1073 1358 1422 1449 1553 1619 1620 1626 1761 1845 1866 1927 2021 2180 2265 2290 2323 2354 2414 2482 2486 2539 2551 2593 2595 2649 2662 2669 2748 2755 2854 2943 3029 3073 3260 3295 3326 3373 3374 3375 3376 3404 3417 3419 3429 3430 3436 3464 3469 3472 3476 3482 3501 3519 3524 3542 3572 3587 3590 3597 3605 3619 3634 3684 3705 3707 3716 3725 3727 3749 3750 3759 3774 3788 3799 3800 3813 3839 3870 3913 3936 3942 3948 3972 4003 4010 4019 4035 4043 4048 4054 4121 4132 4143 4162 4192 4241 4252 4284 4292 4335 4391 4437 4446 4451 4486 4495 4500 4506 4574 4581 4649 4652 4685 4712 4753 4762 4786 4811 4872 4873 4902 4904 4934 4938 4944 5019 5051 5067 5089 5105 5114 5136 5154 5165 5193 5196 5217 5273","Academic":"1095 2919 3482"}},{"levels":{"Interested":"1358 1403 1416 1422 1430 1449 1553 1619 1623 1761 1845 1927 2149 2180 2262 2265 2290 2323 2354 2414 2482 2486 2539 2551 2595 2649 2662 2669 2734 2748 2755 2814 2815 2854 2894 2986 3029 3073 3260 3270 3359 3373 3374 3375 3376 3404 3407 3417 3419 3422 3429 3430 3436 3449 3464 3469 3470 3472 3476 3482 3484 3501 3513 3519 3524 3542 3572 3587 3590 3597 3600 3605 3619 3628 3634 3637 3640 3649 3656 3679 3684 3700 3705 3707 3709 3716 3725 3727 3729 3749 3750 3752 3759 3774 3788 3795 3800 3813 3822 3839 3870 3913 3936 3948 3954 3972 3973 4003 4007 4010 4019 4035 4043 4048 4054 4065 4111 4121 4132 4143 4162 4192 4241 4252 4284 4292 4335 4363 4391 4437 4446 4451 4458 4476 4486 4500 4506 4574 4581 4649 4652 4685 4702 4712 4713 4735 4753 4762 4786 4811 4872 4873 4899 4902 4904 4934 4938 4944 5018 5019 5051 5067 5105 5114 5136 5137 5154 5165 5193 5196 5217 5273","Academic":"2149 2177 2323 2435 2894 3375 3407 3422 3482 3709 3712 3795 3847 4143 4253 4256 4712 4747 4867 4904","Practical":"2265 2814 3035 3366 3374 3421 3700 3729 3752 3826 4010 4284 4363 4387 4702 4899 4924 4934 4940 5100 5113","Paid":"3600 4476 5069"}},{"levels":{"Interested":"603 1358 1403 1409 1422 1426 1449 1553 1619 1626 1631 1786 1845 1927 2051 2063 2103 2105 2106 2110 2180 2191 2225 2263 2265 2289 2290 2299 2300 2302 2323 2348 2354 2413 2414 2482 2513 2539 2551 2587 2595 2607 2691 2738 2748 2755 2762 2815 2854 2972 2986 3012 3073 3094 3161 3178 3260 3265 3270 3274 3364 3366 3368 3370 3371 3372 3375 3376 3384 3394 3400 3404 3419 3429 3430 3436 3449 3455 3460 3464 3469 3470 3472 3476 3484 3485 3491 3492 3497 3499 3504 3507 3512 3519 3524 3542 3557 3558 3570 3572 3573 3580 3587 3590 3602 3610 3617 3619 3628 3634 3636 3640 3643 3666 3679 3684 3700 3705 3707 3709 3712 3716 3723 3727 3739 3748 3749 3750 3759 3776 3777 3788 3799 3800 3813 3822 3839 3850 3864 3871 3913 3918 3932 3936 3940 3942 3948 3954 3972 4003 4010 4040 4043 4044 4048 4054 4056 4104 4111 4121 4122 4130 4143 4162 4191 4192 4219 4241 4245 4249 4252 4256 4274 4282 4284 4308 4315 4335 4344 4363 4375 4379 4387 4391 4408 4424 4434 4437 4443 4446 4451 4486 4494 4495 4500 4503 4506 4523 4531 4552 4574 4584 4649 4682 4685 4692 4717 4730 4732 4734 4735 4748 4753 4760 4762 4783 4786 4811 4812 4822 4867 4872 4873 4883 4902 4904 4926 4934 4938 4942 4944 4958 5018 5019 5046 5051 5073 5090 5096 5100 5105 5134 5136 5137 5154 5165 5196 5209","Academic":"1309 1353 1422 1455 1619 2062 2106 2177 2263 2265 2289 2299 2323 2354 2435 2587 2972 2986 3265 3370 3371 3376 3407 3460 3482 3491 3502 3542 3580 3602 3640 3643 3707 3709 3777 3826 3839 3870 3942 4019 4057 4143 4162 4308 4375 4523 4717 4732 4747 4786 5073 5105 5217","Practical":"1409 2063 2607 2691 2762 3094 3368 3436 3499 3507 3557 3712 3850 3913 3927 3932 3998 4056 4219 4252 4282 4379 4437 4486 4940","Paid":"1449 2023 2051 2773 3270 4344"}},{"levels":{"Academic":"965 1095 1619 1786 2023 2071 2106 2191 2265 2323 2494 2587 2710 2773 2927 3364 3394 3482 3485 3491 3507 3524 3580 3587 3643 3948 3954 3990 4040 4043 4057 4143 4162 4292 4308 4335 4344 4358 4363 4375 4379 4434 4506 4590 4717 4730 4753 4822 4867 4902 4943 4991 5014 5113 5165","Interested":"1031 1353 1403 1422 1449 1496 1553 1619 1620 1626 1786 1845 1866 1927 1933 2051 2063 2071 2106 2191 2263 2323 2414 2435 2482 2539 2551 2595 2607 2657 2748 2762 2815 2854 3094 3270 3326 3364 3366 3376 3400 3419 3429 3430 3436 3469 3470 3476 3482 3485 3507 3512 3519 3542 3557 3572 3580 3587 3602 3634 3636 3640 3643 3684 3716 3723 3749 3750 3799 3807 3839 3913 3927 3936 3942 3948 3954 3972 3998 4010 4040 4043 4048 4054 4056 4111 4143 4162 4192 4219 4241 4252 4282 4284 4308 4315 4335 4344 4363 4379 4391 4434 4437 4443 4446 4451 4486 4495 4500 4506 4531 4574 4649 4685 4692 4732 4753 4786 4804 4822 4873 4902 4904 4938 4944 5019 5051 5073 5075 5105 5134 5137 5154 5165 5196","Practical":"1309 1403 1426 2051 2063 2263 2289 2607 2657 2762 3094 3375 3476 3542 3602 3998 4282 4315 4408 4804 4940 5073","Paid":"1449 2032"}},{"levels":{"Academic":"965 1353 1610 1619 1786 2023 2051 2071 2106 2191 2263 2265 2323 2494 2587 2710 2719 2814 2941 3364 3482 3485 3507 3524 3580 3602 3643 3954 3990 4057 4143 4162 4308 4315 4335 4344 4358 4363 4506 4732 4753 4822 4867 4902 4943 4991 5014 5100 5102 5113","Interested":"1031 1403 1422 1449 1553 1619 1620 1626 1786 1845 1866 1927 1933 2051 2063 2069 2071 2106 2191 2263 2265 2323 2414 2482 2539 2595 2607 2657 2748 2814 2815 2854 2927 2972 3094 3326 3364 3376 3400 3404 3419 3429 3430 3436 3469 3470 3476 3482 3485 3501 3507 3512 3519 3542 3557 3572 3580 3587 3634 3636 3643 3684 3716 3723 3749 3750 3799 3807 3839 3913 3918 3927 3936 3942 3948 3954 3972 3990 3998 4010 4040 4043 4048 4056 4111 4130 4143 4162 4192 4219 4241 4252 4282 4284 4308 4315 4335 4344 4391 4434 4437 4443 4446 4451 4486 4495 4500 4506 4531 4574 4649 4685 4692 4717 4732 4753 4786 4804 4822 4873 4902 4904 4938 4944 5019 5051 5073 5105 5134 5137 5154 5165 5196","Practical":"1095 1309 1403 1426 2063 2289 2607 2657 2762 2773 3094 3375 3476 3542 3998 4040 4408 4590 4804 4940 5073","Paid":"1449 4282 4292"}},{"levels":{"Paid":"614 1449 2773 3940","Academic":"1403 2071 2263 2402 2494 2587 2738 2748 2755 2762 2814 2941 2972 2986 3008 3014 3178 3270 3366 3370 3371 3376 3400 3436 3439 3472 3482 3485 3499 3512 3518 3524 3542 3558 3570 3586 3595 3636 3691 3707 3708 3709 3839 3863 3954 3990 3998 4019 4122 4132 4143 4162 4191 4192 4213 4308 4315 4325 4335 4338 4348 4363 4373 4375 4379 4446 4451 4486 4497 4500 4502 4503 4506 4568 4574 4713 4717 4730 4747 4783 4812 4822 4883 4902 4934 4943 4969 4989 5018 5019 5069 5100 5102 5209","Interested":"1403 1422 1449 1553 1619 1626 1786 1845 1927 2051 2063 2071 2105 2106 2191 2263 2265 2290 2300 2414 2482 2539 2551 2587 2595 2607 2738 2748 2814 2815 2854 2972 3008 3012 3089 3094 3270 3274 3364 3370 3372 3375 3376 3419 3429 3430 3436 3460 3469 3470 3472 3476 3482 3499 3507 3512 3519 3524 3542 3572 3587 3595 3636 3643 3684 3707 3709 3716 3727 3749 3750 3759 3799 3813 3839 3871 3913 3936 3942 3948 3954 3972 4003 4010 4033 4040 4043 4048 4056 4111 4143 4162 4191 4192 4219 4241 4252 4282 4284 4315 4335 4344 4363 4373 4375 4391 4424 4437 4446 4451 4486 4500 4503 4506 4574 4584 4649 4685 4692 4717 4732 4748 4753 4783 4786 4812 4873 4883 4902 4904 4934 4938 4944 4969 4989 5018 5019 5051 5073 5105 5136 5154 5165 5196 5217","Practical":"1426 2023 2051 2265 3094 3461 3476 3507 3913 3927 4282 4344 4634 4873 4940 5073 5104"}},{"levels":{"Interested":"614 1031 1309 1422 1426 1449 1553 1619 1626 1761 1786 1845 1866 1927 2051 2062 2063 2069 2105 2106 2110 2191 2225 2263 2265 2290 2348 2414 2482 2494 2539 2587 2595 2607 2691 2738 2748 2755 2814 2815 2854 2955 2972 3027 3073 3089 3270 3326 3327 3364 3370 3371 3375 3376 3400 3407 3419 3429 3430 3436 3456 3470 3476 3482 3491 3507 3519 3524 3542 3572 3587 3602 3643 3684 3708 3716 3749 3750 3799 3839 3871 3913 3927 3936 3942 3948 3954 3972 4010 4040 4043 4048 4054 4056 4111 4121 4143 4162 4192 4219 4241 4252 4282 4284 4308 4315 4335 4387 4391 4434 4437 4446 4451 4486 4487 4500 4506 4531 4574 4581 4590 4649 4685 4753 4783 4786 4804 4812 4822 4872 4873 4902 4904 4934 4938 4944 4999 5018 5019 5051 5073 5089 5096 5105 5136 5154 5165","Practical":"1095 2691 3035 3602 4178 4590","Academic":"1416 1422 1426 1449 1619 1620 1786 1845 2051 2105 2106 2263 2299 2494 2587 2607 2710 2738 2814 3089 3178 3407 3482 3587 3627 3643 3990 4040 4141 4162 4192 4213 4308 4335 4363 4408 4451 4676 4804 4822 4867 4934 4944 5014 5073 5113","Paid":"1565 2719 2773"}},{"levels":{"Interested":"614 1031 1309 1352 1403 1422 1449 1553 1619 1620 1626 1761 1786 1845 1866 1927 2023 2051 2063 2071 2105 2106 2110 2191 2263 2265 2348 2414 2482 2494 2539 2587 2595 2607 2691 2748 2762 2814 2815 2854 3073 3270 3326 3327 3362 3364 3370 3376 3400 3407 3419 3429 3430 3436 3456 3470 3476 3482 3485 3507 3519 3542 3572 3587 3634 3636 3643 3684 3716 3749 3750 3799 3807 3839 3913 3927 3936 3942 3948 3954 3972 4010 4040 4043 4048 4054 4056 4111 4121 4130 4143 4162 4192 4219 4241 4252 4282 4284 4308 4315 4335 4363 4375 4387 4391 4434 4437 4451 4486 4487 4500 4506 4531 4574 4581 4590 4649 4682 4685 4748 4753 4783 4786 4804 4873 4904 4938 4944 4999 5018 5019 5051 5073 5095 5105 5136 5137 5154 5165","Practical":"1095 1403 2263 2607 2773 3094 3362 3927 4804 5102","Academic":"1309 1352 1426 1449 1845 2051 2063 2071 2106 2289 2494 2587 2691 2710 2719 2762 2814 3482 3485 3524 3587 3643 3913 3954 3998 4043 4282 4308 4335 4375 4379 4451 4590 4676 4682 4934 5014 5073 5095 5104","Paid":"2941"}},{"levels":{"Academic":"965 1095 1309 1403 1422 1449 2023 2071 2106 2191 2323 2494 2587 2710 2719 2755 2762 2814 2927 3270 3368 3376 3394 3400 3482 3485 3491 3507 3524 3526 3542 3573 3587 3617 3643 3948 3954 3990 4040 4041 4043 4057 4111 4132 4143 4162 4192 4292 4308 4335 4344 4363 4375 4400 4408 4446 4451 4458 4506 4692 4717 4730 4753 4804 4822 4867 4873 4902 4943 4944 5014 5018 5073 5100 5104 5105 5113 5209","Interested":"1031 1353 1403 1416 1422 1449 1496 1553 1619 1620 1626 1786 1845 1866 1927 2051 2063 2071 2106 2191 2225 2263 2265 2323 2414 2435 2482 2539 2551 2587 2595 2607 2748 2762 2814 2815 2854 3073 3094 3270 3326 3362 3364 3370 3376 3384 3407 3419 3429 3430 3436 3456 3470 3476 3482 3485 3497 3507 3519 3542 3557 3572 3587 3628 3634 3636 3643 3684 3708 3716 3726 3749 3750 3799 3807 3839 3913 3927 3936 3942 3948 3954 3972 3998 4010 4040 4043 4048 4054 4056 4111 4121 4143 4162 4192 4219 4241 4252 4282 4284 4315 4335 4344 4363 4375 4391 4434 4437 4443 4446 4451 4486 4495 4500 4506 4531 4574 4581 4590 4649 4685 4692 4717 4732 4735 4748 4753 4786 4804 4822 4873 4902 4904 4938 4944 5018 5019 5046 5051 5073 5105 5136 5154 5165 5196 5209","Practical":"1426 1786 2051 2063 2263 2607 3094 3362 3476 3595 3726 3927 3998 4219 4282 4315 4590"}},{"levels":{"Interested":"190 908 1031 1309 1352 1403 1416 1422 1449 1496 1553 1619 1620 1626 1786 1845 1866 1927 2051 2063 2106 2191 2225 2263 2265 2323 2414 2435 2482 2539 2551 2587 2595 2607 2748 2762 2814 2815 2854 2919 3073 3094 3326 3364 3370 3376 3400 3407 3419 3429 3430 3436 3456 3470 3476 3482 3485 3507 3519 3542 3557 3572 3580 3587 3617 3619 3634 3636 3640 3643 3684 3708 3716 3723 3749 3750 3799 3839 3870 3913 3927 3936 3948 3954 3972 3998 4010 4019 4040 4043 4048 4054 4056 4111 4121 4143 4162 4192 4219 4241 4252 4282 4284 4308 4315 4335 4344 4363 4391 4434 4437 4443 4446 4451 4486 4495 4500 4506 4574 4584 4590 4649 4685 4692 4717 4732 4735 4748 4753 4786 4804 4822 4873 4902 4904 4938 4944 4999 5018 5019 5051 5073 5090 5105 5134 5136 5154 5165 5196","Academic":"965 1352 1403 1422 2023 2071 2106 2191 2289 2323 2494 2587 2710 2762 2814 3178 3270 3368 3407 3482 3485 3524 3542 3580 3587 3595 3640 3643 3657 3708 3863 3870 3942 3948 3954 3990 4040 4111 4132 4143 4162 4192 4292 4308 4335 4338 4379 4400 4451 4458 4506 4732 4804 4822 4867 4873 4902 4944 4984 4991 5073 5104","Practical":"1095 1786 2051 2063 2263 2607 3094 3927 3998 4219 4282 4315 4408 4590 4940","Paid":"1426 1449 2032"}},{"levels":{"Interested":"614 908 1031 1309 1352 1403 1416 1422 1426 1449 1455 1553 1619 1620 1626 1786 1845 1866 1927 1933 2051 2062 2063 2071 2103 2105 2106 2110 2191 2224 2225 2263 2265 2300 2304 2317 2325 2413 2414 2482 2497 2539 2587 2595 2607 2669 2748 2772 2814 2815 2854 2917 2919 2995 3027 3073 3094 3178 3196 3326 3362 3364 3366 3370 3371 3375 3376 3404 3407 3417 3419 3429 3430 3436 3456 3470 3473 3476 3482 3485 3504 3507 3519 3524 3542 3557 3572 3580 3587 3594 3602 3636 3643 3684 3708 3712 3716 3749 3750 3799 3839 3870 3913 3927 3936 3942 3948 3954 3972 4010 4019 4040 4043 4048 4054 4121 4143 4162 4191 4192 4219 4241 4252 4282 4284 4308 4335 4344 4363 4391 4400 4434 4437 4443 4446 4451 4486 4487 4495 4500 4506 4574 4649 4682 4685 4748 4753 4783 4804 4822 4873 4902 4904 4938 4944 4999 5018 5019 5046 5051 5073 5090 5095 5102 5105 5114 5134 5136 5154 5165 5196 5209","Practical":"1095 1426 1845 2051 2263 2607 2719 3073 3094 3595 3602 3927 4104 4282 4335 4344 4379 4682 4804 4822 4944","Academic":"1403 1416 1422 1449 1455 1610 1619 1786 2023 2063 2071 2106 2191 2299 2330 2494 2587 2755 2762 2814 2917 2927 3368 3375 3400 3472 3482 3524 3587 3643 3708 3712 3870 3913 3931 3954 3990 3998 4041 4043 4111 4121 4132 4192 4219 4308 4358 4363 4400 4408 4446 4451 4500 4676 4699 4730 4873 4902 4939 4984 5018 5073 5194 5209","Paid":"1565 1933 2032 2941 3362 5095 5113"}},{"levels":{"Practical":"1095 1426 2051 2607 4111 4379 4944","Academic":"1352 1422 1449 2106 3094 3482 3524 3657 4282 4315 4335 4363 4375 4451 4590 4804 4902 4984","Interested":"1352 1422 1426 1449 1553 1619 1620 1626 1786 1845 1927 2051 2063 2106 2191 2265 2290 2414 2482 2539 2595 2607 2748 2762 2854 2919 2972 3073 3270 3326 3364 3376 3400 3407 3419 3429 3430 3436 3456 3470 3476 3482 3485 3507 3519 3542 3572 3587 3602 3643 3684 3716 3748 3749 3750 3799 3813 3839 3913 3927 3936 3942 3948 3954 3972 4010 4040 4043 4048 4111 4121 4122 4143 4162 4192 4219 4241 4252 4315 4335 4375 4391 4434 4437 4443 4446 4451 4486 4500 4506 4574 4581 4649 4685 4753 4783 4786 4804 4873 4902 4904 4938 4944 5018 5019 5051 5073 5105 5136 5154 5165","Paid":"2773"}},{"levels":{"Practical":"1095 2051 2106 2607 3094 3476 3927","Interested":"1309 1358 1403 1422 1426 1449 1553 1619 1620 1626 1786 1845 1927 1933 2023 2051 2063 2069 2105 2106 2191 2225 2263 2265 2289 2290 2323 2402 2414 2482 2539 2551 2587 2595 2607 2748 2772 2815 2854 2919 3012 3094 3270 3326 3364 3368 3370 3371 3376 3400 3404 3419 3429 3430 3436 3456 3470 3476 3482 3485 3497 3507 3519 3524 3542 3558 3572 3587 3594 3619 3634 3636 3643 3684 3716 3748 3749 3750 3799 3822 3839 3913 3927 3936 3942 3948 3954 3972 4010 4040 4043 4048 4054 4056 4111 4121 4130 4137 4143 4162 4192 4219 4241 4252 4265 4284 4308 4315 4335 4344 4363 4375 4391 4434 4437 4446 4451 4476 4486 4494 4500 4503 4506 4574 4649 4685 4692 4732 4735 4753 4783 4786 4873 4883 4904 4938 4943 4944 5018 5019 5051 5073 5090 5100 5105 5136 5154 5165","Academic":"1449 1786 2023 2063 2177 2191 2263 2299 2323 2762 3270 3368 3370 3394 3482 3643 3998 4143 4308 4335 4375 4451 4682 4943 4984 5073","Paid":"2773"}},{"levels":{"Practical":"190 1309 1403 1786 2051 2063 2106 2177 2191 2263 2300 2333 2607 2719 3073 3094 3375 3476 3491 3507 3927 3998 4104 4282 4315 4335 4344 4408 4469 4682 4732 4822 4827 4873 5073","Interested":"190 908 1031 1403 1416 1422 1449 1553 1619 1620 1626 1786 1845 1866 1927 1933 2051 2062 2063 2071 2103 2106 2110 2191 2263 2289 2290 2300 2317 2333 2414 2482 2539 2587 2595 2607 2657 2748 2815 2854 2919 2955 3073 3094 3196 3270 3326 3362 3364 3368 3370 3371 3372 3375 3376 3384 3400 3404 3419 3429 3430 3436 3456 3460 3470 3473 3482 3485 3491 3497 3507 3512 3519 3524 3542 3557 3572 3580 3587 3600 3617 3634 3636 3643 3684 3708 3716 3723 3725 3739 3749 3750 3799 3822 3839 3913 3927 3936 3940 3942 3948 3954 3972 3990 3998 4010 4040 4043 4048 4054 4111 4121 4123 4130 4143 4162 4191 4192 4219 4241 4252 4282 4284 4308 4315 4335 4344 4363 4391 4400 4424 4434 4437 4443 4446 4451 4469 4486 4500 4506 4574 4649 4682 4685 4692 4717 4732 4735 4753 4786 4804 4822 4873 4904 4938 4944 5018 5019 5051 5073 5102 5105 5136 5154 5165 5196 5209","Academic":"965 1095 1422 1610 2023 2062 2071 2103 2383 2402 2494 2587 2710 2755 2762 2814 2818 2927 2972 2986 3270 3368 3370 3371 3394 3407 3460 3470 3482 3485 3497 3512 3524 3542 3573 3587 3600 3617 3643 3710 3715 3822 3913 3931 3936 3948 3954 3990 4041 4143 4191 4219 4308 4358 4400 4446 4451 4494 4500 4590 4692 4731 4753 4804 4876 4944 5014 5018 5100 5209","Paid":"1426 1449 2773 2941 3362 3574 5102"}},{"levels":{"Interested":"603 1031 1309 1403 1422 1449 1553 1619 1620 1626 1786 1845 1866 1927 2051 2063 2106 2191 2263 2265 2289 2414 2482 2539 2587 2595 2607 2748 2814 2815 2854 2955 2972 3094 3305 3326 3362 3364 3376 3400 3404 3419 3429 3430 3436 3470 3476 3482 3507 3519 3542 3572 3587 3610 3619 3643 3684 3716 3749 3750 3799 3839 3913 3927 3936 3942 3948 3954 3972 3998 4010 4040 4043 4048 4111 4121 4143 4162 4192 4219 4241 4252 4308 4315 4335 4344 4363 4375 4391 4434 4437 4446 4451 4486 4495 4500 4506 4574 4649 4685 4732 4748 4753 4786 4804 4873 4902 4904 4938 4944 5019 5051 5073 5105 5154 5165","Academic":"965 1095 1422 1553 2023 2051 2071 2106 2191 2333 2587 2710 2762 2814 3482 3524 3954 3990 4219 4308 4358 4375 4400 4434 4732 4804 4902 5100","Practical":"1309 1403 1426 1786 1845 2063 2263 2607 2719 2941 3094 3927 3998 4040 4282 4315 4335 4408 5073","Paid":"1449 2032 3362"}},{"levels":{"Interested":"1031 1403 1416 1422 1449 1553 1619 1620 1626 1786 1845 1866 1927 2034 2051 2063 2106 2191 2263 2414 2482 2539 2595 2607 2748 2814 2815 2854 2919 2955 3094 3326 3327 3364 3376 3400 3407 3419 3429 3430 3436 3470 3476 3482 3507 3519 3542 3572 3587 3643 3684 3708 3716 3749 3750 3799 3839 3870 3913 3927 3936 3942 3948 3954 3972 4010 4040 4043 4048 4111 4137 4143 4162 4192 4241 4252 4282 4284 4315 4335 4391 4434 4437 4446 4451 4486 4500 4506 4574 4649 4685 4732 4748 4753 4786 4867 4873 4904 4938 4944 5019 5051 5073 5137 5154 5165 5217","Practical":"1095 2607 3476 3542 4282","Academic":"1449 2051 2063 2106 2814 3094 3482 3524 3587 3643 3870 4040 4315 4335 4506 4590 4984","Paid":"2773"}},{"levels":{"Interested":"614 1031 1416 1422 1449 1553 1619 1620 1626 1786 1845 1866 1927 2034 2051 2063 2106 2191 2263 2414 2482 2539 2595 2607 2748 2815 2854 2919 3094 3326 3364 3370 3376 3400 3419 3429 3430 3436 3470 3476 3482 3507 3519 3542 3572 3587 3594 3643 3684 3716 3749 3750 3799 3839 3870 3913 3936 3942 3948 3954 3972 4010 4040 4043 4048 4111 4143 4162 4192 4241 4252 4282 4284 4315 4335 4391 4437 4446 4451 4486 4495 4500 4506 4574 4649 4685 4748 4753 4786 4873 4904 4938 4944 5019 5051 5073 5136 5165","Academic":"1095 1449 1619 2071 2106 2494 2607 2773 3094 3482 3524 3643 3870 4282 4335 4873 4984"}},{"levels":{"Academic":"614 1416 1449 1619 1761 1866 2029 2049 2106 2299 2433 2494 2738 2814 2854 3094 3370 3371 3482 3542 3643 3839 3870 4044 4253 4274 4282 4391 4451 4747 4934 5090 5105","Interested":"614 1031 1403 1422 1442 1449 1496 1553 1619 1620 1626 1761 1786 1845 1927 2034 2051 2063 2106 2110 2191 2224 2265 2290 2413 2414 2433 2435 2482 2539 2551 2587 2595 2607 2691 2738 2748 2762 2814 2815 2854 2919 3270 3326 3364 3370 3371 3374 3376 3400 3404 3419 3429 3430 3436 3456 3470 3476 3482 3519 3542 3572 3587 3619 3628 3643 3684 3707 3708 3716 3727 3748 3749 3750 3799 3839 3870 3913 3936 3942 3948 3954 3972 3973 4003 4010 4040 4043 4044 4048 4054 4111 4121 4123 4143 4162 4191 4192 4219 4241 4252 4265 4274 4282 4315 4335 4391 4434 4437 4446 4451 4486 4500 4506 4574 4581 4649 4685 4753 4786 4872 4873 4904 4934 4938 4944 5018 5019 5051 5073 5090 5105 5136 5137 5154 5165","Practical":"1095 1442 1845 2691 2917 3270 3705","Paid":"3110 3644"}},{"levels":{"Practical":"190 1358 1845 2051 2062 2063 2069 2106 2177 2191 2263 2300 2494 2607 2691 2710 2814 3094 3362 3368 3375 3476 3485 3927 4121 4252 4451 5116","Interested":"190 603 1031 1309 1358 1403 1409 1422 1426 1449 1496 1553 1619 1620 1626 1786 1845 1927 1933 2034 2051 2063 2103 2105 2106 2160 2191 2225 2263 2265 2289 2290 2300 2317 2323 2348 2402 2414 2435 2482 2497 2513 2539 2551 2587 2595 2607 2669 2691 2711 2748 2755 2770 2814 2815 2854 2919 2941 2955 2957 2986 2998 3008 3012 3014 3073 3094 3178 3270 3326 3327 3362 3364 3366 3368 3370 3371 3372 3374 3376 3384 3400 3404 3419 3429 3430 3436 3439 3452 3456 3460 3464 3469 3470 3476 3482 3485 3491 3497 3504 3507 3519 3524 3542 3557 3558 3572 3580 3587 3590 3594 3610 3619 3634 3636 3643 3664 3684 3691 3707 3708 3712 3716 3723 3727 3730 3739 3748 3749 3750 3765 3799 3813 3839 3856 3864 3870 3913 3927 3931 3932 3936 3942 3948 3954 3972 3973 3998 4007 4010 4033 4040 4043 4044 4048 4054 4056 4104 4111 4121 4130 4139 4143 4162 4191 4192 4219 4241 4249 4252 4265 4270 4282 4284 4308 4315 4335 4363 4387 4391 4400 4424 4434 4437 4443 4446 4451 4458 4476 4486 4495 4500 4503 4506 4574 4649 4682 4685 4692 4717 4732 4753 4783 4786 4804 4867 4873 4883 4902 4904 4938 4943 4944 4999 5019 5046 5051 5073 5090 5116 5134 5136 5137 5154 5165 5209 5217","Academic":"965 1095 1353 1409 1449 1496 1786 2149 2289 2299 2323 2587 2762 2772 2854 2941 2986 3073 3270 3369 3370 3394 3404 3407 3436 3439 3456 3460 3472 3482 3491 3524 3542 3574 3580 3587 3643 3708 3710 3712 3826 3864 3870 3932 4143 4162 4270 4282 4308 4335 4400 4500 4590 4682 4804 4902 5073","Paid":"2773 3954"}},{"levels":{"Academic":"965 1352 1403 1416 1422 1426 1449 1619 1786 2063 2071 2191 2263 2289 2486 2494 2509 2587 2607 2691 2710 2738 3094 3366 3482 3497 3524 3580 3587 3643 3870 3954 3990 3998 4040 4162 4282 4335 4358 4375 4400 4434 4451 4458 4590 4783 4804 4944 4984 5014 5073","Practical":"1095 2106 2657 2773 2814 3368 3375 3542 4315 4379","Paid":"1309","Interested":"1352 1416 1422 1449 1553 1619 1620 1626 1786 1845 1927 1933 2034 2106 2225 2263 2414 2482 2539 2587 2595 2607 2657 2748 2762 2814 2815 2854 2919 3073 3270 3326 3364 3375 3376 3400 3407 3419 3429 3430 3436 3439 3456 3460 3470 3473 3476 3482 3497 3504 3507 3519 3524 3542 3572 3580 3587 3610 3636 3643 3684 3716 3748 3749 3750 3799 3839 3870 3913 3927 3936 3942 3948 3954 3972 3998 4010 4033 4040 4043 4048 4054 4056 4111 4121 4143 4162 4192 4219 4241 4249 4252 4265 4282 4284 4308 4315 4335 4363 4375 4391 4434 4437 4446 4451 4486 4500 4506 4531 4568 4574 4581 4649 4685 4748 4753 4783 4786 4804 4812 4873 4904 4938 4944 5018 5019 5051 5073 5105 5136 5154 5165"}},{"levels":{"Interested":"190 614 965 1031 1352 1397 1403 1422 1449 1455 1553 1619 1626 1631 1761 1786 1845 1927 1933 2034 2062 2063 2105 2110 2143 2191 2225 2238 2290 2325 2333 2414 2482 2486 2539 2595 2649 2669 2691 2719 2738 2762 2770 2790 2815 2854 2894 2917 2943 2955 2972 2998 3035 3073 3178 3260 3270 3326 3370 3371 3376 3400 3407 3414 3419 3429 3430 3436 3456 3461 3469 3472 3476 3482 3484 3488 3491 3499 3501 3507 3519 3522 3524 3542 3557 3572 3573 3587 3590 3592 3602 3605 3606 3652 3684 3700 3708 3712 3716 3739 3749 3768 3778 3791 3799 3807 3808 3817 3839 3850 3870 3895 3913 3917 3936 3942 3948 3972 3973 3992 4003 4010 4035 4040 4043 4044 4048 4054 4099 4111 4121 4122 4139 4140 4143 4174 4192 4241 4249 4252 4254 4284 4292 4324 4335 4363 4391 4437 4446 4451 4476 4483 4487 4495 4500 4506 4574 4652 4685 4702 4712 4734 4753 4760 4767 4783 4812 4822 4873 4904 4922 4938 4944 5019 5046 5051 5089 5102 5114 5130 5134 5153 5165 5187","Practical":"1095 1845 2691 4139 4574 4767 4783 5014","Academic":"1403 1416 1422 1496 1619 1626 1761 2034 2062 2143 2160 2238 2316 2494 2711 2719 2738 2788 2917 2919 2941 3027 3102 3178 3260 3482 3524 3557 3602 3627 3652 3708 3712 3931 4111 4174 4495 4568 4676 4822 4944 4984 5055 5114 5134","Paid":"3035 4087 4140 5153 5187"}},{"levels":{"Practical":"190 908 1095 1346 1619 1626 1761 1845 2062 2063 2143 2238 2333 2367 2494 2549 2595 2691 2769 2784 2790 2814 2815 2881 2917 2987 3102 3196 3362 3400 3494 3549 3602 3627 3708 3712 3917 4010 4118 4120 4274 4495 4574 4643 4685 4732 4886 4924 4944 5014 5051 5105 5154 5173","Interested":"190 603 965 1031 1346 1352 1397 1411 1422 1430 1449 1455 1553 1619 1624 1626 1761 1786 1845 1927 2021 2034 2063 2105 2110 2143 2149 2159 2175 2191 2225 2238 2248 2290 2298 2299 2327 2333 2348 2413 2414 2417 2482 2486 2494 2506 2539 2549 2551 2592 2595 2649 2669 2691 2719 2734 2738 2748 2762 2769 2781 2790 2814 2815 2854 2881 2894 2917 2943 2955 2972 2987 2998 3035 3073 3089 3090 3178 3196 3260 3264 3269 3270 3274 3326 3362 3366 3370 3371 3375 3376 3404 3407 3417 3419 3429 3430 3436 3439 3449 3456 3461 3470 3472 3476 3482 3484 3485 3488 3491 3493 3494 3497 3499 3501 3504 3511 3512 3519 3522 3524 3527 3542 3557 3572 3573 3587 3590 3592 3594 3596 3602 3605 3606 3610 3627 3636 3652 3656 3679 3684 3700 3707 3709 3712 3715 3716 3723 3725 3726 3739 3749 3759 3768 3777 3778 3799 3807 3808 3817 3828 3839 3850 3864 3870 3871 3872 3895 3913 3917 3933 3936 3942 3948 3959 3972 3992 4003 4007 4010 4033 4035 4040 4043 4044 4048 4054 4057 4058 4099 4104 4111 4118 4120 4121 4122 4130 4132 4139 4140 4143 4174 4192 4241 4243 4245 4252 4254 4265 4271 4274 4284 4292 4324 4335 4352 4363 4389 4391 4424 4437 4446 4451 4461 4476 4483 4487 4500 4506 4508 4523 4531 4574 4581 4584 4643 4652 4685 4702 4712 4732 4734 4746 4753 4759 4760 4767 4783 4811 4812 4822 4873 4902 4904 4914 4926 4938 4944 4977 4984 4994 5018 5019 5046 5051 5090 5095 5105 5114 5130 5136 5137 5153 5154 5165 5172 5173 5187 5196 5209","Academic":"603 614 965 1409 1411 1416 1422 1430 1455 1496 1620 1623 1624 1631 1786 2034 2049 2149 2160 2175 2304 2316 2486 2506 2539 2592 2711 2719 2738 2788 2818 2854 2894 3027 3178 3260 3366 3472 3476 3482 3485 3493 3497 3504 3558 3652 3700 3707 3709 3723 3726 3765 3768 3777 3808 3828 3856 3864 3870 3872 3895 3936 3948 3959 3972 3976 4007 4035 4044 4048 4056 4104 4109 4111 4121 4130 4143 4174 4243 4253 4254 4265 4271 4389 4391 4405 4424 4461 4476 4523 4568 4590 4649 4652 4676 4812 4822 4914 4977 4984 4999 5055 5089 5090 5095 5114 5130 5136 5165 5183","Paid":"1933 2755 3035 3270 3491 3542 3679 4003 4087 4139 4140 4572 4581 5102 5134 5153 5187"}},{"levels":{"Academic":"190 603 614 1416 1422 1531 1619 1623 1631 1786 2103 2160 2304 2486 2719 2738 2788 2815 2854 2917 2919 2955 3027 3102 3260 3326 3358 3476 3482 3492 3504 3602 3627 3684 3712 3870 4010 4139 4140 4389 4405 4604 4676 4944 5055 5089 5095 5102 5130 5134 5201","Interested":"190 603 614 908 965 1031 1352 1358 1397 1422 1430 1449 1455 1496 1531 1553 1610 1619 1626 1717 1761 1786 1845 1927 1933 2034 2062 2071 2103 2105 2110 2143 2191 2225 2290 2304 2325 2333 2414 2435 2482 2486 2539 2595 2649 2669 2691 2711 2719 2738 2748 2762 2815 2854 2917 2943 2955 2972 2998 3035 3073 3178 3260 3264 3370 3371 3376 3400 3404 3407 3409 3414 3419 3429 3430 3436 3439 3456 3461 3469 3472 3476 3482 3485 3488 3491 3492 3499 3501 3504 3507 3519 3522 3524 3542 3557 3558 3572 3573 3581 3590 3592 3594 3602 3605 3606 3619 3627 3636 3652 3684 3700 3708 3712 3716 3739 3748 3749 3778 3791 3799 3807 3808 3817 3839 3850 3870 3871 3895 3913 3917 3936 3942 3948 3959 3972 3973 3976 3992 4010 4019 4035 4040 4043 4048 4054 4099 4104 4111 4121 4122 4130 4132 4139 4140 4143 4192 4219 4241 4252 4254 4274 4292 4335 4338 4363 4389 4391 4405 4437 4446 4451 4476 4483 4487 4495 4500 4506 4531 4574 4604 4652 4685 4702 4712 4734 4753 4783 4811 4873 4902 4904 4938 4944 5019 5046 5051 5089 5090 5095 5102 5105 5114 5130 5134 5136 5137 5153 5165 5187 5209","Practical":"1095 1626 1761 1845 2034 2062 2595 2691 3035 3708 3808 3973 4111 4574 4649 4760 5014","Paid":"2071 2325 3917 4087 4254 5153 5187"}},{"levels":{"Interested":"190 603 614 965 1031 1397 1422 1430 1449 1455 1531 1553 1619 1626 1761 1786 1845 1927 1933 2021 2034 2062 2063 2103 2105 2110 2143 2191 2225 2238 2265 2289 2290 2298 2299 2333 2348 2413 2414 2482 2486 2487 2539 2551 2595 2649 2669 2691 2719 2738 2748 2762 2790 2814 2815 2854 2894 2919 2943 2955 2972 2998 3073 3089 3178 3260 3264 3326 3368 3370 3371 3375 3376 3384 3400 3404 3407 3409 3414 3419 3429 3430 3436 3439 3449 3456 3461 3469 3470 3472 3476 3481 3482 3485 3488 3491 3492 3499 3501 3504 3519 3522 3524 3542 3557 3570 3572 3573 3587 3590 3592 3594 3595 3605 3610 3619 3634 3664 3679 3684 3700 3708 3709 3712 3716 3739 3748 3749 3778 3791 3799 3807 3808 3817 3839 3870 3871 3872 3895 3913 3917 3918 3933 3936 3940 3942 3948 3959 3972 3973 3992 3998 4010 4035 4040 4043 4044 4048 4054 4099 4109 4111 4121 4122 4140 4143 4173 4174 4191 4192 4241 4252 4265 4274 4284 4292 4335 4338 4363 4387 4391 4437 4446 4451 4458 4476 4483 4487 4494 4495 4500 4506 4572 4574 4581 4598 4604 4652 4685 4702 4712 4734 4753 4783 4811 4812 4873 4886 4902 4904 4922 4938 4944 4989 4991 4994 5019 5039 5046 5051 5090 5105 5114 5130 5134 5137 5154 5165 5187 5196 5217","Academic":"603 1422 1455 1496 1531 1619 1624 1626 1631 1786 1845 2160 2238 2595 2711 2719 2738 2748 2755 2814 2815 2854 2919 3027 3102 3178 3270 3317 3358 3368 3481 3482 3497 3504 3524 3548 3627 3708 3709 3710 3712 3749 3856 3870 3872 3895 3948 3959 4056 4058 4087 4140 4143 4174 4233 4408 4424 4497 4502 4598 4604 4652 4676 4922 4924 4944 4977 4989 4999 5018 5039 5055 5130 5134 5153 5165 5187 5201","Paid":"614 2955 4938","Practical":"1095 1761 2034 2062 2105 2265 2304 2691 3035 3362 3371 3491 4274 4649 4760 5089 5102 5154"}},{"levels":{"Academic":"190 603 614 1416 1422 1531 1619 1626 1631 1761 2034 2049 2175 2238 2317 2414 2506 2719 2738 2755 2814 2815 2854 2881 2894 2917 2919 3178 3270 3358 3368 3407 3481 3482 3484 3494 3497 3504 3519 3524 3548 3550 3627 3708 3709 3710 3715 3765 3777 3782 3808 3828 3870 3872 3895 3936 3940 3948 3959 3973 3976 4007 4010 4058 4087 4111 4118 4125 4137 4140 4174 4243 4271 4389 4391 4405 4408 4424 4476 4495 4497 4523 4604 4652 4732 4867 4924 4944 4999 5016 5039 5051 5055 5089 5090 5113 5130 5187 5201 5273","Interested":"603 614 965 1352 1397 1422 1424 1430 1449 1455 1496 1531 1553 1619 1626 1761 1786 1845 1927 1933 2021 2034 2062 2063 2103 2105 2110 2143 2175 2191 2225 2238 2290 2298 2325 2333 2348 2413 2414 2435 2482 2486 2506 2539 2595 2649 2669 2691 2719 2734 2748 2762 2781 2790 2814 2815 2854 2881 2894 2917 2955 2972 2998 3035 3073 3089 3092 3178 3260 3270 3274 3362 3366 3368 3370 3371 3375 3376 3384 3400 3407 3409 3414 3417 3419 3429 3430 3436 3439 3449 3456 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3494 3499 3501 3504 3512 3519 3522 3524 3527 3542 3550 3557 3558 3572 3573 3586 3587 3590 3592 3594 3595 3596 3597 3605 3606 3610 3619 3636 3641 3652 3664 3666 3679 3684 3700 3708 3709 3710 3712 3716 3725 3730 3739 3748 3749 3759 3765 3768 3777 3778 3782 3791 3799 3807 3808 3813 3817 3828 3839 3850 3870 3871 3872 3895 3913 3917 3933 3936 3942 3948 3959 3972 3973 3992 3998 4007 4010 4035 4043 4044 4048 4054 4056 4099 4109 4120 4121 4125 4139 4140 4143 4174 4191 4192 4219 4233 4241 4252 4265 4271 4274 4284 4292 4335 4363 4387 4389 4391 4405 4424 4437 4446 4451 4476 4483 4486 4487 4494 4500 4503 4506 4523 4574 4581 4604 4645 4652 4676 4685 4702 4712 4732 4734 4748 4753 4783 4811 4873 4886 4902 4904 4938 4944 4991 4994 4999 5016 5018 5019 5039 5046 5051 5089 5090 5105 5114 5130 5137 5153 5165 5187 5196","Practical":"1786 1845 2062 2105 2595 2691 2790 3035 3362 3371 3557 3712 4056 4143 4649 4760 4938 5102 5105","Paid":"2333 2781 2955 4274 4676 5153"}},{"levels":{"Interested":"190 603 614 965 1031 1352 1397 1422 1449 1455 1531 1553 1619 1626 1631 1786 1845 1927 1933 2034 2062 2103 2110 2143 2191 2225 2248 2290 2325 2414 2482 2486 2539 2595 2649 2669 2691 2719 2738 2748 2762 2815 2854 2894 2917 2919 2943 2972 3027 3035 3073 3178 3264 3270 3326 3362 3370 3371 3376 3407 3414 3419 3429 3430 3436 3461 3469 3472 3476 3482 3485 3488 3491 3499 3501 3504 3519 3522 3524 3542 3550 3557 3572 3573 3587 3590 3592 3605 3606 3684 3700 3716 3739 3749 3791 3799 3808 3839 3895 3913 3917 3936 3942 3948 3959 3972 3973 3992 4010 4035 4043 4048 4121 4143 4192 4219 4241 4252 4284 4292 4335 4363 4391 4437 4446 4451 4476 4483 4486 4487 4500 4506 4574 4652 4685 4702 4712 4734 4753 4811 4873 4902 4904 4922 4938 4944 5019 5051 5102 5114 5130 5153 5165 5187","Academic":"603 1422 1786 1845 2034 2062 2105 2160 2711 2719 2917 3358 3362 3482 3524 3550 3808 4652 4922 5055","Practical":"1095 2691 3035 3973 4087 4649 5014","Paid":"4938 5153"}},{"levels":{"Academic":"190 908 965 1346 1411 1416 1422 1496 1531 1553 1619 1620 1623 1624 1626 1631 1717 2051 2103 2143 2160 2299 2414 2486 2506 2649 2710 2719 2738 2755 2761 2773 2788 2814 2815 2818 2894 2919 2927 2943 2955 3014 3027 3035 3089 3094 3102 3178 3260 3270 3317 3326 3358 3368 3400 3407 3417 3439 3472 3473 3481 3482 3485 3492 3497 3499 3504 3519 3524 3542 3548 3550 3627 3708 3709 3716 3777 3791 3807 3808 3813 3828 3839 3856 3870 3872 3895 3925 3936 3948 3959 4010 4056 4087 4111 4121 4140 4173 4174 4249 4253 4308 4335 4476 4487 4495 4497 4502 4523 4568 4574 4590 4598 4676 4760 4812 4944 5018 5019 5039 5055 5089 5102 5113 5114 5130 5165 5187 5196 5273","Interested":"190 603 614 965 1031 1346 1352 1397 1411 1422 1430 1449 1455 1531 1553 1619 1626 1761 1786 1845 1927 1933 2021 2034 2051 2062 2063 2069 2103 2105 2110 2143 2191 2225 2248 2265 2290 2298 2333 2413 2414 2482 2486 2487 2497 2539 2551 2595 2649 2669 2691 2719 2738 2748 2762 2790 2814 2815 2955 2972 2986 3035 3089 3178 3260 3264 3270 3274 3368 3370 3371 3376 3394 3404 3407 3409 3414 3419 3429 3430 3436 3439 3456 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3499 3501 3504 3512 3519 3522 3524 3542 3557 3558 3572 3573 3581 3586 3587 3590 3592 3594 3605 3619 3636 3679 3684 3700 3708 3709 3710 3712 3716 3739 3749 3778 3791 3799 3807 3808 3813 3817 3839 3870 3872 3895 3913 3917 3925 3933 3936 3942 3948 3954 3959 3972 3973 3992 3998 4003 4010 4019 4035 4042 4043 4044 4048 4054 4057 4099 4111 4121 4143 4173 4174 4178 4191 4192 4219 4233 4241 4252 4254 4274 4284 4292 4335 4363 4391 4400 4424 4437 4446 4451 4458 4476 4483 4486 4487 4494 4500 4506 4523 4574 4590 4598 4652 4685 4702 4712 4734 4753 4760 4783 4811 4812 4873 4902 4904 4924 4938 4944 4994 5018 5019 5039 5046 5051 5089 5090 5102 5105 5114 5130 5134 5137 5153 5165 5187 5196","Paid":"614 2071 3917 4938 5153","Practical":"1095 1455 1761 1786 1845 2034 2049 2062 2105 2333 2691 2784 3581 3710 3712 4042 4058 4178 4254 4408 4649 5134"}},{"levels":{"Paid":"190 614 3917 4938 5153","Interested":"190 603 614 965 1031 1352 1397 1411 1418 1422 1449 1455 1531 1553 1619 1626 1761 1786 1845 1927 1933 2034 2051 2063 2069 2103 2105 2110 2143 2191 2225 2238 2265 2290 2298 2330 2333 2413 2414 2482 2486 2497 2539 2595 2649 2669 2691 2719 2748 2762 2790 2814 2815 2854 2955 2972 2986 2998 3027 3059 3089 3122 3178 3274 3326 3368 3370 3371 3375 3376 3394 3404 3407 3409 3414 3419 3421 3429 3430 3436 3439 3456 3461 3464 3469 3470 3472 3476 3481 3482 3485 3488 3491 3499 3501 3502 3504 3507 3512 3519 3522 3524 3526 3542 3557 3558 3570 3572 3573 3581 3587 3590 3592 3594 3605 3610 3619 3636 3643 3679 3684 3700 3708 3709 3710 3712 3716 3739 3749 3799 3807 3808 3813 3817 3839 3870 3872 3895 3913 3917 3927 3933 3936 3942 3948 3954 3959 3972 3976 3992 3998 4003 4010 4019 4035 4040 4043 4048 4099 4121 4143 4173 4174 4178 4191 4192 4219 4241 4252 4254 4274 4284 4292 4308 4335 4363 4391 4400 4424 4437 4446 4451 4476 4483 4486 4487 4494 4500 4506 4523 4574 4590 4598 4604 4645 4652 4685 4693 4702 4712 4734 4748 4753 4760 4783 4811 4812 4873 4902 4904 4914 4922 4924 4938 4944 4977 4989 4994 5018 5019 5039 5046 5051 5055 5089 5090 5102 5105 5114 5130 5134 5136 5137 5153 5165","Academic":"908 965 1411 1416 1422 1496 1531 1553 1610 1620 1717 1786 2051 2063 2143 2238 2299 2304 2333 2755 2761 2788 2790 2814 2815 2894 2917 2919 2927 2943 2955 3035 3094 3122 3178 3358 3368 3375 3400 3407 3439 3472 3481 3482 3485 3499 3502 3503 3504 3524 3627 3643 3708 3709 3712 3739 3749 3791 3808 3813 3839 3856 3872 3895 3936 3948 4010 4056 4087 4173 4174 4233 4253 4335 4487 4497 4502 4574 4590 4598 4604 4645 4676 4760 4812 4867 4914 4922 4944 4969 4989 5018 5019 5039 5069 5102 5113 5114 5130 5273","Practical":"1095 1455 1761 1845 2034 2049 2062 2105 2691 2719 3102 3491 3679 3710 4042 4058 4178 4408 4649"}},{"levels":{"Interested":"190 603 614 965 1031 1346 1352 1397 1409 1422 1449 1455 1496 1553 1619 1624 1626 1631 1761 1786 1845 1927 1933 2021 2050 2062 2103 2159 2191 2225 2248 2290 2327 2333 2414 2482 2486 2506 2539 2595 2649 2669 2691 2719 2748 2762 2814 2815 2854 2894 2917 2919 2943 2972 2995 2998 3027 3152 3178 3274 3326 3362 3371 3376 3404 3407 3409 3414 3419 3429 3430 3436 3439 3456 3461 3469 3470 3472 3476 3482 3485 3488 3491 3499 3501 3504 3519 3522 3524 3542 3557 3572 3573 3590 3592 3605 3606 3619 3652 3656 3664 3684 3700 3712 3716 3739 3748 3749 3782 3791 3799 3807 3808 3813 3817 3839 3850 3870 3895 3913 3917 3925 3931 3936 3942 3948 3972 3992 4010 4035 4043 4048 4104 4111 4118 4121 4122 4130 4139 4140 4143 4178 4188 4192 4219 4241 4252 4254 4265 4284 4292 4335 4363 4389 4391 4405 4437 4446 4451 4461 4476 4483 4486 4487 4500 4506 4574 4652 4682 4685 4702 4712 4734 4753 4767 4811 4873 4886 4904 4926 4938 4944 5018 5019 5051 5055 5089 5114 5130 5134 5136 5165","Academic":"603 965 1409 1422 1496 2021 2062 2494 2719 2747 2814 2815 2854 2995 3362 3384 3482 3519 3627 3684 3765 3782 3925 3931 4111 4118 4130 4233 4461 4476 4495 4652 4682 4944","Practical":"1095 1845 2317 2414 2691 2790 2818 2917 3035 3557 3791 4139 4140 4178 4188 4405 4574 4886 5014","Paid":"1426 2755 4087 4389"}},{"levels":{"Interested":"190 603 614 965 1031 1346 1352 1397 1409 1422 1430 1449 1455 1496 1531 1553 1619 1626 1786 1845 1927 1933 2062 2063 2069 2103 2105 2110 2143 2191 2224 2225 2299 2333 2348 2413 2414 2482 2486 2506 2539 2595 2649 2669 2691 2719 2734 2738 2748 2762 2781 2790 2815 2854 2894 2919 2943 2955 2972 3014 3027 3073 3178 3260 3264 3270 3326 3370 3371 3375 3376 3384 3400 3407 3409 3414 3419 3429 3430 3436 3456 3461 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3488 3491 3492 3494 3499 3501 3504 3519 3522 3524 3542 3557 3572 3573 3581 3586 3587 3590 3592 3595 3597 3605 3606 3610 3641 3652 3666 3684 3700 3708 3709 3712 3716 3725 3730 3739 3748 3749 3777 3778 3791 3799 3808 3817 3839 3870 3871 3895 3913 3917 3933 3936 3942 3948 3954 3959 3972 3973 3976 3992 3998 4010 4035 4040 4043 4044 4048 4099 4109 4121 4123 4125 4139 4143 4173 4191 4192 4219 4241 4252 4254 4271 4274 4292 4335 4338 4363 4389 4391 4424 4437 4446 4451 4476 4483 4486 4487 4494 4500 4506 4523 4574 4581 4652 4676 4685 4702 4712 4734 4753 4783 4811 4812 4873 4904 4922 4938 4944 4977 4994 5018 5019 5039 5046 5051 5089 5090 5102 5105 5114 5130 5136 5137 5153 5165 5187","Academic":"603 614 965 1346 1416 1422 1531 1619 2049 2105 2143 2506 2595 2719 2738 2790 2854 2894 2955 3035 3102 3178 3260 3270 3317 3358 3473 3481 3482 3485 3504 3777 3782 3856 3895 3959 3973 4010 4056 4125 4139 4143 4173 4233 4243 4604 4760 4922 4944 5014 5051 5105 5113 5114 5130 5153 5187 5273","Practical":"1095 1409 1786 2062 2691 3371 3870 3936 4389 4649 4938 5039","Paid":"1845 2333 2781 4581 4676"}},{"levels":{"Academic":"190 908 965 1416 1422 1496 1531 1619 1620 1624 1631 1717 1786 2021 2103 2143 2160 2248 2299 2317 2333 2379 2414 2486 2539 2649 2710 2711 2761 2815 2818 2894 2943 2955 3014 3027 3094 3102 3178 3317 3326 3358 3362 3368 3370 3400 3407 3417 3439 3461 3472 3473 3476 3481 3482 3485 3492 3497 3499 3504 3519 3524 3548 3550 3570 3708 3709 3716 3726 3749 3777 3807 3813 3839 3856 3872 3895 3940 3959 4010 4048 4056 4137 4140 4143 4249 4335 4358 4476 4483 4487 4598 4604 4645 4676 4759 4760 4867 4944 4969 4989 5014 5018 5046 5051 5055 5089 5113 5114 5130 5134 5153 5187 5196","Interested":"190 603 614 965 1352 1397 1422 1449 1455 1531 1553 1619 1626 1761 1786 1845 1927 1933 2034 2051 2062 2063 2103 2105 2110 2143 2191 2225 2289 2298 2348 2414 2435 2482 2486 2487 2539 2551 2595 2649 2669 2691 2748 2762 2790 2814 2815 2854 2919 2955 2972 2987 3014 3035 3073 3089 3178 3362 3370 3371 3376 3394 3407 3409 3414 3419 3421 3429 3430 3436 3456 3461 3464 3469 3472 3473 3476 3481 3482 3484 3485 3488 3491 3499 3501 3504 3507 3512 3519 3522 3524 3542 3557 3572 3573 3581 3587 3590 3592 3602 3605 3610 3634 3643 3679 3684 3700 3708 3709 3712 3716 3726 3739 3748 3749 3799 3807 3808 3813 3817 3839 3870 3872 3895 3913 3917 3918 3936 3942 3948 3954 3959 3972 3992 3998 4010 4035 4040 4043 4048 4054 4111 4121 4137 4140 4143 4173 4178 4192 4219 4233 4241 4252 4254 4274 4284 4292 4335 4363 4391 4424 4437 4446 4451 4476 4483 4486 4487 4495 4500 4506 4523 4531 4574 4590 4598 4604 4645 4652 4685 4702 4712 4734 4748 4753 4759 4811 4873 4902 4904 4924 4938 4944 4977 4989 4994 5019 5039 5046 5051 5089 5090 5105 5114 5130 5134 5136 5153 5165 5187 5196","Practical":"603 1031 1095 1623 1761 1845 2034 2049 2051 2062 2105 2691 2719 2790 2814 3035 3421 3491 3581 3602 3643 3679 3710 3712 3748 3808 3870 3936 4058 4173 4178 4233 4254 4424 4531 4590 4649 4977 5039 5102 5201","Paid":"1455 1565 1626 2919 3917 4748 4938"}},{"levels":{"Academic":"190 965 1346 1411 1422 1531 1619 1620 1761 2063 2071 2103 2129 2160 2299 2304 2402 2814 2815 2818 2854 2894 2927 2941 2987 3014 3102 3178 3358 3366 3368 3370 3371 3400 3407 3482 3504 3524 3558 3602 3636 3712 3895 3931 3948 4010 4041 4042 4056 4058 4080 4111 4132 4139 4174 4192 4253 4308 4338 4348 4363 4375 4387 4400 4451 4458 4502 4568 4604 4676 4753 4783 4822 4914 4924 4944 4969 4989 5018 5019 5273","Interested":"190 603 614 908 965 1031 1346 1352 1397 1411 1416 1422 1449 1455 1496 1531 1553 1610 1619 1626 1761 1786 1845 1927 1933 2034 2051 2062 2063 2069 2103 2105 2110 2143 2191 2225 2238 2271 2290 2298 2333 2348 2383 2413 2414 2482 2494 2539 2595 2649 2669 2691 2713 2748 2762 2770 2788 2790 2814 2815 2854 2894 2919 2943 2955 2972 2987 2998 3027 3035 3073 3089 3178 3270 3305 3326 3327 3366 3370 3371 3376 3394 3407 3414 3419 3429 3430 3436 3456 3461 3464 3469 3470 3472 3476 3482 3485 3488 3491 3499 3501 3504 3507 3512 3519 3522 3524 3542 3557 3572 3573 3581 3586 3587 3590 3592 3602 3605 3610 3634 3643 3644 3679 3684 3700 3709 3712 3716 3739 3748 3749 3799 3807 3808 3813 3817 3839 3870 3872 3895 3913 3917 3927 3931 3936 3940 3942 3948 3954 3959 3972 3992 3998 4003 4010 4019 4035 4040 4042 4043 4048 4054 4058 4080 4099 4111 4121 4122 4139 4143 4174 4178 4192 4219 4233 4241 4252 4254 4265 4274 4284 4292 4308 4335 4363 4375 4387 4391 4437 4446 4451 4476 4483 4486 4487 4500 4506 4523 4574 4581 4604 4652 4685 4702 4712 4734 4748 4753 4760 4783 4811 4812 4822 4873 4902 4904 4914 4922 4938 4944 4989 4994 4999 5018 5019 5046 5051 5089 5090 5100 5114 5130 5136 5137 5153 5165 5196 5209","Paid":"614 1565 2713 2955 3644 3917 3943 4254 5153","Practical":"1095 1845 2034 2062 2238 2333 2494 2691 2719 2755 2919 3035 3439 3472 3485 3870 3936 4178 4649 4902 4938 4999 5014 5209"}},{"levels":{"Interested":"190 603 614 908 965 1031 1346 1352 1397 1422 1449 1455 1531 1553 1619 1626 1786 1845 1927 1933 2034 2051 2062 2063 2103 2105 2110 2191 2225 2325 2333 2414 2482 2486 2487 2494 2539 2595 2649 2669 2691 2719 2738 2748 2762 2788 2790 2815 2854 2894 2919 2943 2955 2972 2998 3027 3035 3073 3089 3092 3178 3264 3270 3326 3370 3371 3376 3407 3414 3419 3429 3430 3436 3456 3461 3464 3469 3470 3472 3476 3482 3485 3488 3491 3499 3501 3504 3507 3519 3522 3524 3542 3557 3572 3573 3586 3590 3592 3605 3606 3610 3619 3684 3700 3708 3709 3712 3716 3739 3748 3749 3778 3791 3799 3807 3808 3813 3817 3839 3870 3871 3872 3895 3913 3917 3918 3931 3936 3942 3948 3959 3972 3992 3998 4003 4010 4019 4035 4042 4043 4044 4048 4054 4058 4099 4111 4121 4122 4123 4143 4178 4192 4219 4241 4252 4254 4271 4274 4284 4292 4308 4335 4363 4389 4391 4437 4446 4451 4476 4483 4486 4487 4500 4506 4508 4523 4531 4574 4581 4652 4685 4702 4712 4734 4748 4753 4760 4783 4811 4873 4904 4922 4938 4944 4994 5018 5019 5051 5089 5090 5100 5105 5114 5130 5136 5137 5153 5165 5196","Paid":"614 2325 3035 3895 3917 4254 5153","Academic":"965 1346 1422 1455 1531 1619 1845 2062 2105 2160 2317 2486 2494 2738 2815 2818 2854 2894 3270 3358 3368 3400 3407 3417 3482 3684 3708 3712 3856 3872 3931 3940 3959 4010 4042 4056 4271 4389 4531 4676 4922 4924 4944 5051 5055 5090 5136 5273","Practical":"1095 1626 2034 2049 2691 2719 2919 3102 3870 3936 4058 4087 4178 4649 4938"}},{"levels":{"Interested":"190 603 614 965 1031 1352 1358 1397 1422 1449 1455 1553 1619 1626 1761 1786 1845 1927 2034 2062 2063 2103 2262 2290 2299 2325 2413 2414 2482 2486 2494 2506 2539 2551 2595 2649 2669 2691 2738 2748 2770 2814 2815 2854 2917 2919 2943 2955 2986 3027 3035 3073 3102 3260 3270 3326 3370 3371 3375 3376 3400 3404 3407 3419 3421 3429 3430 3436 3461 3469 3470 3472 3476 3482 3488 3499 3501 3504 3519 3524 3542 3557 3570 3572 3573 3590 3592 3602 3605 3606 3619 3634 3636 3679 3684 3700 3705 3708 3709 3712 3716 3749 3776 3799 3807 3822 3839 3870 3895 3913 3917 3931 3936 3942 3948 3972 3992 4010 4035 4043 4044 4048 4058 4104 4111 4121 4132 4143 4192 4219 4241 4245 4252 4253 4265 4284 4292 4308 4335 4391 4437 4443 4446 4451 4483 4486 4487 4495 4500 4506 4508 4574 4581 4604 4652 4685 4702 4730 4734 4753 4760 4822 4873 4886 4902 4904 4926 4938 4944 5005 5014 5018 5019 5039 5051 5071 5089 5090 5095 5105 5114 5130 5134 5136 5165 5172 5193 5196 5273","Practical":"1095 1845 2063 2414 2486 2691 2755 3407 3421 3491 3542 3602 3705 3795 3976 4054 4087 4111 4253 4574 4867 5039","Paid":"2919 3679","Academic":"3035 3260 3482 3712 3776 3895 4019 4252 4604 4717 4822 4902 5172"}},{"levels":{"Interested":"190 603 965 1346 1352 1358 1397 1411 1418 1422 1430 1442 1449 1455 1496 1553 1619 1624 1626 1761 1786 1845 1927 2021 2063 2103 2143 2149 2159 2160 2191 2225 2238 2248 2265 2290 2298 2327 2333 2348 2413 2414 2482 2486 2494 2506 2539 2551 2595 2649 2669 2691 2738 2748 2762 2772 2814 2815 2854 2894 2917 2919 2927 2941 2943 2972 2987 2998 3008 3035 3073 3089 3090 3152 3178 3196 3260 3269 3270 3327 3362 3370 3371 3376 3404 3407 3414 3419 3429 3430 3436 3461 3469 3470 3472 3476 3481 3482 3484 3485 3488 3494 3497 3499 3501 3504 3512 3519 3522 3524 3542 3557 3572 3573 3581 3586 3590 3592 3605 3606 3619 3627 3634 3649 3652 3656 3666 3684 3700 3709 3712 3716 3726 3749 3759 3782 3799 3807 3808 3817 3828 3839 3847 3850 3870 3871 3872 3895 3913 3917 3918 3927 3931 3936 3940 3942 3948 3972 3976 3992 4010 4035 4043 4044 4048 4058 4065 4104 4111 4121 4122 4130 4132 4139 4140 4143 4191 4192 4219 4241 4245 4252 4253 4265 4274 4292 4308 4335 4391 4424 4437 4446 4451 4483 4486 4500 4506 4508 4523 4531 4574 4581 4652 4685 4702 4732 4734 4753 4783 4812 4822 4873 4904 4926 4938 4944 4984 4989 4994 5005 5014 5018 5019 5046 5051 5071 5089 5090 5105 5114 5130 5136 5165 5173 5193 5194","Academic":"908 965 1411 1416 1422 1430 1567 1623 1624 1631 2029 2049 2103 2160 2224 2299 2323 2348 2413 2417 2433 2497 2506 2539 2649 2719 2761 2854 2894 2941 3008 3014 3196 3260 3264 3269 3317 3326 3407 3417 3472 3476 3481 3482 3485 3493 3494 3504 3519 3524 3542 3700 3704 3709 3710 3759 3782 3791 3817 3828 3847 3863 3872 3895 3931 3936 3940 3972 3992 4048 4056 4104 4109 4111 4121 4130 4274 4391 4424 4458 4495 4523 4568 4581 4598 4669 4676 4812 4822 4924 4944 4989 5102 5114 5136 5194 5201","Practical":"1031 1095 1418 1442 1455 1619 1620 1626 1761 1845 2062 2149 2304 2333 2414 2486 2494 2691 2711 2784 2790 2814 2815 2917 2987 3102 3362 3400 3491 3549 3557 3558 3636 3649 3712 3726 3765 3870 3927 4139 4140 4253 4461 4500 4531 4574 4732 4984 5051","Paid":"1565 1933 2755 2788 2818 3027 3035 3178 3627 4010 4087 5134"}},{"levels":{"Interested":"190 603 965 1031 1346 1352 1358 1397 1422 1442 1449 1455 1496 1553 1619 1626 1631 1761 1786 1845 1927 2062 2062 2143 2145 2160 2191 2248 2265 2333 2413 2414 2482 2486 2506 2539 2551 2595 2649 2669 2691 2748 2762 2772 2814 2815 2854 2894 2917 2919 2943 2987 2998 3027 3035 3073 3089 3090 3178 3196 3260 3270 3326 3370 3376 3400 3407 3414 3419 3429 3430 3436 3461 3469 3470 3472 3476 3482 3484 3485 3488 3497 3501 3504 3519 3522 3524 3542 3572 3573 3581 3590 3592 3605 3606 3619 3652 3657 3666 3684 3700 3709 3712 3716 3723 3749 3759 3777 3799 3807 3808 3817 3839 3850 3870 3871 3895 3913 3917 3925 3931 3936 3940 3942 3948 3972 3976 3992 4010 4035 4043 4044 4048 4058 4104 4111 4121 4122 4130 4132 4139 4140 4143 4191 4192 4219 4241 4252 4254 4274 4284 4292 4335 4352 4391 4437 4446 4451 4483 4486 4487 4500 4506 4508 4574 4581 4652 4682 4685 4702 4734 4753 4783 4812 4822 4873 4904 4926 4938 4944 4984 4991 4994 5005 5014 5018 5019 5046 5051 5071 5089 5090 5105 5114 5130 5134 5136 5165 5173 5193 5194","Academic":"603 2049 2145 2160 2316 2383 2818 2854 3264 3274 3317 3417 3482 3497 3549 3657 3709 3710 3759 3777 3782 3863 3864 3925 3931 3936 4104 4109 4111 4121 4130 4132 4254 4352 4461 4676 4682 4702 4944 4977 5194","Practical":"1095 2790 2814 2815 2987 3102 3196 3712 3870 4572 4574 4649 5102","Paid":"2755 2917 3035 4087 4139 4140"}},{"levels":{"Interested":"190 965 1031 1346 1352 1358 1397 1411 1418 1422 1442 1449 1455 1496 1553 1619 1626 1761 1786 1845 1927 2021 2063 2110 2191 2225 2238 2333 2348 2414 2482 2486 2506 2539 2551 2595 2649 2669 2691 2748 2755 2762 2814 2815 2854 2894 2917 2919 2927 2943 2987 2995 2998 3073 3260 3270 3326 3371 3376 3407 3414 3419 3429 3430 3436 3461 3469 3470 3472 3476 3482 3485 3488 3501 3504 3519 3522 3524 3542 3572 3573 3581 3586 3590 3592 3605 3606 3619 3652 3656 3684 3700 3709 3716 3749 3791 3799 3808 3817 3839 3895 3913 3917 3936 3942 3948 3972 3992 4010 4035 4043 4048 4104 4111 4121 4122 4143 4191 4192 4219 4241 4252 4253 4274 4292 4335 4391 4437 4446 4451 4458 4483 4486 4500 4506 4574 4581 4652 4685 4702 4734 4753 4811 4812 4822 4873 4904 4926 4938 4944 4994 5005 5019 5046 5051 5071 5089 5090 5114 5130 5165 5173 5193","Academic":"219 1358 1411 1416 1422 1426 1567 1761 1927 1995 2021 2159 2191 2238 2333 2348 2417 2497 2854 3027 3035 3482 3504 3936 4087 4109 4253","Practical":"1095 1346 1418 1442 1455 1845 1933 2062 2486 2691 2814 3059 3491 4574","Paid":"3400 3791 5173"}},{"levels":{"Practical":"190 1031 1095 1346 1442 1619 1626 1845 2143 2149 2549 2592 2719 2769 2784 2814 2815 2917 2987 3102 3712 3726 3870 4087 4118 4140 4178 4274 4500 4531 4574 4643 4649 5014 5051","Interested":"190 965 1346 1352 1358 1397 1422 1430 1442 1449 1455 1553 1619 1624 1626 1761 1786 1845 1927 2021 2062 2063 2143 2149 2159 2160 2191 2225 2238 2248 2290 2298 2327 2333 2414 2482 2486 2506 2539 2549 2551 2592 2595 2649 2669 2691 2738 2748 2755 2762 2769 2814 2815 2854 2894 2917 2919 2927 2943 2972 2987 2995 2998 3035 3073 3089 3178 3196 3260 3269 3270 3370 3371 3376 3400 3404 3407 3414 3419 3429 3430 3436 3461 3469 3470 3472 3476 3482 3484 3485 3488 3494 3497 3501 3504 3519 3522 3524 3542 3572 3573 3581 3586 3590 3592 3605 3606 3619 3627 3634 3652 3657 3664 3684 3700 3709 3712 3716 3726 3749 3759 3777 3782 3799 3807 3808 3817 3839 3850 3870 3872 3895 3910 3913 3917 3931 3936 3940 3942 3948 3972 3992 3998 4010 4035 4043 4044 4048 4058 4104 4111 4118 4120 4121 4122 4139 4140 4143 4174 4178 4191 4192 4219 4241 4252 4253 4254 4265 4271 4274 4284 4292 4335 4391 4424 4437 4446 4451 4458 4483 4486 4500 4506 4523 4531 4574 4581 4643 4652 4682 4685 4702 4734 4753 4760 4783 4812 4822 4873 4904 4926 4938 4944 4977 4994 5005 5014 5016 5018 5019 5046 5051 5071 5089 5090 5105 5114 5130 5136 5153 5165 5173 5193 5194","Academic":"965 1416 1422 1430 1455 1496 1620 1623 1624 1631 2049 2062 2159 2160 2224 2299 2486 2711 2738 2761 2818 2854 3196 3260 3264 3326 3417 3482 3493 3494 3504 3549 3709 3759 3782 3828 3931 3972 4048 4056 4174 4233 4243 4253 4254 4271 4391 4495 4523 4581 4598 4676 4682 4924 4977 5089 5090 5114 5130 5194 5201","Paid":"2788 3027 3035 3178 3572 3627 4139 5016 5134 5153"}},{"levels":{"Interested":"190 603 614 965 1031 1346 1352 1358 1397 1403 1416 1422 1442 1449 1455 1531 1553 1619 1626 1631 1761 1786 1845 1927 2034 2063 2103 2105 2110 2160 2225 2289 2290 2298 2325 2333 2348 2414 2482 2486 2494 2506 2539 2551 2595 2649 2669 2691 2738 2748 2762 2815 2854 2917 2919 2943 2955 2972 2986 2998 3014 3073 3260 3269 3270 3305 3326 3362 3369 3370 3371 3375 3376 3384 3394 3407 3409 3414 3419 3429 3430 3436 3449 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3491 3499 3501 3504 3512 3519 3524 3542 3550 3557 3570 3572 3573 3581 3587 3590 3592 3605 3610 3619 3634 3636 3664 3684 3700 3708 3709 3710 3712 3716 3725 3749 3791 3799 3808 3817 3839 3870 3872 3895 3913 3917 3918 3931 3933 3936 3942 3948 3972 3973 3976 3992 3998 4010 4035 4042 4043 4044 4048 4058 4104 4111 4120 4121 4122 4130 4132 4139 4143 4173 4178 4192 4219 4241 4249 4252 4253 4254 4265 4274 4284 4292 4308 4335 4363 4391 4424 4437 4446 4451 4483 4486 4487 4495 4500 4506 4574 4604 4645 4652 4685 4702 4734 4753 4759 4760 4783 4811 4812 4822 4873 4902 4904 4926 4938 4944 4991 4994 5018 5019 5046 5051 5071 5089 5090 5095 5105 5114 5130 5134 5136 5165 5173 5193 5196 5209","Academic":"603 614 1346 1455 1496 1619 1761 1845 2160 2298 2761 2790 2917 3027 3102 3366 3370 3482 3499 3708 3856 3870 3872 3895 3931 3973 3992 3998 4042 4058 4143 4173 4192 4243 4252 4253 4461 4497 4531 4568 4574 4604 4645 4649 4676 4760 4822 4902 4994 5095 5105 5273","Practical":"1095 1403 1623 1786 1933 2034 2049 2062 2103 2110 2299 2333 2497 2691 2711 2719 2755 2919 2955 3035 3362 3400 3504 3557 3558 3636 3710 3791 3808 4111 4139 4178 4249 4424 4500 4734 4924 4938 5113 5201","Paid":"2325 3491 3542 3936 4087 4254 5102"}},{"levels":{"Interested":"190 603 965 1346 1352 1358 1397 1416 1422 1449 1455 1496 1531 1553 1619 1626 1761 1786 1845 1927 2034 2063 2105 2160 2262 2265 2289 2290 2298 2325 2333 2348 2414 2482 2486 2494 2506 2539 2551 2595 2649 2669 2691 2738 2748 2762 2770 2815 2854 2917 2919 2943 2955 2972 2986 2987 2998 3027 3035 3073 3089 3090 3178 3260 3264 3269 3270 3305 3326 3369 3370 3371 3375 3376 3384 3404 3407 3409 3414 3419 3429 3430 3436 3449 3461 3464 3469 3470 3472 3476 3481 3482 3484 3485 3488 3497 3499 3501 3504 3512 3519 3524 3527 3542 3550 3557 3558 3570 3572 3573 3581 3587 3590 3592 3602 3605 3606 3610 3619 3634 3636 3657 3664 3679 3684 3700 3708 3709 3710 3716 3725 3749 3799 3807 3808 3817 3839 3870 3871 3872 3895 3913 3917 3931 3936 3942 3948 3972 3973 3992 4010 4035 4042 4043 4044 4048 4058 4104 4111 4118 4120 4121 4122 4125 4132 4139 4143 4173 4174 4178 4192 4219 4241 4243 4245 4252 4253 4254 4265 4274 4284 4292 4308 4335 4363 4387 4391 4424 4437 4446 4451 4483 4486 4487 4495 4500 4506 4523 4574 4581 4604 4645 4652 4676 4685 4702 4730 4734 4753 4759 4783 4811 4812 4822 4873 4902 4904 4922 4926 4938 4944 4989 4991 4994 5018 5019 5039 5051 5071 5089 5090 5105 5114 5130 5134 5136 5153 5165 5187 5193 5196 5209","Academic":"603 965 1455 1631 1786 2323 2669 2691 2711 2761 2818 2854 2917 2941 3014 3260 3305 3366 3370 3419 3482 3497 3499 3708 3709 3828 3856 3870 3872 3895 3972 3998 4019 4042 4048 4056 4143 4173 4174 4192 4233 4243 4461 4497 4523 4574 4590 4604 4645 4652 4712 4902 4922 4989 4994 4999 5055 5105 5136","Paid":"614 1626 2325 2333 2815 2919 2955 3657 3679 3917 3936 4274 4308 4500 4676 5102 5153 5187","Practical":"1031 1095 1403 1619 1761 2034 2049 2298 2299 2486 2595 2719 2755 2987 3035 3102 3400 3504 3542 3557 3558 3602 3636 3710 3808 3973 3976 4058 4087 4111 4118 4139 4178 4252 4253 4254 4424 4649 4760 4867 4924 4938 5039 5089 5113 5134 5201"}},{"levels":{"Interested":"190 603 965 1352 1397 1422 1449 1455 1531 1553 1619 1626 1717 1761 1786 1845 1927 2034 2062 2063 2103 2105 2110 2290 2317 2348 2413 2414 2482 2486 2506 2539 2549 2551 2595 2649 2669 2691 2738 2748 2755 2790 2814 2815 2854 2917 2919 2955 2972 2986 2987 3029 3035 3073 3089 3178 3220 3264 3327 3370 3371 3375 3376 3400 3409 3414 3419 3421 3429 3430 3436 3461 3464 3469 3470 3472 3476 3482 3485 3488 3491 3497 3501 3504 3519 3524 3542 3557 3570 3572 3573 3581 3590 3592 3596 3605 3606 3610 3619 3634 3636 3684 3700 3709 3712 3716 3725 3749 3799 3807 3808 3813 3817 3839 3864 3870 3872 3895 3913 3917 3931 3936 3942 3948 3972 3973 3990 3992 3998 4010 4033 4035 4042 4043 4048 4058 4104 4111 4120 4121 4122 4125 4132 4139 4140 4143 4174 4178 4192 4219 4241 4243 4252 4254 4265 4274 4284 4292 4308 4335 4352 4391 4424 4437 4446 4451 4483 4486 4487 4500 4506 4523 4574 4581 4604 4608 4645 4652 4685 4702 4734 4753 4759 4783 4811 4812 4822 4873 4902 4904 4924 4938 4944 4977 4991 4994 5014 5018 5019 5051 5071 5075 5090 5095 5114 5130 5134 5136 5153 5165 5193","Practical":"603 908 1026 1031 1095 1623 1717 1933 2034 2049 2062 2333 2691 2719 2790 2814 2917 2919 2943 2955 2986 2987 3035 3196 3371 3375 3421 3472 3473 3491 3492 3557 3581 3636 3712 3808 3917 3918 3936 3990 4087 4104 4109 4111 4120 4121 4139 4140 4173 4178 4254 4284 4424 4494 4500 4523 4531 4574 4608 4649 4734 4760 4977 5005 5014 5018 5071 5089 5102 5113 5201","Academic":"614 1422 1455 1619 1620 1631 1761 1786 2051 2289 2317 2413 2669 2711 2761 2769 2815 2854 2941 3027 3102 3178 3220 3305 3317 3326 3358 3384 3464 3482 3504 3573 3627 3708 3817 3828 3864 3870 3872 3895 3931 3973 3976 4042 4048 4058 4174 4233 4243 4308 4461 4483 4568 4590 4604 4645 4652 4676 4702 4759 4902 4991 5039 5055 5095 5130 5194 5273","Paid":"1565 1626 2325 4938 5153"}},{"levels":{"Academic":"219 603 1409 1411 1416 1418 1449 1496 1531 1553 1610 1620 1717 2021 2029 2034 2062 2063 2071 2106 2108 2129 2143 2149 2150 2188 2224 2263 2273 2280 2298 2299 2302 2304 2333 2348 2509 2513 2549 2587 2649 2662 2673 2719 2738 2755 2762 2781 2790 2814 2818 2820 2854 2881 2894 2919 2927 2941 2957 2972 3014 3059 3070 3073 3090 3094 3260 3358 3394 3417 3419 3439 3472 3482 3492 3493 3494 3499 3501 3504 3507 3519 3522 3527 3542 3548 3549 3558 3572 3581 3586 3587 3600 3606 3610 3636 3656 3657 3684 3692 3707 3716 3723 3724 3759 3765 3768 3778 3782 3791 3799 3807 3808 3870 3871 3872 3895 3910 3925 3931 3959 3976 3998 4035 4041 4048 4080 4087 4104 4111 4118 4121 4139 4192 4243 4245 4252 4271 4274 4313 4325 4358 4363 4389 4391 4405 4424 4458 4483 4494 4503 4508 4531 4568 4574 4581 4608 4643 4669 4682 4699 4702 4717 4732 4734 4767 4783 4827 4902 4926 4944 4958 4969 4984 5005 5018 5071 5090 5093 5102 5104 5136 5209","Interested":"219 603 1165 1346 1352 1358 1397 1403 1411 1418 1422 1430 1442 1449 1531 1553 1567 1619 1624 1626 1631 1717 1761 1845 1927 1933 2021 2051 2063 2069 2103 2106 2143 2145 2149 2150 2160 2175 2177 2188 2191 2238 2248 2263 2280 2290 2298 2302 2304 2317 2325 2333 2348 2379 2413 2414 2482 2494 2506 2513 2539 2549 2551 2587 2595 2649 2657 2662 2669 2673 2691 2713 2734 2738 2747 2748 2755 2762 2769 2770 2781 2814 2815 2819 2820 2854 2881 2894 2916 2917 2919 2941 2957 2972 2986 2998 3008 3012 3029 3035 3073 3089 3090 3122 3178 3196 3220 3260 3270 3274 3362 3366 3368 3369 3370 3371 3375 3376 3400 3404 3407 3409 3414 3419 3421 3429 3430 3436 3452 3455 3456 3460 3464 3469 3470 3472 3473 3476 3481 3482 3484 3485 3491 3492 3493 3494 3497 3499 3501 3504 3511 3512 3513 3519 3524 3526 3542 3557 3558 3570 3572 3573 3581 3586 3587 3590 3592 3594 3595 3597 3600 3602 3605 3606 3610 3619 3627 3640 3641 3652 3656 3657 3664 3679 3684 3700 3705 3707 3708 3709 3710 3711 3712 3716 3724 3725 3726 3727 3730 3748 3749 3750 3759 3768 3774 3777 3778 3782 3791 3799 3807 3808 3813 3817 3839 3850 3856 3864 3866 3870 3872 3895 3913 3925 3931 3932 3936 3940 3942 3943 3948 3954 3959 3972 3990 3992 3998 4003 4010 4033 4035 4040 4043 4044 4048 4054 4058 4080 4099 4104 4109 4111 4121 4122 4132 4139 4141 4143 4162 4188 4191 4192 4212 4219 4241 4243 4245 4249 4252 4253 4254 4265 4271 4274 4284 4292 4313 4335 4363 4389 4391 4405 4424 4437 4443 4446 4451 4461 4483 4486 4494 4495 4500 4503 4506 4508 4530 4531 4574 4581 4596 4643 4652 4669 4682 4685 4702 4713 4717 4732 4734 4753 4760 4783 4811 4822 4873 4886 4896 4899 4902 4904 4926 4934 4938 4939 4944 4958 4969 4984 4991 4994 5005 5016 5018 5019 5046 5051 5061 5071 5089 5090 5093 5134 5136 5165 5193 5194 5209","Practical":"1346 1352 1358 1424 1426 1442 1567 1619 1623 1624 1626 1761 1927 2175 2238 2248 2290 2317 2379 2414 2435 2494 2506 2539 2691 2917 2986 2995 3029 3122 3178 3196 3220 3362 3368 3407 3421 3485 3502 3595 3602 3627 3644 3708 3709 3710 3711 3712 3730 3777 3813 3940 3948 4044 4143 4253 4329 4446 4461 4495 4822 4867 4886 4899 5061 5201","Paid":"1403 1845 1933 2177 2595 2713 2747 2748 2770 2772 3035 3089 3152 3414 3497 3524 3570 3596 3652 3936 3943 4010 4122 4652 4811 4811 5014 5016 5193"}},{"levels":{"Academic":"603 1496 1610 1620 1884 2021 2029 2034 2071 2108 2143 2149 2159 2188 2299 2316 2325 2379 2418 2433 2435 2439 2506 2549 2551 2592 2649 2662 2738 2755 2769 2814 2820 2881 2941 2957 3014 3070 3089 3090 3260 3307 3358 3368 3404 3417 3470 3482 3484 3494 3504 3513 3519 3522 3527 3542 3581 3586 3587 3595 3596 3605 3606 3684 3723 3725 3759 3777 3778 3807 3813 3850 3864 3870 3871 3913 3931 3948 3959 3972 3976 4019 4035 4044 4080 4109 4121 4139 4162 4206 4238 4245 4265 4271 4274 4313 4358 4389 4391 4405 4424 4458 4461 4508 4530 4574 4581 4598 4679 4786 4822 4924 4926 4934 4958 4984 4999 5005 5051 5090 5093 5102 5105 5136 5165 5194 5209","Interested":"603 1352 1358 1397 1422 1430 1449 1531 1553 1619 1626 1631 1717 1884 1927 2021 2034 2069 2106 2110 2143 2149 2150 2175 2188 2191 2238 2325 2379 2414 2418 2433 2435 2439 2482 2486 2494 2506 2539 2549 2551 2587 2592 2595 2649 2662 2669 2691 2713 2734 2738 2748 2755 2769 2814 2815 2820 2854 2894 2916 2917 2972 2987 2998 3012 3035 3089 3090 3122 3178 3196 3220 3260 3270 3369 3371 3376 3400 3404 3407 3417 3419 3421 3422 3429 3430 3436 3455 3469 3470 3472 3473 3476 3482 3485 3494 3497 3504 3519 3522 3524 3542 3572 3573 3587 3592 3595 3597 3602 3605 3606 3610 3652 3684 3700 3705 3707 3708 3709 3710 3712 3716 3723 3724 3725 3726 3727 3748 3749 3750 3759 3768 3774 3778 3799 3800 3807 3839 3847 3850 3864 3866 3870 3895 3913 3917 3931 3936 3942 3943 3948 3954 3959 3972 3990 3992 3998 4010 4019 4035 4040 4043 4044 4048 4056 4057 4080 4099 4120 4121 4122 4123 4125 4132 4137 4139 4141 4143 4162 4191 4192 4241 4245 4252 4253 4254 4265 4271 4274 4313 4329 4335 4389 4391 4405 4424 4437 4446 4451 4483 4486 4495 4500 4506 4508 4530 4574 4581 4584 4598 4652 4679 4685 4702 4713 4732 4734 4746 4753 4762 4786 4811 4872 4873 4886 4896 4899 4904 4926 4934 4938 4939 4944 4958 4969 4984 5005 5009 5018 5019 5051 5071 5072 5089 5090 5093 5100 5105 5134 5136 5165 5209","Practical":"1352 1358 1619 1626 2175 2238 2367 2539 2691 2917 2995 3122 3220 3469 3502 3602 4123 4137 4253 4649 4811 4811 4944 5009 5014 5134","Paid":"1531 2224 2595 2657 2713 2854 3035 3270 3600 3652 3936 3943 4010 4087 4329 4652 4702 4886 4922 5072"}},{"levels":{"Interested":"1352 1358 1397 1422 1449 1553 1567 1619 1626 1717 1761 1927 2021 2069 2143 2175 2191 2238 2262 2290 2325 2354 2414 2433 2435 2482 2494 2539 2549 2551 2595 2649 2662 2669 2734 2748 2755 2814 2815 2854 2894 2916 2972 2987 3012 3196 3220 3260 3270 3371 3376 3400 3404 3417 3419 3429 3430 3436 3464 3469 3472 3473 3476 3482 3485 3504 3512 3519 3524 3527 3542 3572 3573 3587 3595 3600 3602 3605 3606 3679 3684 3700 3705 3707 3709 3710 3716 3725 3727 3748 3749 3750 3752 3759 3774 3782 3788 3791 3799 3800 3839 3866 3870 3871 3895 3913 3931 3936 3942 3948 3959 3972 3992 4010 4019 4035 4040 4043 4048 4054 4056 4057 4099 4121 4123 4132 4141 4143 4162 4191 4192 4241 4245 4252 4253 4274 4335 4362 4391 4437 4446 4451 4483 4495 4500 4506 4574 4581 4652 4685 4702 4713 4732 4734 4746 4753 4762 4786 4811 4872 4873 4896 4899 4904 4934 4938 4944 4958 5005 5009 5018 5019 5051 5089 5090 5105 5165","Practical":"1619 2367 3035 3472 3656 3679 3782 3788 4123 4238 4649 4713 4747 5009","Academic":"2175 2262 2551 2649 2662 2854 3358 3476 3482 3484 3542 3602 3684 3752 3870 3910 3976 4019 4121 4245 4253 4581 4734 4786 4811 4811 4934 4958 5005 5105 5136","Paid":"2595 2814 3260 3270 3549 3587 3600 3774 3936 4010 4044 4104 4143 4702 4735"}},{"levels":{"Academic":"603 1353 1358 1416 1422 1430 1442 1620 2029 2034 2108 2150 2177 2299 2316 2325 2433 2486 2506 2539 2551 2592 2649 2738 2770 2814 2815 2818 2881 2917 2941 3014 3260 3307 3358 3366 3368 3400 3417 3469 3481 3482 3492 3494 3497 3511 3524 3527 3573 3587 3594 3602 3606 3684 3709 3710 3725 3749 3752 3777 3799 3817 3850 3870 3872 3931 3948 3959 3972 3976 3998 4035 4041 4044 4121 4132 4137 4139 4140 4192 4219 4238 4253 4271 4274 4363 4375 4391 4405 4446 4451 4508 4574 4598 4643 4676 4753 4783 4786 4822 4873 4886 4914 4924 4926 4944 4958 4984 4999 5005 5009 5018 5019 5093 5102 5136 5194 5209","Interested":"603 1346 1352 1358 1397 1411 1422 1430 1442 1449 1531 1553 1619 1624 1626 1631 1717 1845 1884 1927 1933 2021 2051 2063 2069 2110 2143 2150 2175 2177 2191 2238 2262 2290 2298 2304 2325 2348 2413 2414 2433 2435 2482 2494 2506 2539 2549 2551 2587 2592 2595 2649 2662 2669 2691 2713 2734 2738 2748 2755 2770 2814 2815 2819 2854 2881 2894 2916 2917 2972 2987 2998 3012 3035 3178 3220 3260 3270 3369 3370 3376 3404 3407 3409 3417 3419 3429 3430 3436 3455 3464 3469 3470 3472 3476 3481 3482 3485 3491 3492 3494 3497 3504 3511 3519 3522 3524 3542 3557 3570 3572 3573 3586 3587 3590 3592 3594 3595 3597 3602 3605 3606 3610 3619 3641 3652 3664 3666 3679 3684 3700 3707 3708 3709 3712 3715 3716 3723 3725 3727 3739 3748 3749 3750 3752 3759 3768 3774 3777 3778 3795 3799 3800 3807 3808 3817 3839 3850 3866 3870 3871 3872 3895 3913 3931 3933 3936 3942 3943 3948 3954 3959 3972 3990 3992 4010 4035 4040 4043 4044 4048 4054 4056 4057 4099 4104 4109 4111 4120 4121 4122 4123 4125 4132 4139 4140 4141 4143 4162 4192 4206 4241 4243 4245 4252 4253 4265 4271 4274 4284 4292 4335 4375 4391 4405 4434 4437 4446 4451 4483 4486 4495 4500 4503 4506 4508 4530 4574 4581 4584 4643 4652 4685 4692 4702 4713 4717 4734 4746 4753 4762 4783 4786 4811 4812 4872 4873 4896 4904 4914 4926 4934 4938 4939 4942 4944 4958 4984 5005 5009 5018 5019 5051 5071 5072 5089 5090 5093 5100 5105 5114 5134 5136 5165 5172 5194 5209","Practical":"1352 1619 1626 1845 2129 2238 2367 2494 2691 2894 2986 3407 3485 3491 3549 3712 4087 4123 4162 4649 4685 4811 4811 4934 5090 5105 5134 5154 5165 5172","Paid":"1496 2069 2595 2713 2755 2772 2854 3035 3270 3542 3596 3597 3652 3723 3936 3943 4010 4122 4206 4581 4652 4702 4735 4767 4922 5072"}},{"levels":{"Interested":"1352 1358 1397 1422 1430 1449 1553 1619 1626 1631 1717 1761 1927 2021 2063 2069 2143 2175 2191 2262 2290 2325 2354 2414 2433 2482 2486 2494 2539 2549 2551 2595 2649 2662 2669 2734 2748 2755 2815 2854 2894 2916 2987 2998 3012 3073 3196 3220 3260 3265 3270 3371 3376 3384 3404 3417 3419 3421 3429 3430 3436 3464 3469 3470 3472 3473 3476 3482 3485 3504 3512 3519 3524 3527 3542 3572 3573 3587 3592 3600 3602 3605 3606 3619 3628 3640 3654 3666 3679 3684 3700 3705 3707 3709 3710 3712 3716 3725 3726 3727 3748 3749 3750 3752 3759 3774 3782 3788 3795 3799 3800 3807 3822 3839 3866 3870 3871 3895 3910 3913 3918 3931 3932 3936 3942 3948 3959 3972 3983 3992 3998 4010 4019 4035 4040 4043 4048 4054 4056 4057 4065 4099 4111 4121 4132 4139 4141 4143 4162 4192 4219 4241 4245 4252 4253 4271 4274 4284 4335 4344 4362 4391 4424 4437 4446 4451 4483 4486 4494 4500 4503 4506 4508 4523 4574 4581 4584 4652 4685 4692 4702 4713 4717 4732 4734 4746 4753 4760 4762 4783 4786 4811 4872 4873 4886 4896 4899 4904 4934 4938 4942 4944 4958 5005 5009 5018 5019 5051 5089 5090 5093 5100 5105 5136 5165 5209","Practical":"1358 1619 2290 2367 2539 2894 3035 3472 3656 3679 3782 3788 4035 4121 4238 4702 4713 4732 4934","Academic":"1620 2262 2435 2494 2551 2649 2662 2755 2854 3358 3368 3404 3476 3482 3542 3606 3684 3705 3712 3727 3750 3752 3870 3976 4019 4109 4139 4143 4253 4271 4424 4734 4786 4904 4958 5105 5136 5209","Paid":"2595 3260 3265 3270 3549 3587 3600 3774 3940 4010 4044 4104 4443 4508 4735 4747 4886 4899"}},{"levels":{"Interested":"1352 1397 1422 1430 1449 1496 1531 1553 1619 1626 1631 1717 1761 1927 1933 2021 2051 2069 2110 2143 2175 2191 2271 2290 2325 2348 2414 2482 2494 2539 2549 2551 2587 2595 2649 2662 2669 2691 2734 2738 2748 2755 2769 2814 2815 2854 2894 2916 2987 2998 3012 3035 3073 3178 3220 3260 3270 3366 3376 3404 3407 3417 3419 3429 3430 3436 3464 3469 3470 3472 3476 3482 3485 3504 3512 3519 3522 3524 3542 3557 3572 3573 3587 3592 3594 3597 3602 3605 3606 3619 3628 3629 3652 3679 3684 3700 3707 3708 3709 3712 3716 3725 3726 3727 3739 3749 3750 3759 3768 3774 3778 3791 3795 3799 3800 3807 3808 3813 3817 3839 3850 3866 3870 3871 3895 3925 3931 3933 3936 3942 3948 3959 3972 3992 4010 4019 4035 4040 4043 4044 4048 4054 4056 4057 4065 4099 4111 4121 4122 4141 4143 4162 4192 4219 4241 4243 4252 4253 4254 4271 4274 4284 4292 4335 4391 4405 4424 4437 4446 4451 4483 4500 4506 4508 4574 4581 4584 4652 4685 4702 4713 4732 4734 4735 4753 4762 4783 4786 4811 4872 4873 4896 4904 4934 4938 4944 4958 5005 5018 5019 5046 5051 5072 5089 5090 5093 5100 5105 5136 5165 5273","Practical":"1619 2919 3035 3602 3644 3712 4058 5273","Academic":"2029 2034 2062 2108 2143 2224 2238 2273 2316 2348 2433 2494 2649 2691 2738 2755 2772 2790 2814 2854 2941 3260 3358 3366 3368 3370 3400 3482 3484 3519 3527 3587 3597 3637 3684 3716 3727 3777 3795 3870 3913 3925 3936 3959 4019 4109 4253 4271 4391 4405 4451 4652 4676 4899 4944 4958 4984 5005 5051 5090 5105 5136","Paid":"2595 4087 4254 5072"}},{"levels":{"Academic":"190 1409 1411 1416 1422 1430 1449 1496 1531 1567 1610 1631 1761 1884 1927 2021 2023 2029 2034 2062 2063 2106 2129 2143 2149 2159 2175 2177 2224 2263 2273 2280 2298 2299 2333 2348 2417 2418 2433 2486 2494 2506 2551 2587 2592 2649 2662 2691 2713 2719 2738 2755 2769 2772 2854 2916 2917 2957 2972 3014 3029 3059 3089 3090 3094 3122 3152 3178 3220 3260 3265 3307 3358 3369 3371 3400 3472 3482 3485 3494 3504 3519 3527 3581 3587 3594 3596 3606 3636 3652 3656 3684 3692 3705 3723 3724 3725 3727 3782 3807 3839 3864 3871 3872 3895 3913 3931 3948 3973 3976 3992 4019 4035 4043 4044 4048 4058 4080 4111 4118 4121 4122 4125 4141 4143 4243 4270 4271 4274 4313 4352 4358 4373 4375 4391 4405 4451 4458 4461 4500 4508 4530 4531 4568 4581 4598 4643 4676 4682 4713 4734 4753 4811 4811 4867 4883 4899 4904 4924 4926 4934 4958 4969 4984 4999 5005 5019 5073 5090 5113 5130 5134 5136 5153 5165 5173 5183","Interested":"190 603 1346 1352 1358 1397 1411 1418 1422 1430 1442 1449 1531 1553 1567 1619 1624 1626 1717 1761 1927 1933 2021 2034 2063 2069 2103 2106 2143 2149 2175 2177 2188 2191 2238 2263 2280 2290 2298 2325 2348 2379 2413 2414 2418 2433 2439 2482 2486 2494 2506 2513 2539 2549 2551 2587 2592 2595 2649 2662 2669 2691 2734 2738 2748 2755 2769 2781 2814 2815 2854 2894 2916 2917 2972 2986 2987 2998 3012 3029 3035 3073 3089 3090 3094 3122 3178 3196 3220 3260 3265 3270 3368 3369 3370 3371 3376 3384 3404 3407 3409 3417 3419 3421 3422 3429 3430 3436 3439 3449 3455 3464 3469 3470 3472 3476 3482 3485 3491 3492 3493 3494 3497 3499 3504 3511 3512 3513 3519 3522 3524 3542 3557 3558 3570 3572 3573 3586 3587 3592 3594 3596 3597 3600 3602 3605 3606 3610 3619 3629 3636 3640 3652 3654 3657 3666 3684 3700 3705 3707 3708 3709 3710 3712 3715 3716 3724 3725 3727 3748 3749 3750 3759 3774 3777 3778 3782 3788 3791 3795 3799 3800 3807 3813 3817 3839 3850 3856 3866 3870 3872 3895 3913 3931 3936 3942 3943 3948 3954 3959 3970 3972 3973 3992 3998 4003 4010 4019 4033 4035 4040 4041 4043 4044 4048 4054 4056 4057 4065 4080 4099 4104 4109 4111 4121 4122 4123 4125 4132 4139 4140 4141 4143 4162 4191 4192 4219 4241 4243 4245 4252 4253 4254 4265 4270 4271 4274 4284 4335 4352 4363 4373 4375 4387 4391 4405 4424 4434 4437 4443 4446 4451 4458 4461 4483 4486 4500 4506 4508 4530 4531 4574 4581 4598 4608 4643 4652 4669 4682 4685 4702 4713 4732 4734 4746 4753 4762 4783 4811 4812 4872 4873 4883 4886 4896 4899 4904 4926 4934 4938 4942 4944 4958 4969 4984 4991 4999 5005 5009 5018 5019 5039 5051 5071 5072 5089 5090 5093 5100 5102 5105 5134 5136 5165 5209","Practical":"603 1346 1352 1358 1426 1442 1619 1624 1626 2238 2367 2379 2435 2549 2748 2781 2814 2815 2894 2941 2986 2995 3196 3359 3368 3404 3407 3421 3439 3493 3549 3558 3602 3700 3708 3709 3710 3711 3712 3777 3795 3813 3870 3936 3998 4139 4140 4162 4253 4254 4424 4495 4574 4608 4649 4812 4940 5009 5039 5051 5071 5093 5105 5154 5201","Paid":"2069 2317 2539 2595 2657 2734 3035 3270 3513 3524 3600 3679 3943 3970 4010 4087 4104 4238 4329 4652 4735 4747 4786 4944 5072 5102"}},{"levels":{"Interested":"1352 1358 1397 1411 1422 1430 1449 1553 1619 1626 1631 1717 1761 1845 1927 2021 2051 2143 2175 2191 2248 2290 2299 2325 2413 2414 2482 2506 2539 2549 2551 2587 2595 2649 2662 2669 2691 2734 2738 2748 2755 2815 2854 2894 2916 2917 2972 2986 2987 2998 3073 3152 3196 3220 3260 3265 3270 3358 3362 3370 3375 3376 3400 3404 3409 3414 3417 3419 3429 3430 3436 3439 3455 3469 3470 3472 3473 3476 3482 3484 3485 3491 3492 3494 3499 3504 3512 3519 3524 3527 3542 3570 3572 3573 3587 3595 3597 3600 3602 3605 3606 3610 3619 3641 3652 3656 3664 3679 3684 3700 3705 3707 3708 3709 3712 3716 3723 3725 3727 3749 3750 3752 3759 3774 3777 3778 3782 3791 3795 3799 3807 3808 3813 3817 3828 3839 3864 3866 3870 3871 3895 3913 3918 3931 3933 3936 3942 3948 3954 3959 3972 3973 3992 4010 4035 4040 4043 4044 4048 4054 4056 4057 4065 4099 4104 4111 4121 4122 4132 4137 4141 4143 4162 4174 4192 4219 4241 4252 4253 4274 4284 4292 4313 4335 4344 4362 4363 4391 4437 4443 4446 4451 4461 4483 4495 4500 4503 4506 4508 4574 4581 4608 4652 4685 4693 4702 4713 4732 4734 4753 4762 4767 4783 4811 4872 4873 4886 4896 4899 4904 4926 4934 4938 4944 4958 4984 4994 5018 5019 5046 5051 5071 5089 5090 5105 5114 5134 5136 5165 5209","Academic":"1353 1619 2224 2551 2738 2917 3260 3358 3362 3482 3524 3557 3602 3656 3708 3752 3782 3808 3813 3817 3870 3998 4056 4104 4143 4253 4461 4581 4652 4702 4732 4734 4899 4958 5005 5051 5090 5136","Practical":"1761 1845 2539 2549 2662 2734 2987 3152 3439 3473 3549 3936 4010 4035 4048 4238 4503 4649 4991 5018 5154","Paid":"2595 3035 3270 3375 3472 3587 3600 3679 3795 3940 4508 4707 4735"}},{"levels":{"Academic":"1165 1352 1353 1358 1397 1403 1411 1422 1426 1496 1553 1623 1626 1631 1761 2021 2029 2034 2063 2106 2110 2143 2150 2175 2177 2225 2238 2248 2263 2271 2273 2290 2299 2305 2325 2333 2348 2433 2486 2494 2539 2551 2587 2649 2734 2738 2762 2770 2781 2815 2818 2820 2917 2941 2957 2972 3014 3035 3059 3073 3089 3152 3178 3260 3307 3358 3366 3369 3370 3371 3374 3376 3400 3407 3419 3430 3449 3464 3469 3470 3472 3476 3482 3484 3485 3491 3492 3502 3503 3504 3507 3511 3512 3522 3524 3548 3572 3573 3581 3586 3587 3596 3597 3606 3610 3641 3652 3709 3716 3725 3739 3749 3774 3782 3799 3807 3817 3850 3864 3870 3895 3906 3910 3913 3931 3933 3972 3976 3998 4003 4035 4040 4044 4048 4056 4121 4123 4132 4141 4143 4192 4219 4238 4243 4245 4274 4291 4292 4305 4373 4375 4391 4494 4495 4503 4531 4581 4598 4608 4652 4713 4734 4753 4783 4786 4811 4811 4812 4822 4873 4886 4924 4934 4939 4944 4958 4984 5009 5018 5019 5073 5093 5102 5136 5209","Interested":"1165 1352 1358 1397 1411 1422 1430 1449 1531 1553 1619 1626 1717 1761 1845 1927 1933 2021 2063 2106 2143 2150 2175 2238 2271 2299 2325 2348 2413 2414 2433 2482 2539 2549 2551 2587 2592 2595 2649 2662 2669 2691 2713 2734 2738 2748 2755 2770 2815 2819 2854 2894 2916 2917 2972 2987 2998 3012 3089 3220 3260 3270 3274 3366 3368 3374 3376 3404 3414 3417 3419 3429 3430 3436 3449 3455 3469 3470 3472 3476 3482 3485 3491 3499 3501 3504 3511 3519 3524 3527 3542 3557 3572 3573 3581 3586 3587 3592 3594 3597 3605 3606 3610 3641 3652 3666 3684 3700 3705 3707 3709 3712 3716 3723 3725 3727 3730 3749 3750 3774 3777 3778 3799 3800 3807 3808 3813 3817 3839 3850 3866 3870 3895 3913 3931 3936 3942 3948 3954 3959 3972 3992 4010 4035 4040 4043 4048 4056 4057 4099 4109 4111 4121 4122 4123 4141 4143 4162 4192 4241 4252 4253 4274 4292 4335 4373 4375 4387 4391 4424 4437 4446 4451 4483 4495 4500 4503 4506 4508 4574 4581 4584 4608 4652 4685 4702 4713 4734 4746 4753 4762 4783 4786 4811 4822 4872 4873 4886 4896 4904 4934 4938 4944 4958 4984 5009 5018 5019 5051 5075 5089 5090 5093 5105 5134 5136 5165 5209","Practical":"1619 1845 2367 2662 2691 2713 2894 2986 2987 3368 3499 3594 3708 3712 3936 4162 4206 4253 4685 5090 5105","Paid":"2595 2772 2854 3270 3542 4010 4122 4702 4735 4922"}},{"levels":{"Interested":"1352 1358 1397 1411 1422 1449 1553 1567 1619 1623 1626 1717 1761 1786 1927 2021 2143 2177 2238 2248 2290 2298 2325 2348 2379 2414 2482 2486 2539 2549 2551 2592 2595 2649 2662 2669 2711 2734 2738 2748 2755 2762 2814 2815 2854 2894 2917 2919 2972 2986 2998 3012 3220 3260 3265 3270 3274 3358 3362 3366 3369 3370 3372 3374 3375 3376 3409 3417 3419 3429 3436 3456 3469 3470 3472 3473 3476 3482 3488 3501 3504 3512 3519 3524 3542 3572 3573 3587 3590 3595 3602 3605 3606 3610 3634 3636 3643 3649 3652 3654 3679 3684 3700 3705 3707 3709 3716 3724 3725 3727 3749 3750 3752 3774 3782 3791 3799 3800 3807 3808 3813 3828 3839 3853 3870 3871 3895 3913 3931 3933 3936 3942 3948 3972 3992 4010 4019 4035 4040 4043 4044 4048 4054 4057 4058 4111 4121 4122 4139 4141 4143 4162 4192 4219 4241 4243 4252 4253 4265 4274 4284 4335 4344 4389 4391 4405 4437 4446 4451 4483 4486 4487 4494 4495 4500 4503 4506 4574 4581 4652 4685 4693 4702 4713 4734 4753 4760 4767 4811 4873 4883 4886 4896 4899 4904 4938 4939 4942 4944 4958 4984 4991 4994 4999 5018 5019 5039 5051 5089 5090 5105 5114 5165 5193 5196 5217","Practical":"1358 1623 2062 2177 2238 2539 2790 2894 2917 3473 3548 3549 3606 3700 3918 4010 4238 4649 4652 4676 4702 4713 5005 5069","Academic":"1619 2280 2551 2734 3374 3375 3656 3782 3813 4035 4104 4253 4899 4958 5039 5217","Paid":"2595 3035 3270 3482 3587 3600 3679 3940 4443 4735 4747"}},{"levels":{"Practical":"1026 1352 1358 1619 1623 2062 2063 2145 2177 2539 2772 2894 2917 3152 3407 3436 3439 3472 3491 3497 3548 3549 3613 3634 4010 4035 4238 4437 4508 4649 4652 4676 4685 4702 4713 4732 4977 5005 5009 5069","Interested":"1352 1358 1397 1403 1411 1416 1422 1449 1553 1567 1619 1623 1626 1631 1717 1761 1786 1927 2021 2051 2063 2143 2145 2177 2188 2238 2248 2262 2290 2298 2304 2325 2348 2379 2413 2414 2435 2482 2486 2494 2539 2549 2551 2592 2595 2649 2662 2669 2691 2711 2713 2734 2738 2748 2755 2762 2814 2815 2854 2881 2894 2917 2919 2957 2972 2986 2998 3012 3035 3073 3089 3152 3196 3220 3260 3265 3270 3274 3358 3362 3366 3369 3370 3372 3374 3375 3376 3407 3409 3417 3419 3429 3430 3436 3456 3464 3469 3470 3472 3473 3476 3482 3485 3488 3492 3497 3499 3501 3504 3512 3519 3524 3542 3572 3573 3581 3587 3590 3595 3602 3605 3606 3610 3613 3634 3636 3640 3643 3649 3652 3654 3679 3684 3700 3705 3707 3709 3712 3716 3723 3724 3725 3727 3749 3750 3752 3759 3774 3778 3782 3791 3795 3799 3800 3807 3808 3813 3822 3828 3839 3847 3853 3870 3871 3895 3910 3913 3931 3933 3936 3942 3948 3954 3959 3972 3992 3998 4003 4010 4019 4035 4040 4043 4044 4048 4054 4056 4057 4058 4080 4099 4111 4121 4122 4123 4139 4140 4141 4143 4162 4192 4219 4241 4243 4245 4252 4253 4254 4265 4274 4284 4292 4335 4344 4389 4391 4405 4424 4434 4437 4443 4446 4451 4483 4486 4494 4495 4500 4502 4503 4506 4508 4574 4581 4643 4652 4669 4685 4693 4702 4713 4732 4734 4746 4753 4760 4767 4811 4812 4872 4873 4883 4886 4896 4899 4904 4938 4939 4942 4944 4958 4962 4977 4984 4991 4994 4999 5009 5018 5019 5039 5046 5051 5055 5089 5090 5095 5096 5102 5105 5114 5134 5136 5165 5193 5196 5209 5217","Academic":"2280 2551 2734 3374 3375 3485 3527 3656 3705 3707 3712 3752 3782 3870 3936 3948 3972 3998 4104 4143 4253 4811 4811 4899 4958 4962 5039 5095 5217","Paid":"2595 3035 3270 3482 3524 3587 3600 3679 3723 3795 3940 4044 4707 4735 4747"}}]};module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
