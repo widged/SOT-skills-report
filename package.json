@@ -14,10 +14,12 @@
   "devDependencies": {
     "babel-core": "^5.8.23",
     "babel-loader": "^5.3.2",
+    "eventemitter2": "^0.4.14",
     "webpack": "^1.12.0"
   },
   "scripts": {
-    "test": "mocha --compilers js:./test/compiler.js test/*-test.es6.js"
+    "test": "npm run unittest",
+    "unittest": "mocha --compilers js:babel/register ./test/*.spec.js ./src/**/*.spec.js"
   },
   "repository": {
     "type": "git",
