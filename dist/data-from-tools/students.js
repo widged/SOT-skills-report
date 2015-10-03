@@ -202,7 +202,7 @@ export default `user_id	school	level	field	degree	degree_details	study_year	fina
 3090	Whitireia New Zealand	PGDip	IT	PGDipIT	Postgraduate diploma in Information Technology	1	TRUE
 3092	Victoria University of Wellington	B	Eng	BE	BE	2	FALSE
 3094	Victoria University of Wellington	B	Eng	BE	BE	3	FALSE
-3102	Regent International Education Group (Auckland) - Diploma in Information Technology	Dip	IT	DIT	5	FALSE	Network Programming/Practical
+3102	Regent International Education Group (Auckland) - Diploma in Information Technology	Dip	IT	DIT	Network Programming/Practical	5	FALSE
 3110	WINTEC	GDip	IT	GDipIT	Grad Dip in IT level 7	5	TRUE
 3122	Whitireia New Zealand	PGDip	IT	PGDipIT	PG Diploma in IT ( Level 8)	1	TRUE
 3152	Auckland University of Technology	B	IT	BIT	Bachelor of Computer and Information Science	3	FALSE
