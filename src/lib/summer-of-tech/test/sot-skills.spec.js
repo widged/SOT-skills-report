@@ -14,7 +14,9 @@ describe('skills', function() {
 
 	describe('listSkills', function() {
 
-	    it('lists the skills at the active experience levels', function() {
+		let summerOfTech;
+
+		beforeEach(function() {
 			const rawSkills = {
 			  "names": {
 			    "dict": [
@@ -47,19 +49,29 @@ describe('skills', function() {
 			  ]
 			};
 
+			summerOfTech = new SummerOfTech();
 			summerOfTech
 			  	.rawSkills(rawSkills)
 			  	.activeExperienceLevels([SummerOfTech.experienceLevels.Paid]);
+		});
 
-			var list = summerOfTech.listSkills(['Android','Computer Architecture']);
-			var actual = list.map(({name}) => name);
+	    it('lists the skills at the active experience levels', function() {
+			var actual = summerOfTech.listSkillNames(['Android','Computer Architecture']);
 	        assert.deepEqual(actual, [ 'Android' ]);
 	    });
+
+	    it('lists all skills at experience levels when names are undefined', function() {
+			var actual = summerOfTech.listSkillNames();
+	        assert.deepEqual(actual, [ 'AI', 'Android' ]);
+	    });
+
 	});
 
 
 	describe('listStudentsWithSkills', function() {
-	    it('lists the students that have all the specified skills at prespecified expertise levels', function() {
+		let summerOfTech;
+
+		beforeEach(function() {
 			const rawSkills = {
 			  "names": {
 			    "dict": [
@@ -81,12 +93,20 @@ describe('skills', function() {
 			  ]
 			};
 
+			summerOfTech = new SummerOfTech();
 			summerOfTech
 			  	.rawSkills(rawSkills)
 			  	.activeExperienceLevels([SummerOfTech.experienceLevels.Paid]);
+		});
 
+	    it('lists the students that have all the specified skills at prespecified expertise levels', function() {
 			var list = summerOfTech.listStudentsWithSkills(['Android','Computer Architecture']);
 	        assert.deepEqual(list, ['190']);
+	    });
+
+	    it('lists all students when primary skills are undefined', function() {
+			var list = summerOfTech.listStudentsWithSkills();
+	        assert.deepEqual(list, ['190','1403','908']);
 	    });
 
 
@@ -181,6 +201,11 @@ describe('skills', function() {
 	    it('lists the skills that co-occur with a list of primary skills', function() {
 			var actual = summerOfTech.listComplementarySkills(['Android']);
 	        assert.deepEqual(actual, ['Computer Architecture']);
+	    });
+
+	    it('lists all skills as complementary skills when the primary skills are undefined', function() {
+			var actual = summerOfTech.listComplementarySkills();
+	        assert.deepEqual(actual, ['Android','Computer Architecture','Javascript']);
 	    });
 
 	});

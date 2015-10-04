@@ -16,6 +16,14 @@ class FN {
     acc = acc.filter((id) => { return Array.isArray(d) && d.indexOf(id) !== -1; });
     return acc;
   }
+
+  static uniqueInLists(acc, d) {
+    if(!Array.isArray(acc)) { acc = []; }
+    d.forEach((id) => { 
+      if(acc.indexOf(id) === -1) { acc.push(id); }
+    });
+    return acc;
+  }
 }
 
 
@@ -123,11 +131,13 @@ export default class SummerOfTech {
     return names
       .map((name) => { 
         let idx = skills.indexOf(name);
-        console.log(name, idx)
-        let levels = (students[idx] || {}).levels; 
-        const user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
-        if(!user_ids || !user_ids.length) {
-          // console.log('[levels missing]', name);
+        let user_ids;
+        if(idx !== -1) {
+          let levels = (students[idx] || {}).levels; 
+          user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
+          if(!user_ids || !user_ids.length) {
+            // console.log('[levels missing]', name);
+          }
         }
         return {name, user_ids};
       })
@@ -141,9 +151,16 @@ export default class SummerOfTech {
   }  
 
   listStudentsWithSkills(names) {
-    return this.listSkills(names)
-          .map(FN.pluck('user_ids'))
-          .reduce(FN.intersectLists, null);
+    console.log(names)
+    let user_ids = this.listSkills(names)
+          .map(FN.pluck('user_ids'));
+    
+    if(names !== undefined) {
+      return user_ids.reduce(FN.intersectLists, null);
+    } else {
+      return user_ids.reduce(FN.uniqueInLists, null);
+    }
+          
   }
 
   listSkillsOfStudents(ids) {
@@ -170,7 +187,7 @@ export default class SummerOfTech {
   listComplementarySkills(names) {
     let ids = this.listStudentsWithSkills(names);
     let skills = this.listSkillsOfStudents(ids).filter((name) => {
-      return names.indexOf(name) === -1;
+      return (names === undefined || names.indexOf(name) === -1);
     });
     return skills;
   }
@@ -226,7 +243,6 @@ export default class SummerOfTech {
         return {user_id, school, level, field, degree, degree_details, study_year,final_year};
     });
   }
-
 }
 
 SummerOfTech.experienceLevels = {

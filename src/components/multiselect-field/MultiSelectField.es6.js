@@ -13,7 +13,6 @@ export default class MultiSelectField extends Component {
   }
   
   handleChange (value, values) {
-    // logChange('New value:', value, 'Values:', values);
     let dispatchChange = this.props && this.props.onChange;
     if(typeof dispatchChange === 'function') {
       let names = values.map(({value}) => value);
@@ -24,13 +23,13 @@ export default class MultiSelectField extends Component {
 
   render () {
     const {handleChange} = this.handlers;
-    const {names}        = this.props;
-    const ops = names.map((name) => {
+    const {names, placeholder} = this.props;
+    const ops = (names || []).map((name) => {
       return { label: name, value: name };
     }).sort(function(a, b) { return a.label < b.label ? -1 : a.label > b.label ? 1 : 0; });
     return (
       <div className="section">
-        <Select multi={true} value={this.state.value} placeholder="Please select one or more skills. The students with that skill will be highlighted." options={ops} onChange={handleChange} />
+        <Select multi value={this.state.value} placeholder={placeholder} options={ops} onChange={handleChange}/>
       </div>
     );
   }

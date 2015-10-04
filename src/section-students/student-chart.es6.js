@@ -101,24 +101,30 @@ export default class StudentVis extends Component {
             .plot(tsv)
             .groupBy(); 
 
+
         return chart;
     }
 
     componentDidMount() {
+        let filteredStudents = this.props.filterStudents;
         var tsv = this.props.list;
         var chart = this.renderD3(tsv);
-        this.setState({chart: chart});       
+        this.setState({chart: chart});
+        // This needs to be delayed. 
+        // Student filtering will cancel out any current animation.
+        window.setTimeout(function() {
+           chart.filterStudents(filteredStudents); 
+       }, 2000);
     }
 
     shouldComponentUpdate( nextProps, nextState) {
         if(nextProps.hasOwnProperty('filterStudents')) {
-            var tsv = this.props.list;
-            // this.renderD3(tsv);
             if(this.state.chart) {
                 this.state.chart.filterStudents(nextProps.filterStudents)
             }
         }
         return false;
     }
+
 
 }

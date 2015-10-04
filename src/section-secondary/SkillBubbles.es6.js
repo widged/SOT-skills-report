@@ -8,7 +8,9 @@ export default class SkillBubbles extends Component {
     var rootNode = document.querySelector('skill-bubbles');
     rootNode.innerHTML = '';
     let rawBubbles = this.props.list;
-    draw_skills_bubbles(rawBubbles, rootNode);
+    if(rawBubbles !== undefined) {
+      draw_skills_bubbles(rawBubbles, rootNode);
+    }
   }
   render() {
     return ( <skill-bubbles/> );
