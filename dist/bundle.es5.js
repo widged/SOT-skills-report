@@ -18288,6 +18288,19 @@
 	      });
 	      return acc;
 	    }
+	  }, {
+	    key: 'uniqueInLists',
+	    value: function uniqueInLists(acc, d) {
+	      if (!Array.isArray(acc)) {
+	        acc = [];
+	      }
+	      d.forEach(function (id) {
+	        if (acc.indexOf(id) === -1) {
+	          acc.push(id);
+	        }
+	      });
+	      return acc;
+	    }
 	  }]);
 
 	  return FN;
@@ -18429,9 +18442,12 @@
 	      }
 	      return names.map(function (name) {
 	        var idx = skills.indexOf(name);
-	        var levels = students[idx].levels;
-	        var user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
-	        if (!user_ids || !user_ids.length) {}
+	        var user_ids = undefined;
+	        if (idx !== -1) {
+	          var levels = (students[idx] || {}).levels;
+	          user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
+	          if (!user_ids || !user_ids.length) {}
+	        }
 	        return { name: name, user_ids: user_ids };
 	      }).filter(function (_ref) {
 	        var user_ids = _ref.user_ids;
@@ -18450,7 +18466,14 @@
 	  }, {
 	    key: 'listStudentsWithSkills',
 	    value: function listStudentsWithSkills(names) {
-	      return this.listSkills(names).map(FN.pluck('user_ids')).reduce(FN.intersectLists, null);
+	      console.log(names);
+	      var user_ids = this.listSkills(names).map(FN.pluck('user_ids'));
+
+	      if (names !== undefined) {
+	        return user_ids.reduce(FN.intersectLists, null);
+	      } else {
+	        return user_ids.reduce(FN.uniqueInLists, null);
+	      }
 	    }
 	  }, {
 	    key: 'listSkillsOfStudents',
@@ -18510,7 +18533,7 @@
 	    value: function listComplementarySkills(names) {
 	      var ids = this.listStudentsWithSkills(names);
 	      var skills = this.listSkillsOfStudents(ids).filter(function (name) {
-	        return names.indexOf(name) === -1;
+	        return names === undefined || names.indexOf(name) === -1;
 	      });
 	      return skills;
 	    }
@@ -18634,71 +18657,37 @@
 	  value: true
 	});
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _sectionSkillsSkillMultiSelectEs6Js = __webpack_require__(161);
+	var _componentsMultiselectFieldMultiSelectFieldEs6Js = __webpack_require__(161);
 
-	var _sectionSkillsSkillMultiSelectEs6Js2 = _interopRequireDefault(_sectionSkillsSkillMultiSelectEs6Js);
+	var _componentsMultiselectFieldMultiSelectFieldEs6Js2 = _interopRequireDefault(_componentsMultiselectFieldMultiSelectFieldEs6Js);
 
-	var _sectionSkillsExperienceLevelSelectEs6Js = __webpack_require__(168);
+	var _componentsCheckboxGroupCheckboxGroupEs6Js = __webpack_require__(168);
 
-	var _sectionSkillsExperienceLevelSelectEs6Js2 = _interopRequireDefault(_sectionSkillsExperienceLevelSelectEs6Js);
+	var _componentsCheckboxGroupCheckboxGroupEs6Js2 = _interopRequireDefault(_componentsCheckboxGroupCheckboxGroupEs6Js);
 
 	var _sectionStudentsStudentChartEs6Js = __webpack_require__(169);
 
 	var _sectionStudentsStudentChartEs6Js2 = _interopRequireDefault(_sectionStudentsStudentChartEs6Js);
 
-	var _sectionSkillsSkillTagsEs6Js = __webpack_require__(179);
+	var _sectionSecondarySkillBubblesEs6Js = __webpack_require__(179);
 
-	var _sectionSkillsSkillTagsEs6Js2 = _interopRequireDefault(_sectionSkillsSkillTagsEs6Js);
+	var _sectionSecondarySkillBubblesEs6Js2 = _interopRequireDefault(_sectionSecondarySkillBubblesEs6Js);
 
 	var Component = _react2['default'].Component;
-
-	var SkillBubbles = (function () {
-	  function SkillBubbles() {
-	    _classCallCheck(this, SkillBubbles);
-	  }
-
-	  _createClass(SkillBubbles, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var rootNode = document.querySelector('skill-bubbles');
-	      rootNode.innerHTML = '';
-	      var rawBubbles = this.props.list;
-	      draw_skills_bubbles(rawBubbles, rootNode);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2['default'].createElement('skill-bubbles', null);
-	    }
-	  }, {
-	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(nextProps, nextState) {
-	      if (nextProps.hasOwnProperty('list')) {
-	        var rootNode = document.querySelector('skill-bubbles');
-	        rootNode.innerHTML = '';
-	        var rawBubbles = nextProps.list;
-	        draw_skills_bubbles(rawBubbles, rootNode);
-	      }
-	      return false;
-	    }
-	  }]);
-
-	  return SkillBubbles;
-	})();
 
 	var SummerOfTechApp = (function (_Component) {
 	  _inherits(SummerOfTechApp, _Component);
@@ -18709,12 +18698,15 @@
 	    _get(Object.getPrototypeOf(SummerOfTechApp.prototype), 'constructor', this).call(this, props);
 	    var store = this.props.store;
 
+	    var names = undefined;
+	    var complementarySkills = store.listComplementarySkills(names);
 	    this.state = {
-	      complementarySkills: store.listSkillNames(),
-	      bubbleSkills: store.nestByCategory(),
+	      primarySkills: names,
 	      levels: store.listExperienceLevels(),
 	      students: store.listActiveStudents(),
-	      filterStudents: undefined
+	      complementarySkills: complementarySkills,
+	      filterStudents: store.listStudentsWithSkills(names),
+	      bubbleSkills: store.nestByCategory(complementarySkills)
 	    };
 	    this.handlers = {
 	      handleSkillsChange: this.handleSkillsChange.bind(this),
@@ -18723,25 +18715,34 @@
 	  }
 
 	  _createClass(SummerOfTechApp, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      var store = this.props.store;
-	    }
-	  }, {
 	    key: 'handleSkillsChange',
 	    value: function handleSkillsChange(names) {
+	      this.setState({ primarySkills: names });
+	      this.whenPrimaryChange(names);
+	    }
+	  }, {
+	    key: 'handleExperienceChange',
+	    value: function handleExperienceChange(levels) {
 	      var store = this.props.store;
 
+	      var names = this.state.primarySkills;
+	      store.activeExperienceLevels(levels);
+	      this.whenPrimaryChange(names);
+	    }
+	  }, {
+	    key: 'whenPrimaryChange',
+	    value: function whenPrimaryChange(names) {
+	      var store = this.props.store;
+
+	      console.log('[whenPrimaryChange]', names);
 	      var complementarySkills = store.listComplementarySkills(names);
 	      this.setState({
+	        primarySkills: names,
 	        complementarySkills: complementarySkills,
 	        filterStudents: store.listStudentsWithSkills(names),
 	        bubbleSkills: store.nestByCategory(complementarySkills)
 	      });
 	    }
-	  }, {
-	    key: 'handleExperienceChange',
-	    value: function handleExperienceChange(names) {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -18783,8 +18784,8 @@
 	          _react2['default'].createElement(
 	            'section',
 	            null,
-	            _react2['default'].createElement(_sectionSkillsSkillMultiSelectEs6Js2['default'], { names: complementarySkills, handleChange: handleSkillsChange }),
-	            _react2['default'].createElement(_sectionSkillsExperienceLevelSelectEs6Js2['default'], { levels: levels, handleChange: handleExperienceChange })
+	            _react2['default'].createElement(_componentsMultiselectFieldMultiSelectFieldEs6Js2['default'], { names: complementarySkills, onChange: handleSkillsChange, placeholder: 'Please select one or more skills. The students with that skill will be highlighted.' }),
+	            _react2['default'].createElement(_componentsCheckboxGroupCheckboxGroupEs6Js2['default'], { items: levels, onChange: handleExperienceChange })
 	          ),
 	          _react2['default'].createElement(
 	            'section',
@@ -18807,7 +18808,7 @@
 	            _react2['default'].createElement(
 	              'div',
 	              { id: 'skills-secondary-vis' },
-	              _react2['default'].createElement(SkillBubbles, { list: bubbleSkills })
+	              _react2['default'].createElement(_sectionSecondarySkillBubblesEs6Js2['default'], { list: bubbleSkills })
 	            )
 	          )
 	        ),
@@ -18825,12 +18826,6 @@
 
 	exports['default'] = SummerOfTechApp;
 	module.exports = exports['default'];
-
-	/*
-	handleComplementary(skills);
-	// let skills = Sot.listSkillsAtExpertise(jsonp_skills, expertiseLevel);
-	studentVis.setState({filterStudents: students});
-	*/
 
 	/*
 	<section>
@@ -18887,8 +18882,7 @@
 	  _createClass(MultiSelectField, [{
 	    key: 'handleChange',
 	    value: function handleChange(value, values) {
-	      // logChange('New value:', value, 'Values:', values);
-	      var dispatchChange = this.props && this.props.handleChange;
+	      var dispatchChange = this.props && this.props.onChange;
 	      if (typeof dispatchChange === 'function') {
 	        var names = values.map(function (_ref) {
 	          var value = _ref.value;
@@ -18902,9 +18896,11 @@
 	    key: 'render',
 	    value: function render() {
 	      var handleChange = this.handlers.handleChange;
-	      var names = this.props.names;
+	      var _props = this.props;
+	      var names = _props.names;
+	      var placeholder = _props.placeholder;
 
-	      var ops = names.map(function (name) {
+	      var ops = (names || []).map(function (name) {
 	        return { label: name, value: name };
 	      }).sort(function (a, b) {
 	        return a.label < b.label ? -1 : a.label > b.label ? 1 : 0;
@@ -18912,7 +18908,7 @@
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'section' },
-	        _react2['default'].createElement(_reactSelect2['default'], { multi: true, value: this.state.value, placeholder: 'Please select one or more skills. The students with that skill will be highlighted.', options: ops, onChange: handleChange })
+	        _react2['default'].createElement(_reactSelect2['default'], { multi: true, value: this.state.value, placeholder: placeholder, options: ops, onChange: handleChange })
 	      );
 	    }
 	  }]);
@@ -20112,77 +20108,105 @@
 
 	/* jshint esnext: true */
 
-	"use strict";
+	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var Component = _react2["default"].Component;
+	var Component = _react2['default'].Component;
 
-	var ExperienceLevelSelect = (function (_Component) {
-	  _inherits(ExperienceLevelSelect, _Component);
+	var CheckboxGroup = (function (_Component) {
+	  _inherits(CheckboxGroup, _Component);
 
-	  function ExperienceLevelSelect() {
-	    _classCallCheck(this, ExperienceLevelSelect);
+	  function CheckboxGroup(props) {
+	    _classCallCheck(this, CheckboxGroup);
 
-	    _get(Object.getPrototypeOf(ExperienceLevelSelect.prototype), "constructor", this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(CheckboxGroup.prototype), 'constructor', this).call(this, props);
+	    this.state = { value: undefined };
+	    this.handlers = { handleChange: this.handleChange.bind(this) };
 	  }
 
-	  _createClass(ExperienceLevelSelect, [{
-	    key: "checkboxRenderer",
-	    value: function checkboxRenderer(_ref) {
-	      var name = _ref.name;
-	      var checked = _ref.checked;
+	  _createClass(CheckboxGroup, [{
+	    key: 'handleChange',
+	    value: function handleChange(event) {
+	      var name = event.target.dataset.name;
+	      var value = event.target.checked;
+	      var items = this.props.items;
 
-	      return _react2["default"].createElement(
-	        "item",
-	        null,
-	        _react2["default"].createElement("input", { type: "checkbox", className: "checkbox-control", defaultChecked: checked }),
-	        _react2["default"].createElement(
-	          "span",
-	          { className: "checkbox-label" },
-	          name
+	      items.forEach(function (d) {
+	        if (d.name === name) {
+	          d.checked = d.checked ? undefined : true;
+	        }
+	      });
+	      var names = items.filter(function (_ref) {
+	        var checked = _ref.checked;
+	        return checked === true;
+	      }).map(function (_ref2) {
+	        var name = _ref2.name;
+	        return name;
+	      });
+	      var dispatchChange = this.props && this.props.onChange;
+	      if (typeof dispatchChange === 'function') {
+	        dispatchChange(names);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var items = this.props.items;
+
+	      var checkboxRenderer = this.checkboxRenderer;
+	      var handleChange = this.handlers.handleChange;
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'section', onChange: handleChange },
+	        _react2['default'].createElement(
+	          'label',
+	          { className: 'checkbox' },
+	          items.map(checkboxRenderer)
 	        )
 	      );
 	    }
 	  }, {
-	    key: "render",
-	    value: function render() {
-	      var levels = this.props.levels;
+	    key: 'checkboxRenderer',
+	    value: function checkboxRenderer(_ref3, i) {
+	      var name = _ref3.name;
+	      var checked = _ref3.checked;
 
-	      var checkboxRenderer = this.checkboxRenderer;
-	      return _react2["default"].createElement(
-	        "div",
-	        { className: "section" },
-	        _react2["default"].createElement(
-	          "label",
-	          { className: "checkbox" },
-	          levels.map(checkboxRenderer)
+	      return _react2['default'].createElement(
+	        'item',
+	        { key: 'check_' + i },
+	        _react2['default'].createElement('input', { type: 'checkbox', className: 'checkbox-control', defaultChecked: checked, 'data-name': name }),
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'checkbox-label' },
+	          name
 	        )
 	      );
 	    }
 	  }]);
 
-	  return ExperienceLevelSelect;
+	  return CheckboxGroup;
 	})(Component);
 
-	exports["default"] = ExperienceLevelSelect;
-	module.exports = exports["default"];
+	exports['default'] = CheckboxGroup;
+	module.exports = exports['default'];
 
 	// defaultChecked
 	/*
@@ -20338,16 +20362,20 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var filteredStudents = this.props.filterStudents;
 	            var tsv = this.props.list;
 	            var chart = this.renderD3(tsv);
 	            this.setState({ chart: chart });
+	            // This needs to be delayed.
+	            // Student filtering will cancel out any current animation.
+	            window.setTimeout(function () {
+	                chart.filterStudents(filteredStudents);
+	            }, 2000);
 	        }
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate(nextProps, nextState) {
 	            if (nextProps.hasOwnProperty('filterStudents')) {
-	                var tsv = this.props.list;
-	                // this.renderD3(tsv);
 	                if (this.state.chart) {
 	                    this.state.chart.filterStudents(nextProps.filterStudents);
 	                }
@@ -21552,8 +21580,6 @@
 /* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* jshint esnext: true */
-
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
@@ -21576,207 +21602,47 @@
 
 	var Component = _react2['default'].Component;
 
-	var SkillList = (function (_Component) {
-	  _inherits(SkillList, _Component);
+	var SkillBubbles = (function (_Component) {
+	  _inherits(SkillBubbles, _Component);
 
-	  function SkillList() {
-	    _classCallCheck(this, SkillList);
+	  function SkillBubbles() {
+	    _classCallCheck(this, SkillBubbles);
 
-	    _get(Object.getPrototypeOf(SkillList.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(SkillBubbles.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
-	  _createClass(SkillList, [{
+	  _createClass(SkillBubbles, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var rootNode = document.querySelector('skill-bubbles');
+	      rootNode.innerHTML = '';
+	      var rawBubbles = this.props.list;
+	      if (rawBubbles !== undefined) {
+	        draw_skills_bubbles(rawBubbles, rootNode);
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var list = this.props.list;
-
-	      return _react2['default'].createElement(
-	        'skills',
-	        null,
-	        _react2['default'].createElement(
-	          'ul',
-	          null,
-	          (list || []).map(function (item) {
-	            return _react2['default'].createElement(
-	              'li',
-	              null,
-	              _react2['default'].createElement(SkillItem, { item: item })
-	            );
-	          })
-	        )
-	      );
+	      return _react2['default'].createElement('skill-bubbles', null);
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState) {
+	      if (nextProps.hasOwnProperty('list')) {
+	        var rootNode = document.querySelector('skill-bubbles');
+	        rootNode.innerHTML = '';
+	        var rawBubbles = nextProps.list;
+	        draw_skills_bubbles(rawBubbles, rootNode);
+	      }
+	      return false;
 	    }
 	  }]);
 
-	  return SkillList;
+	  return SkillBubbles;
 	})(Component);
 
-	var SkillItem = (function (_Component2) {
-	  _inherits(SkillItem, _Component2);
-
-	  function SkillItem(props) {
-	    _classCallCheck(this, SkillItem);
-
-	    _get(Object.getPrototypeOf(SkillItem.prototype), 'constructor', this).call(this, props);
-	    function handleClick(e) {
-	      this.setState({ selected: !this.state.selected });
-	    }
-	    this.state = { selected: false, handleClick: handleClick.bind(this) };
-	  }
-
-	  _createClass(SkillItem, [{
-	    key: 'render',
-	    value: function render() {
-	      var item = this.props.item;
-	      var handleClick = this.state.handleClick;
-	      var name = item.name;
-	      var type = item.type;
-	      var primary = item.primary;
-	      var secondary = item.secondary;
-	      var selected = item.selected;
-	      var students = item.students;
-
-	      var studentsQty = selected && primary ? primary.length : secondary ? secondary.users.split(' ').length.toString() : '    ';
-	      return _react2['default'].createElement(
-	        'skill',
-	        { className: 'type-' + type + (selected ? ' selected' : '') + (secondary ? ' secondary' : ''), onClick: handleClick },
-	        name,
-	        _react2['default'].createElement(
-	          'qty',
-	          null,
-	          studentsQty
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SkillItem;
-	})(Component);
-
-	function skillsByCategory(skills) {
-	  var dict = [],
-	      categories = [];
-	  (skills || []).forEach(function (_ref) {
-	    var name = _ref.name;
-	    var type = _ref.type;
-	    var category = _ref.category;
-	    var levels = _ref.levels;
-
-	    var idx = dict.indexOf(category);
-	    if (idx === -1) {
-	      idx = dict.length;
-	      dict.push(category);
-	      categories[idx] = { name: category, skills: [] };
-	    }
-	    categories[idx].skills.push({ name: name, type: type, category: category, levels: levels });
-	  });
-	  categories.forEach(function (d) {
-	    var order = 'skill;tool'.split(';');
-	    d.skills.sort(function (a, b) {});
-	    d.skills.sort(function (a, b) {
-	      var diff = order.indexOf(a.type) - order.indexOf(b.type);
-	      if (diff !== 0) return diff;
-	      return a.name < b.name ? -1 : a.name > b.name ? +1 : 0;
-	    });
-	  });
-	  var order = 'Web / Programming;Design;BA / Digital Marketing;Engineering Skills;Systems / Ops / DBA'.split(';');
-	  categories.sort(function (a, b) {
-	    return order.indexOf(a.name) - order.indexOf(b.name);
-	  });
-	  return categories;
-	}
-
-	var SkillVis = (function (_Component3) {
-	  _inherits(SkillVis, _Component3);
-
-	  function SkillVis(props) {
-	    _classCallCheck(this, SkillVis);
-
-	    _get(Object.getPrototypeOf(SkillVis.prototype), 'constructor', this).call(this, props);
-	    var _props = this.props;
-	    var secondarySkills = _props.secondarySkills;
-	    var handlePrimaryChange = _props.handlePrimaryChange;
-
-	    var level = 'Paid';
-	    function getSecondary(skill, level) {
-	      var sskill = (secondarySkills || []).filter(function (d) {
-	        return d.name === skill;
-	      })[0];
-	      var slevel = (sskill || { levels: [] }).levels.filter(function (d) {
-	        return d.name === level;
-	      })[0];
-	      return (slevel || {}).skills;
-	    }
-	    function handleClick(e) {
-	      var skill = e.target.innerText;
-	      var secSkills = getSecondary(skill, level);
-	      var secList = (secSkills || []).map(function (_ref2) {
-	        var name = _ref2.name;
-	        return name;
-	      });
-	      var list = this.state.list;
-	      var nlist = (list || []).map(function (_ref3) {
-	        var name = _ref3.name;
-	        var skills = _ref3.skills;
-
-	        var nskills = skills.map(function (_ref4) {
-	          var name = _ref4.name;
-	          var type = _ref4.type;
-	          var category = _ref4.category;
-	          var levels = _ref4.levels;
-
-	          var selected = name === skill ? true : false;
-	          var primary = (levels[level] || { user_ids: [] }).user_ids;
-	          if (selected) {
-	            handlePrimaryChange(primary);
-	          }
-	          var idx = secList.indexOf(name);
-	          var secondary = idx !== -1 ? secSkills[idx] : undefined;
-	          return { name: name, type: type, category: category, levels: levels, selected: selected, primary: primary, secondary: secondary };
-	        });
-	        return { name: name, skills: nskills };
-	      });
-	      this.setState({ list: nlist });
-	    }
-	    var primarySkills = this.props.primarySkills;
-
-	    var categorySkills = skillsByCategory(primarySkills);
-	    this.state = { list: categorySkills, handleClick: handleClick.bind(this) };
-	  }
-
-	  _createClass(SkillVis, [{
-	    key: 'render',
-	    value: function render() {
-	      var _state = this.state;
-	      var list = _state.list;
-	      var handleClick = _state.handleClick;
-
-	      return _react2['default'].createElement(
-	        'categories',
-	        { onClick: handleClick },
-	        (list || []).map(function (_ref5) {
-	          var name = _ref5.name;
-	          var skills = _ref5.skills;
-
-	          return _react2['default'].createElement(
-	            'div',
-	            null,
-	            _react2['default'].createElement(
-	              'h1',
-	              null,
-	              name
-	            ),
-	            _react2['default'].createElement(SkillList, { list: skills })
-	          );
-	        })
-	      );
-	    }
-	  }]);
-
-	  return SkillVis;
-	})(Component);
-
-	exports['default'] = SkillVis;
+	exports['default'] = SkillBubbles;
 	module.exports = exports['default'];
 
 /***/ },
