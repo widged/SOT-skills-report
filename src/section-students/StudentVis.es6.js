@@ -1,7 +1,5 @@
 /* jshint esnext: true */
 
-import {Inject} from './imports';
-
 import React from 'react';
 let {Component} = React;
 
@@ -13,20 +11,18 @@ export default class StudentVis extends Component {
 
     render() {
         return (
-          <div className="page">
-            <div id="visualisation">
-                <div id="vis-controls">
+            <student-vis>
+                <div className="vis-controls">
                     <div id='color-by'></div>
                     <div id='group-by'></div>
                     <div id='filters'></div>
                 </div>
-                <div id="vis-display">
-                    <div id='vis'></div>
-                    <div id='itemTooltip'></div>            
+                <div className="vis-display">
+                    <div className='vis'></div>
+                    <div className='item-tooltip'></div>            
                 </div>
-                <div id="vis-legend"></div>
-            </div>
-        </div> 
+                <div className="color-legend"></div>
+            </student-vis>
         );
     }
 
@@ -62,7 +58,7 @@ export default class StudentVis extends Component {
         }
 
         // -- Loading the chart config
-        let StudentChart = require('./sotChart.es6.js');
+        let StudentChart = require('./studentvis-config.es6.js');
 
         // -- Getting the Lookup keys
         let {keys, keyMap} = getLookupKeys(
@@ -79,19 +75,19 @@ export default class StudentVis extends Component {
 
         let tooltip =  React.render(
             React.createElement(ItemTooltip, {title: "my_tooltip", width: 240}), 
-            document.getElementById('itemTooltip')
+            document.querySelector('.item-tooltip')
         );
 
         let colorLegend  = React.render(
             React.createElement(ColorLegend), 
-            document.getElementById('vis-legend')
+            document.querySelector('.color-legend')
         );
         
         // -- Mounting the visualisation
         var BubbleChart = require('../components/bubble-clusters-chart/BubbleClustersChart.es6.js');
         let chart = new BubbleChart();
         StudentChart.addControls({lookups, lookupMap, chart, colorLegend});
-        chart.mountIn(document.getElementById("vis"))
+        chart.mountIn(document.querySelector('.vis'))
             .onItemSelection(function(item, xy) {
                 let {title, list} = StudentChart.itemDump(item, lookupMap) || {title: null, list: null};
                 tooltip.setState({visible: list && list.length, xy, title, list});
@@ -100,7 +96,6 @@ export default class StudentVis extends Component {
             .circleStyle(StudentChart.circleStyle)
             .plot(tsv)
             .groupBy(); 
-
 
         return chart;
     }

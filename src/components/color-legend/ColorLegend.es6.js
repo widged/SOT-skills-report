@@ -14,14 +14,14 @@ export default class ColorLegend extends Component {
             return (<div></div>); 
         } else {
             return (
-                <div>
+                <color-legend>
                     <h3>{title}</h3>
                     <ul>
                     {(colorList || []).map(({name, color}) => {return (
                         <li><span style={{width: '15px', height: '15px', background:color, color:color}}>__</span> {name}</li>
                     )})}
                     </ul>
-                </div>
+                </color-legend>
             );
         }
     }

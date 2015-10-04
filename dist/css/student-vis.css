@@ -1,33 +1,31 @@
-
 /* ################
-   Student chart
+   Student vis
 ################ */
 
-#visualisation {
+student-vis {
+  display: block;
   position: relative;
   height: 610px;
 }
 
-#vis-display {
+student-vis .vis-display {
   position: absolute;
   margin-left: 0px;
   z-index: 40; /* necessary for tooltip to show */
 }
 
-
-#vis-display #itemTooltip {
+student-vis .vis-display .item-tooltip {
   position:absolute;
   top: 0;
   left: 0;
 }
 
-
-#vis {
+student-vis .vis {
   position: relative;
   display: block;
 }
 
-#vis-legend {
+student-vis .color-legend {
     display:block;
     position:absolute;
     top:30px;
@@ -35,39 +33,34 @@
     background-color:rgba(255,255,255,0.5);
 }
 
-#vis-legend ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-svg g.top-labels {
+student-vis svg g.top-labels {
   font-size: 14px;
-  stroke: #aaa;
+  /* stroke: #aaa;  */ /* required for display in codepen */
   fill: #aaa;
 }
 
-svg g.top-labels text {
+student-vis svg g.top-labels text {
 }
 
 /* ################
    controls 
 ################ */
-#vis-controls {
+student-vis .vis-controls {
   display:block;
   background-color:rgba(255,255,255,0.75);
 }
 
-#vis-controls > * {
+student-vis .vis-controls > * {
   display: inline-block;
   margin-right: 12px;
   font-size: 0.8em;
   font-weight: bold;
 }
 
-#vis-controls select-group > * {
+student-vis .vis-controls select-group > * {
   display: inline-block;
 }
-#vis-controls select {
+student-vis .vis-controls select {
     width:150px;
     margin-left: 6px;
 }

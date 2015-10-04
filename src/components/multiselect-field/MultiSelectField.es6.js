@@ -28,9 +28,9 @@ export default class MultiSelectField extends Component {
       return { label: name, value: name };
     }).sort(function(a, b) { return a.label < b.label ? -1 : a.label > b.label ? 1 : 0; });
     return (
-      <div className="section">
+      <multiselect-field>
         <Select multi value={this.state.value} placeholder={placeholder} options={ops} onChange={handleChange}/>
-      </div>
+      </multiselect-field>
     );
   }
 }

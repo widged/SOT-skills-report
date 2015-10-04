@@ -3,7 +3,7 @@
 import React             from 'react';
 import MultiSelectField  from './components/multiselect-field/MultiSelectField.es6.js';
 import CheckboxGroup     from './components/checkbox-group/CheckboxGroup.es6.js';
-import StudentVis        from './section-students/student-chart.es6.js';
+import StudentVis        from './section-students/StudentVis.es6.js';
 import SkillBubbles      from './section-secondary/SkillBubbles.es6.js';
 
 let {Component} = React;
@@ -61,7 +61,7 @@ export default class SummerOfTechApp extends Component {
       <div>
         <header>
           <div>
-            <h1><img src="../dist/css/sot_new3.png"/></h1>
+            <h1><img src="../dist/assets/sot_banner.png"/></h1>
             <h2>Interns with Paid Work Experience</h2>
           </div>
         </header>
