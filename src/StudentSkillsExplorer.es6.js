@@ -3,8 +3,8 @@
 import React             from 'react';
 import MultiSelectField  from './components/multiselect-field/MultiSelectField.es6.js';
 import CheckboxGroup     from './components/checkbox-group/CheckboxGroup.es6.js';
-import StudentVis        from './section-students/StudentVis.es6.js';
-import SkillBubbles      from './section-secondary/SkillBubbles.es6.js';
+import StudentVis        from './components/student-vis/StudentVis.es6.js';
+import SkillBubbles      from './components/skill-bubbles/SkillBubbles.es6.js';
 
 let {Component} = React;
 

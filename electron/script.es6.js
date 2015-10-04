@@ -13,7 +13,7 @@ Inject.css({file: '../../dist/css/item-tooltip.css', parent: module});
 Inject.css({file: '../../node_modules/react-select/dist/default.css', parent: module});
 
 injectJs([
-	'../src/section-secondary/script.js',
+	'../dist/scripts/skill-bubbles.d3.js',
 	'../dist/vendor/d3/d3.v3.min.js',
 ], function() {
 	main();

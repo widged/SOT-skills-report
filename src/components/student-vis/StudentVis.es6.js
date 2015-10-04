@@ -70,8 +70,8 @@ export default class StudentVis extends Component {
         let {lookups, lookupMap} = {lookups: keys, lookupMap: keyMap};
 
         // -- Mounting the visualisation add-ons
-        var ItemTooltip = require('../components/item-tooltip/ItemTooltip.es6.js');
-        var ColorLegend = require('../components/color-legend/ColorLegend.es6.js');
+        var ItemTooltip = require('../item-tooltip/ItemTooltip.es6.js');
+        var ColorLegend = require('../color-legend/ColorLegend.es6.js');
 
         let tooltip =  React.render(
             React.createElement(ItemTooltip, {title: "my_tooltip", width: 240}), 
@@ -84,7 +84,7 @@ export default class StudentVis extends Component {
         );
         
         // -- Mounting the visualisation
-        var BubbleChart = require('../components/bubble-clusters-chart/BubbleClustersChart.es6.js');
+        var BubbleChart = require('../bubble-clusters-chart/BubbleClustersChart.es6.js');
         let chart = new BubbleChart();
         StudentChart.addControls({lookups, lookupMap, chart, colorLegend});
         chart.mountIn(document.querySelector('.vis'))

@@ -96,8 +96,8 @@ export default class StudentChart {
 
 
     static addControls({lookups, lookupMap, chart, colorLegend}) {
-        var SelectBy = require('../components/select-group/SelectBy.es6.js');
-        var FilterList = require('../components/filter-list/FilterList.es6.js');
+        var SelectBy = require('../select-group/SelectBy.es6.js');
+        var FilterList = require('../filter-list/FilterList.es6.js');
 
         function whenColorValues(keyName, distinctValues) {
 
