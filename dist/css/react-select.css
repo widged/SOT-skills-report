@@ -5,9 +5,12 @@
  * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs
  * MIT License: https://github.com/keystonejs/react-select
 */
-react-select .Select {
+
+react-select {
+  display: block;
   position: relative;
 }
+
 react-select .Select-control {
   position: relative;
   overflow: hidden;
@@ -202,10 +205,10 @@ react-select .Select-searching {
   display: block;
   padding: 8px 10px;
 }
-react-select .Select.is-multi .Select-control {
+react-select.Select.is-multi .Select-control {
   padding: 2px 52px 2px 3px;
 }
-react-select .Select.is-multi .Select-input {
+react-select.Select.is-multi .Select-input {
   vertical-align: middle;
   border: 1px solid transparent;
   margin: 2px;
@@ -250,18 +253,18 @@ react-select .Select-item-icon:focus {
 react-select .Select-item-icon:active {
   background-color: #c9e6f2;
 }
-react-select .Select.is-multi.is-disabled .Select-item {
+react-select.Select.is-multi.is-disabled .Select-item {
   background-color: #f2f2f2;
   border: 1px solid #d9d9d9;
   color: #888888;
 }
-react-select .Select.is-multi.is-disabled .Select-item-icon {
+react-select.Select.is-multi.is-disabled .Select-item-icon {
   cursor: not-allowed;
   border-right: 1px solid #d9d9d9;
 }
-react-select .Select.is-multi.is-disabled .Select-item-icon:hover,
-react-select .Select.is-multi.is-disabled .Select-item-icon:focus,
-react-select .Select.is-multi.is-disabled .Select-item-icon:active {
+react-select.Select.is-multi.is-disabled .Select-item-icon:hover,
+react-select.Select.is-multi.is-disabled .Select-item-icon:focus,
+react-select.Select.is-multi.is-disabled .Select-item-icon:active {
   background-color: #f2f2f2;
 }
 @keyframes Select-animation-spin {

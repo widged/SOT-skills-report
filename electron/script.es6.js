@@ -10,7 +10,7 @@ Inject.css({file: '../../dist/css/student-vis.css', parent: module});
 Inject.css({file: '../../dist/css/skill-bubbles.css', parent: module});
 Inject.css({file: '../../dist/css/color-legend.css', parent: module});
 Inject.css({file: '../../dist/css/item-tooltip.css', parent: module});
-Inject.css({file: '../../node_modules/react-select/dist/default.css', parent: module});
+Inject.css({file: '../../dist/css/react-select.css', parent: module});
 
 injectJs([
 	'../dist/scripts/skill-bubbles.d3.js',

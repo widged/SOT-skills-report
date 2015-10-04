@@ -2,7 +2,7 @@ module.exports = {
     entry  : './src/bundle.es6.js',
     output : {
         path     : __dirname,
-        filename : 'dist/bundle.es5.js'
+        filename : 'staging/bundle.es5.js'
     },
     module : {
         loaders: [ 
