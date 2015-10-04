@@ -2,35 +2,11 @@
 
 import React             from 'react';
 import SkillMultiSelect  from './section-skills/SkillMultiSelect.es6.js';
-import ExperienceLevelSelect  from './section-skills/ExperienceLevelSelect.es6.js';
+import CheckboxGroup     from './section-skills/CheckboxGroup.es6.js';
 import StudentVis        from './section-students/student-chart.es6.js';
-import SkillTags         from './section-skills/SkillTags.es6.js';
+import SkillBubbles      from './section-secondary/SkillBubbles.es6.js';
 
 let {Component} = React;
-
-class SkillBubbles {
-
-  componentDidMount() {
-    var rootNode = document.querySelector('skill-bubbles');
-    rootNode.innerHTML = '';
-    let rawBubbles = this.props.list;
-    draw_skills_bubbles(rawBubbles, rootNode);
-  }
-  render() {
-    return ( <skill-bubbles/> );
-  }
-
-  shouldComponentUpdate( nextProps, nextState) {
-      if(nextProps.hasOwnProperty('list')) {
-        var rootNode = document.querySelector('skill-bubbles');
-        rootNode.innerHTML = '';
-        let rawBubbles = nextProps.list;
-        draw_skills_bubbles(rawBubbles, rootNode);
-      }
-      return false;
-  }
-
-}
 
 export default class SummerOfTechApp extends Component {
 
@@ -38,6 +14,7 @@ export default class SummerOfTechApp extends Component {
     super(props);
     const {store} = this.props;
     this.state = {
+      primarySkills: undefined,
       complementarySkills: store.listSkillNames(),
       bubbleSkills: store.nestByCategory(),
       levels: store.listExperienceLevels(),
@@ -58,13 +35,25 @@ export default class SummerOfTechApp extends Component {
     const {store} = this.props;
     const complementarySkills = store.listComplementarySkills(names);
     this.setState({
+      primarySkills: names,
       complementarySkills: complementarySkills, 
       filterStudents: store.listStudentsWithSkills(names), 
       bubbleSkills: store.nestByCategory(complementarySkills)
     });
   }
 
-  handleExperienceChange(names) {
+  handleExperienceChange(levels) {
+    const {store} = this.props;
+    store.activeExperienceLevels(levels);
+    const names = this.state.primarySkills;
+    const complementarySkills = store.listComplementarySkills(['Java']);
+    console.log('[handleExperienceChange]', levels, complementarySkills)
+    this.setState({
+      primarySkills: names,
+      complementarySkills: complementarySkills, 
+      filterStudents: store.listStudentsWithSkills(names), 
+      bubbleSkills: store.nestByCategory(complementarySkills)
+    });
       /*
       handleComplementary(skills);
       // let skills = Sot.listSkillsAtExpertise(jsonp_skills, expertiseLevel);
@@ -86,8 +75,8 @@ export default class SummerOfTechApp extends Component {
         </header>
         <article>
           <section>
-            <SkillMultiSelect names={complementarySkills} handleChange={handleSkillsChange}/>
-            <ExperienceLevelSelect levels={levels}  handleChange={handleExperienceChange}/>
+            <SkillMultiSelect names={complementarySkills} onChange={handleSkillsChange}/>
+            <CheckboxGroup items={levels} onChange={handleExperienceChange}/>
           </section>
           <section>
             <div id="students-vis">

@@ -123,7 +123,8 @@ export default class SummerOfTech {
     return names
       .map((name) => { 
         let idx = skills.indexOf(name);
-        let levels = students[idx].levels; 
+        console.log(name, idx)
+        let levels = (students[idx] || {}).levels; 
         const user_ids = Utils.listUsersAtActiveLevels(levels, activeLevels);
         if(!user_ids || !user_ids.length) {
           // console.log('[levels missing]', name);
