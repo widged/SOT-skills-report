@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>Summer of Tech Tools</title>
+    
+    
+    
+    
+        <link rel="stylesheet" href="css/style.css">
+
+    
+    
+    
+  </head>
+
+  <body>
+
+    
+<div id="app">
+  <div class="wrapper">
+  <div id="controls">
+    <div>Paste the html content for the raw files on the left.  <em>`Summer of Tech Skills Categories.html`</em> at the top and <em>`student_skills_for_vis_2015-08-31.csv`</em> . Press convert and then copy the content of the right panel to your clipboard. The top part should be pasted into <em>`dist/data-from-tools/skills.js`<em>, the bottom part into <em>`dist/data-from-tools/students.js`<em>  </div>
+    <div>
+    <button id='convert'>Convert</button>  
+
+    </div>
+   </div>
+
+    <div id="html-input">
+     <textarea id="categories-raw"></textarea>
+     <textarea id="students-raw"></textarea>
+  </div>
+  <div id="json-result">
+   <textarea id="skills-vis"></textarea>
+   <textarea id="students-vis"></textarea>
+    <button id='copyclip1'  class='clip' data-clipboard-target="#skills-vis">Copy</button>    
+
+    <button id='copyclip2'  class='clip' data-clipboard-target="#students-vis">Copy</button>    
+
+      </div>
+  </div> <!-- wrapper -->
+</div>
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+<script>new Clipboard('.clip');</script>
+    <script src='http://requirejs.org/docs/release/2.1.15/minified/require.js'></script>
+
+        <script src="js/index.js"></script>
+
+    
+    
+    
+  </body>
+</html>
