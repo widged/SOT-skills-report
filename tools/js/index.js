@@ -2,15 +2,15 @@
 
 pipe(function (pass, res) {
   return [function (_) {
-    loadTextFile("http://widged.github.io/SOT-skills-report/dist/data-raw/student_skills_for_vis_2015-08-31.csv", pass);
+    loadTextFile("http://widged.github.io/SOT-skills-report/tools/data-raw/student_skills_for_vis_2015-08-31.csv", pass);
   }, function (_) {
     res.student_csv = _;pass();
   }, function (_) {
-    loadTextFile("http://widged.github.io/SOT-skills-report/dist/data-raw/Summer%20of%20Tech%20Skills%20Categories.html", pass);
+    loadTextFile("http://widged.github.io/SOT-skills-report/tools/data-raw/Summer%20of%20Tech%20Skills%20Categories.html", pass);
   }, function (_) {
     res.html_categories = _;pass();
   }, function (_) {
-    loadTextFile("http://widged.github.io/SOT-skills-report/dist/data-raw/students_patch.csv", pass);
+    loadTextFile("http://widged.github.io/SOT-skills-report/tools/data-raw/students_patch.csv", pass);
   }, function (_) {
     res.student_patch = _;pass();
   }];
