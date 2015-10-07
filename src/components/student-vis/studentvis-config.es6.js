@@ -6,47 +6,66 @@ let {Component} = React;
 export default class StudentChart {
 
     static getFieldColor(value) {
-/*
         var colors = {
-          'HSc/Sc'    : 'SomeColorCloseToBlue',
-          'Com'       : 'red1',
-          'Com/BSc'   : 'red2',
-          'Com/Sc'    : 'red3',
-          'A'         : 'somewhatGreen1',
-          'A/Sc'      : 'somewhatGreen2', 
-          'Mus'       : 'greenishButDifferent' 
-          'Des'       : 'typicallyGreen1'    
-          'Des/A'     : 'typicallyGreen2'    
-          'Des/Com'   : 'green/Red'  // not obvious how to present overlap
-          'IT'        : 'darkGray1'
-          'Tech'      : 'darkGray2'
-          'CompSc'    : 'darkGray3'
-          'CompSc/Des': 'darkGray4'
-          'Eng'       : 'Blue1'
-          'Eng/Com'   : 'Blue/Red'
-          'Eng/Sc'    : 'Blue/Purple' // not obvious how to present overlap
-          'Sc'        : 'Purple'
-          'Sc/Com'    : 'Purple'
-          'Sc/Law'    : 'Purple'
-          'MathSc'    : 'SomeColorCloseToBlue'
+          'HSc/Sc'    : '#5B9CE5',
+          'Com'       : '#FF6A00',
+          'Com/BSc'   : '#FF2C00',
+          'Com/Sc'    : '#B63300',
+          'A'         : '#6CD681',
+          'A/Sc'      : '#26C66F', 
+          'Mus'       : '#13B5B7', 
+          'Des'       : '#489400',    
+          'Des/A'     : '#1A6300',    
+          'Des/Com'   : '#94AB3E',  // not obvious how to present overlap
+          'IT'        : '#6B7C7D',
+          'Tech'      : '#D4815D',
+          'CompSc'    : '#B5A77F',
+          'CompSc/Des': '#E0D3AB',
+          'Eng'       : '#908CD1',
+          'Eng/Com'   : '#774E94',
+          'Eng/Sc'    : '#460078', // not obvious how to present overlap
+          'Sc'        : '#9AEBFC',
+          'Sc/Com'    : '#44B8E1',
+          'Sc/Law'    : '#3178AE',
+          'MathSc'    : '#163456'
         };
         return colors[value] || colors.default;
-        */
     }
 
     static getLevelColor(value) {
         var colors = {
-          'Dip'    : '#FF00CC',
-          'GDip'   : '#FF00CC',
-          "B"      : '#00FF00',
-          "B(Hons)": '#00FF00',
-          "PGDip"  : '#FFFF00',
-          "M"      : '#FF0000',
-          "PhD"    : '#FF0000',
+          'Dip'    : '#C4DEFF',
+          'GDip'   : '#5B9CE5',
+          'B'      : '#EFAAF7',
+          'B(Hons)': '#CC8A98',
+          'PGDip'  : '#26B0F8',
+          'M'      : '#189B7F',
+          'PhD'    : '#CC4AE2',
           default  : '#4F4F4F'
         };
         return colors[value] || colors.default;
     }
+
+static getYearColor(value) {
+        var colors = {
+          '1'     : '#563A5E',
+          '2'     : '#883F7F',
+          '3'     : '#A6639E',
+          '4'     : '#95C7BA',
+          '5'     : '#536273',
+          default : '#4F4F4F'
+        };
+        return colors[value] || colors.default;
+    }    
+
+    static getFinalColor(value) {
+        var colors = {
+          'FALSE'  : '#B63300',
+          'TRUE'   : '#6FACA2',
+          default  : '#4F4F4F'
+        };
+        return colors[value] || colors.default;
+    }    
 
     // Area. Black - code, green - design, blue - engineering, yellow - BA, red - Ops
 
@@ -63,8 +82,10 @@ export default class StudentChart {
 
     static getColorFn(type, distinctValues) {
         var colorFns = {
-            // "level": StudentChart.getLevelColor,
-            // "field": StudentChart.getFieldColor,
+            "level": StudentChart.getLevelColor,
+            "field": StudentChart.getFieldColor,
+            "study_year": StudentChart.getYearColor,
+            "final_year": StudentChart.getFinalColor,
             default: StudentChart.getDefaultColor(distinctValues)
         };
         return colorFns[type] || colorFns.default;
