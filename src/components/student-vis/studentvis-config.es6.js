@@ -48,11 +48,11 @@ export default class StudentChart {
 
 static getYearColor(value) {
         var colors = {
-          '1'     : '#563A5E',
-          '2'     : '#883F7F',
+          '5'     : '#563A5E',
+          '4'     : '#883F7F',
           '3'     : '#A6639E',
-          '4'     : '#95C7BA',
-          '5'     : '#536273',
+          '2'     : '#95C7BA',
+          '1'     : '#536273',
           default : '#4F4F4F'
         };
         return colors[value] || colors.default;
