@@ -2,14 +2,14 @@ function draw_skills_bubbles(data, node) {
 
   var r = 900  / 3,
     w = (r+30) * 3,
-    h = 600,
+    h = 640,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
     root;
 
 
   // Define the div for the tooltip
-  var div = d3.select(node).append("item-tooltip")
+  var tooltip = d3.select(node).append("item-tooltip")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -53,16 +53,14 @@ var zoom = d3.behavior.zoom()
         var newy = y - scaleFactor * y;
         vis
           .transition().duration(750)
-          .attr("transform", "translate("+ [newx, newy].join(',') +"),scale("+scaleFactor+")")
-
+          .attr("transform", "translate("+ [newx, newy].join(',') +"),scale("+scaleFactor+")");
         vis
           .classed("zoomed", true);
         zoomed = true;
       } else {
         vis
           .transition().duration(750)
-          .attr("transform", "translate(" + [0, 0].join(',') + "),scale(1)")
-
+          .attr("transform", "translate(" + [0, 0].join(',') + "),scale(1)");
         vis          
           .classed("zoomed", false);
         zoomed = false;
@@ -78,25 +76,36 @@ var zoom = d3.behavior.zoom()
       var left = 30 + (i * (r + 30));
       var top = 0;
       if(i > 2) {
-        top = (i > 2) ? r : 0;
+        top = r + 20;
         left = ((4-i) * (r+30)) + r/2;
       }
       var g = vis.insert("svg:g");
+      var bubs = g.insert("svg:g");
       g.attr("transform", "translate(" + left + "," + top + ")");
-      g.attr("data-left", left);
-      g.attr("data-top", top);
       g.attr("class", d.name.split(/\s+/)[0].toLowerCase() );
+
+      bubs.attr("transform", "translate(" + 0 + "," + 20 + ")");
+      bubs.attr("data-left", left);
+      bubs.attr("data-top", top);
       if(d.children && d.children.length) {
-        drawCategory(d, g);
+        drawCategory(d, bubs);
       }
+
+      g.append("svg:text").text(function(x) {
+        return d.name;
+      })
+      .attr("dy", "1em")
+      .attr("x", r/2)
+      .attr("text-anchor", "middle")
+      .style("opacity", 1).classed('category', true);
     });
-
-
-
 
   function drawCategory(root, g) {
 
       var nodes = pack.nodes(root);
+      nodes.sort(function(a,b) {
+        return b.depth - a.depth;
+      });
 
       var node = g.selectAll(".node")
                 .data(nodes)
@@ -110,29 +119,29 @@ var zoom = d3.behavior.zoom()
                 .attr("transform", function(d) { 
                     return "translate(" + Math.round(d.x) + "," + Math.round(d.y) + ")"; 
                 })
-        // .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
-        // .style('cursor', function(d) { return (d.depth === 2) ? 'pointer' : 'default'; })
+              .style('pointer-events', function(d) { return (d.depth > 0) ? 'auto' : 'none'; })
+              .style('cursor', function(d) { return (d.depth > 0) ? 'pointer' : 'default'; })
         .on("mouseover", function(d) {
           var left = parseInt(this.parentNode.getAttribute('data-left'), 10);
           var top = parseInt(this.parentNode.getAttribute('data-top'), 10);
           if(d.depth === 1){
             var lines = d.children.map(function(d) { return [d.value, d.name].join('\t'); });
             lines.unshift(d.name);
-            div.transition().duration(200)
+            tooltip.transition().duration(200)
               .style("opacity", 0.9);
-            div.html(lines.join("<br/>"))
-              .style("left", (left + d.x + 10) + "px")
-              .style("top", (top + d.y - 28) + "px");
+            tooltip.html(lines.join("<br/>"))
+              .style("left", (left + d.x + 15) + "px")
+              .style("top", (top + d.y + 20) + "px");
           }
         })
         .on("mouseout", function(d) {
-          div.transition()
+          tooltip.transition()
           .duration(500)
           .style("opacity", 0);
         });
         
       var circle = node.append("circle")
-        .attr("r",  function(d) { return d.r; })
+        .attr("r",  function(d) { return d.r; });
 
       var text = node.append("svg:text")
         .attr("dy", ".35em")

@@ -33,11 +33,11 @@ export default class CheckboxGroup extends Component {
     var checkboxRenderer = this.checkboxRenderer;
     const {handleChange} = this.handlers;
     return (
-      <div className="section" onChange={handleChange}>
+      <checkbox-group onChange={handleChange}>
         <label className="checkbox">
         {items.map(checkboxRenderer)}
         </label>
-      </div>
+      </checkbox-group>
     );
   }
 

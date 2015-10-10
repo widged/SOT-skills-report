@@ -4,6 +4,10 @@ body, html, #app {
 	font-family: "Open Sans Condensed", Verdana, Helvetica, Arial, sans-serif;
 }
 
+#app {
+	width: 100%;
+	min-width: 1260px;
+}
 header {
 	padding: 12px;
 	display: block;
@@ -64,8 +68,16 @@ aside select-group select {
     box-sizing: border-box;
     color: #333333;	
     padding: 8px 52px 8px 10px;
+    margin-bottom: 6px;
+    margin-top: 5px;
     height: 32px;
     width: 100%;
+}
+
+aside checkbox-group {
+	display: block;
+	margin-top: 9px;
+	margin-bottom: 18px;
 }
 
 section {
@@ -115,6 +127,10 @@ summary-data h1 {
 	font-style: italic;
 }
 
+
+#skills-secondary-vis {
+	margin-top: 33px;
+}
 footer {
 	clear: both;
 	text-align: center;

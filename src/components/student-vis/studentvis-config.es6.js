@@ -92,7 +92,7 @@ static getYearColor(value) {
     }
 
     static keyFilterFn({key, type, title}) { 
-        return key.match(/^(level|field_5|study_year|final_year)/); 
+        return key.match(/^(level|field|study_year|final_year)$/); 
     }
 
     static keySortFn(keyName) { 

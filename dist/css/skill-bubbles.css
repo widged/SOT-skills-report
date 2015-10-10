@@ -24,6 +24,12 @@ skill-bubbles .depth-2 text {
   opacity: 0;
 }
 
+skill-bubbles .zoomed .depth-1 text {
+  font-size: 3pt;
+  fill: #333333;
+  text-shadow: 0 3px 0 #fff, 3px 0 0 #fff, -3px 0 0 #fff, 0 -3px 0 #fff;
+}
+
 skill-bubbles .zoomed .depth-2 text {
   opacity: 1;
   font-size: 2pt;
@@ -65,30 +71,35 @@ skill-bubbles .depth-1 circle:hover {
 }
 
 /* yellow - BA*/
+skill-bubbles .ba .category,
 skill-bubbles .ba circle {
   fill: #e65100;
   stroke: #e65100;
 }
 
 /* green - design */
+skill-bubbles .design .category,
 skill-bubbles .design circle  {
   fill: #1b5e20;
   stroke: #1b5e20;
 }
 
 /* blue - engineering */
+skill-bubbles .engineering .category,
 skill-bubbles .engineering circle  {
   fill: #1565c0;
   stroke: #1565c0;
 }
 
 /* red - Ops */
+skill-bubbles .systems .category,
 skill-bubbles .systems circle  {
   fill: #b71c1c;
   stroke: #b71c1c;
 }
 
 /* Black - code */
+skill-bubbles .web .category,
 skill-bubbles .web circle  {
   fill: #6a1b9a;
   stroke: #6a1b9a;
@@ -132,4 +143,8 @@ skill-bubbles div.tooltip {
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
+}
+
+.category {
+  font-size: 0.8rem;
 }
