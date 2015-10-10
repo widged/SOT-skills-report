@@ -13,11 +13,11 @@ export default class CustomTooltip extends Component {
     	let {cx, cy} = xy || {x: 0, y: 0};
         return (
         	<item-tooltip className={visible ? '' : 'hidden'} style={{left: cx + 20 , top: cy + 10 }}>
-	            <h3>{title}</h3>
+	            <user-id>{title}</user-id>
                 <ul>
 	            {(list || []).map(({title, value}) => {
 	            	return (
-	            		<li><span className="name">{title}:</span><span className="value">{value}</span></li>
+	            		<li><span className="name">{title}:</span> <span className="value">{value}</span></li>
 	            	);
 	            })}
 	            </ul>

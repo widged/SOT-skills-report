@@ -13,9 +13,6 @@ export default class StudentVis extends Component {
         return (
             <student-vis>
                 <div className="vis-controls">
-                    <div id='color-by'></div>
-                    <div id='group-by'></div>
-                    <div id='filters'></div>
                 </div>
                 <div className="vis-display">
                     <div className='vis'></div>
@@ -74,7 +71,7 @@ export default class StudentVis extends Component {
         var ColorLegend = require('../color-legend/ColorLegend.es6.js');
 
         let tooltip =  React.render(
-            React.createElement(ItemTooltip, {title: "my_tooltip", width: 240}), 
+            React.createElement(ItemTooltip), 
             document.querySelector('.item-tooltip')
         );
 

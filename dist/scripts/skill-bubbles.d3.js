@@ -1,16 +1,15 @@
 function draw_skills_bubbles(data, node) {
 
-  var r = 720  / 3,
-    w = (r+10) * 5,
-    h = 400,
+  var r = 900  / 3,
+    w = (r+30) * 3,
+    h = 600,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
-    zoomNode,
     root;
 
 
   // Define the div for the tooltip
-  var div = d3.select(node).append("div")
+  var div = d3.select(node).append("item-tooltip")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
@@ -21,14 +20,71 @@ function draw_skills_bubbles(data, node) {
   var vis = d3.select(node).insert("svg:svg", "h2")
     .attr("width", w)
     .attr("height", h)
+    .on("click", function(d) { 
+      var pt = d3.mouse(this);
+      zoom(pt[0],pt[1]);
+    })
+/*
+    .call(d3.behavior.zoom().on("zoom", function () {
+      vis.attr("transform", "translate(" + d3.event.translate + ")") //  + " scale(" + scale + ")"
+    }))    
+*/
     .append("svg:g")
     .attr("transform", "translate(" + 0 + "," + 0 + ")");
 
+/*
+
+var zoom = d3.behavior.zoom()
+    .x(x)
+    .y(y)
+    .scaleExtent([1, 10])
+    .on("zoom", zoomed);
+
+.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .call(zoom);    
+*/    
+
+    var zoomed;
+    function zoom(x, y) {
+      if(!zoomed) { 
+        var scaleFactor = 4;
+        var newx = x - scaleFactor * x;
+        var newy = y - scaleFactor * y;
+        vis
+          .transition().duration(750)
+          .attr("transform", "translate("+ [newx, newy].join(',') +"),scale("+scaleFactor+")")
+
+        vis
+          .classed("zoomed", true);
+        zoomed = true;
+      } else {
+        vis
+          .transition().duration(750)
+          .attr("transform", "translate(" + [0, 0].join(',') + "),scale(1)")
+
+        vis          
+          .classed("zoomed", false);
+        zoomed = false;
+      }
+      d3.event.stopPropagation();
+    }
+
+    d3.select(window).on("click", function() { zoom(0,0); });
+
+
 
     data.children.forEach(function(d, i) {
+      var left = 30 + (i * (r + 30));
+      var top = 0;
+      if(i > 2) {
+        top = (i > 2) ? r : 0;
+        left = ((4-i) * (r+30)) + r/2;
+      }
       var g = vis.insert("svg:g");
-      g.attr("transform", "translate(" + (i * (r + 10)) + "," + 0 + ")");
-      g.attr("data-left", (i * (r + 10)));
+      g.attr("transform", "translate(" + left + "," + top + ")");
+      g.attr("data-left", left);
+      g.attr("data-top", top);
       g.attr("class", d.name.split(/\s+/)[0].toLowerCase() );
       if(d.children && d.children.length) {
         drawCategory(d, g);
@@ -36,35 +92,37 @@ function draw_skills_bubbles(data, node) {
     });
 
 
-  function drawCategory(root, g) {
 
-      zoomNode = root;
+
+  function drawCategory(root, g) {
 
       var nodes = pack.nodes(root);
 
-      g.selectAll("circle")
-        .data(nodes)
-        .enter().append("svg:circle")
-
-        .attr("class", bubbleClass)
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; })
-        .attr("r",  function(d) { return d.r; })
+      var node = g.selectAll(".node")
+                .data(nodes)
+                .enter()
+                .append("svg:g")
+                .attr("class", function(d) { 
+                    var classes = 'node depth-' + d.depth;
+                    if(d.depth === 2) { classes += ' level-' + d.name.split(' ')[0].toLowerCase(); }
+                    return classes;
+                })
+                .attr("transform", function(d) { 
+                    return "translate(" + Math.round(d.x) + "," + Math.round(d.y) + ")"; 
+                })
         // .style('pointer-events', function(d) { return (d.depth === 1) ? 'auto' : 'none'; })
         // .style('cursor', function(d) { return (d.depth === 2) ? 'pointer' : 'default'; })
-        .on("click", function(d) { return zoom(zoomNode == d ? root : d); })
         .on("mouseover", function(d) {
+          var left = parseInt(this.parentNode.getAttribute('data-left'), 10);
+          var top = parseInt(this.parentNode.getAttribute('data-top'), 10);
           if(d.depth === 1){
             var lines = d.children.map(function(d) { return [d.value, d.name].join('\t'); });
             lines.unshift(d.name);
-            div.transition()
-              .duration(200)
+            div.transition().duration(200)
               .style("opacity", 0.9);
-
-              var groupLeft = parseInt(this.parentNode.getAttribute('data-left'), 10);
             div.html(lines.join("<br/>"))
-              .style("left", (groupLeft + parseInt(this.getAttribute('cx'))) + "px")
-              .style("top", (this.getAttribute('cy') - 28) + "px");
+              .style("left", (left + d.x + 10) + "px")
+              .style("top", (top + d.y - 28) + "px");
           }
         })
         .on("mouseout", function(d) {
@@ -72,60 +130,24 @@ function draw_skills_bubbles(data, node) {
           .duration(500)
           .style("opacity", 0);
         });
+        
+      var circle = node.append("circle")
+        .attr("r",  function(d) { return d.r; })
 
-      g.selectAll("text")
-        .data(nodes)
-        .enter().append("svg:text")
-        .attr("class", bubbleClass)
-        .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
+      var text = node.append("svg:text")
         .attr("dy", ".35em")
         .attr("text-anchor", "middle")
-        .style("opacity", function(d) { return d.r > 20 ? 1 : 0; })
-        .text(function(d) { return bubbleText(d); });
+//        .style("opacity", textOpacity)
+        .text(function(d) { 
+            if(d.depth === 1){
+              return d.name;
+            } else if (d.depth !== 0){
+              return d.name +" "+ d.value;
+            }
+            return "";
+        });
 
-      d3.select(window).on("click", function() { zoom(root); });
 
-      function bubbleText(d){
-        if(d.depth === 1){
-          return d.name;
-        } else if (d.depth !== 0){
-          return d.name +"\t"+ d.value;
-        }
-        return "";
-      }
-
-      function bubbleClass(d){
-        if(d.depth === 0){
-          return "root";
-        } else if(d.depth === 1){
-          return "top_parent";
-        } else {
-          return "child_"+d.name;
-        }
-      }
-
-      function zoom(d, i) {
-        var k = r / d.r / 2;
-        x.domain([d.x - d.r, d.x + d.r]);
-        y.domain([d.y - d.r, d.y + d.r]);
-
-        var t = g.transition()
-          .duration(d3.event.altKey ? 7500 : 750);
-
-        t.selectAll("circle")
-          .attr("cx", function(d) { return x(d.x); })
-          .attr("cy", function(d) { return y(d.y); })
-          .attr("r", function(d) { return k * d.r; });
-
-        t.selectAll("text")
-          .attr("x", function(d) { return x(d.x); })
-          .attr("y", function(d) { return y(d.y); })
-          .style("opacity", function(d) { return k * d.r > 20 ? 1 : 0; });
-
-        zoomNode = d;
-        d3.event.stopPropagation();
-      }
 
   }
 

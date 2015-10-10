@@ -92,7 +92,7 @@ static getYearColor(value) {
     }
 
     static keyFilterFn({key, type, title}) { 
-        return key.match(/^(school|level|field|degree|study_year|final_year)/); 
+        return key.match(/^(level|field_5|study_year|final_year)/); 
     }
 
     static keySortFn(keyName) { 
@@ -154,8 +154,8 @@ static getYearColor(value) {
         var list = [];
         for (var key in obj) {
           var value = obj[key];
-          var {title} = lookupMap[key] || {};
-          if(title) {
+          var {title} = {title: key} || {};
+          if(title && key !== 'user_id') {
              list.push({title, value});
           } 
         }

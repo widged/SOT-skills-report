@@ -18769,7 +18769,7 @@
 	            _react2['default'].createElement(
 	              'h1',
 	              null,
-	              _react2['default'].createElement('img', { src: '../dist/assets/sot_banner.png' })
+	              _react2['default'].createElement('div', { id: 'sot_banner' })
 	            ),
 	            _react2['default'].createElement(
 	              'h2',
@@ -18779,36 +18779,59 @@
 	          )
 	        ),
 	        _react2['default'].createElement(
-	          'article',
+	          'page',
 	          null,
 	          _react2['default'].createElement(
-	            'section',
-	            null,
-	            _react2['default'].createElement(_componentsMultiselectFieldMultiSelectFieldEs6Js2['default'], { names: complementarySkills, onChange: handleSkillsChange, placeholder: 'Please select one or more skills. The students with that skill will be highlighted.' }),
-	            _react2['default'].createElement(_componentsCheckboxGroupCheckboxGroupEs6Js2['default'], { items: levels, onChange: handleExperienceChange })
-	          ),
-	          _react2['default'].createElement(
-	            'section',
+	            'aside',
 	            null,
 	            _react2['default'].createElement(
-	              'div',
-	              { id: 'students-vis' },
-	              _react2['default'].createElement(_componentsStudentVisStudentVisEs6Js2['default'], { list: students, filterStudents: filterStudents })
+	              'article',
+	              null,
+	              'Your next employee is somewhere in here. Use the filters to find them!'
+	            ),
+	            _react2['default'].createElement(
+	              'article',
+	              null,
+	              _react2['default'].createElement(_componentsMultiselectFieldMultiSelectFieldEs6Js2['default'], { names: complementarySkills, onChange: handleSkillsChange, placeholder: 'Type up to 3 skills' }),
+	              _react2['default'].createElement(_componentsCheckboxGroupCheckboxGroupEs6Js2['default'], { items: levels, onChange: handleExperienceChange })
+	            ),
+	            _react2['default'].createElement(
+	              'article',
+	              null,
+	              _react2['default'].createElement('div', { id: 'group-by' })
+	            ),
+	            _react2['default'].createElement(
+	              'article',
+	              null,
+	              _react2['default'].createElement('div', { id: 'color-by' })
 	            )
 	          ),
 	          _react2['default'].createElement(
 	            'section',
 	            null,
 	            _react2['default'].createElement(
-	              'div',
-	              { className: 'explanation' },
-	              'The students matching your criteria also have these skills'
+	              'article',
+	              null,
+	              _react2['default'].createElement(
+	                'div',
+	                { id: 'students-vis' },
+	                _react2['default'].createElement(_componentsStudentVisStudentVisEs6Js2['default'], { list: students, filterStudents: filterStudents })
+	              )
 	            ),
-	            _react2['default'].createElement('br', null),
 	            _react2['default'].createElement(
-	              'div',
-	              { id: 'skills-secondary-vis' },
-	              _react2['default'].createElement(_componentsSkillBubblesSkillBubblesEs6Js2['default'], { list: bubbleSkills })
+	              'article',
+	              null,
+	              _react2['default'].createElement(
+	                'div',
+	                { className: 'explanation' },
+	                'The students matching your criteria also have these skills'
+	              ),
+	              _react2['default'].createElement('br', null),
+	              _react2['default'].createElement(
+	                'div',
+	                { id: 'skills-secondary-vis' },
+	                _react2['default'].createElement(_componentsSkillBubblesSkillBubblesEs6Js2['default'], { list: bubbleSkills })
+	              )
 	            )
 	          )
 	        ),
@@ -18828,12 +18851,12 @@
 	module.exports = exports['default'];
 
 	/*
-	<section>
+	<article>
 	  <div className="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
 	  <div id="skills-vis">
 	    <SkillTags complementarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handleSkillsChange}/>
 	  </div>
-	</section>
+	</article>
 	*/
 
 /***/ },
@@ -20247,27 +20270,27 @@
 
 	/* jshint esnext: true */
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var Component = _react2['default'].Component;
+	var Component = _react2["default"].Component;
 
 	var StudentVis = (function (_Component) {
 	    _inherits(StudentVis, _Component);
@@ -20275,34 +20298,28 @@
 	    function StudentVis(props) {
 	        _classCallCheck(this, StudentVis);
 
-	        _get(Object.getPrototypeOf(StudentVis.prototype), 'constructor', this).call(this, props);
+	        _get(Object.getPrototypeOf(StudentVis.prototype), "constructor", this).call(this, props);
 	        this.state = {};
 	    }
 
 	    _createClass(StudentVis, [{
-	        key: 'render',
+	        key: "render",
 	        value: function render() {
-	            return _react2['default'].createElement(
-	                'student-vis',
+	            return _react2["default"].createElement(
+	                "student-vis",
 	                null,
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'vis-controls' },
-	                    _react2['default'].createElement('div', { id: 'color-by' }),
-	                    _react2['default'].createElement('div', { id: 'group-by' }),
-	                    _react2['default'].createElement('div', { id: 'filters' })
+	                _react2["default"].createElement("div", { className: "vis-controls" }),
+	                _react2["default"].createElement(
+	                    "div",
+	                    { className: "vis-display" },
+	                    _react2["default"].createElement("div", { className: "vis" }),
+	                    _react2["default"].createElement("div", { className: "item-tooltip" })
 	                ),
-	                _react2['default'].createElement(
-	                    'div',
-	                    { className: 'vis-display' },
-	                    _react2['default'].createElement('div', { className: 'vis' }),
-	                    _react2['default'].createElement('div', { className: 'item-tooltip' })
-	                ),
-	                _react2['default'].createElement('div', { className: 'color-legend' })
+	                _react2["default"].createElement("div", { className: "color-legend" })
 	            );
 	        }
 	    }, {
-	        key: 'renderD3',
+	        key: "renderD3",
 	        value: function renderD3(tsv) {
 	            function getLookupKeys(tsv, keyToLookup, keyFilterFn, keySortFn) {
 	                // columns that we are interested in
@@ -20360,15 +20377,15 @@
 	            var ItemTooltip = __webpack_require__(173);
 	            var ColorLegend = __webpack_require__(174);
 
-	            var tooltip = _react2['default'].render(_react2['default'].createElement(ItemTooltip, { title: 'my_tooltip', width: 240 }), document.querySelector('.item-tooltip'));
+	            var tooltip = _react2["default"].render(_react2["default"].createElement(ItemTooltip, { title: "my_tooltip", width: 240 }), document.querySelector(".item-tooltip"));
 
-	            var colorLegend = _react2['default'].render(_react2['default'].createElement(ColorLegend), document.querySelector('.color-legend'));
+	            var colorLegend = _react2["default"].render(_react2["default"].createElement(ColorLegend), document.querySelector(".color-legend"));
 
 	            // -- Mounting the visualisation
 	            var BubbleChart = __webpack_require__(175);
 	            var chart = new BubbleChart();
 	            StudentChart.addControls({ lookups: lookups, lookupMap: lookupMap, chart: chart, colorLegend: colorLegend });
-	            chart.mountIn(document.querySelector('.vis')).onItemSelection(function (item, xy) {
+	            chart.mountIn(document.querySelector(".vis")).onItemSelection(function (item, xy) {
 	                var _ref = StudentChart.itemDump(item, lookupMap) || { title: null, list: null };
 
 	                var title = _ref.title;
@@ -20380,7 +20397,7 @@
 	            return chart;
 	        }
 	    }, {
-	        key: 'componentDidMount',
+	        key: "componentDidMount",
 	        value: function componentDidMount() {
 	            var filteredStudents = this.props.filterStudents;
 	            var tsv = this.props.list;
@@ -20393,9 +20410,9 @@
 	            }, 2000);
 	        }
 	    }, {
-	        key: 'shouldComponentUpdate',
+	        key: "shouldComponentUpdate",
 	        value: function shouldComponentUpdate(nextProps, nextState) {
-	            if (nextProps.hasOwnProperty('filterStudents')) {
+	            if (nextProps.hasOwnProperty("filterStudents")) {
 	                if (this.state.chart) {
 	                    this.state.chart.filterStudents(nextProps.filterStudents);
 	                }
@@ -20407,8 +20424,8 @@
 	    return StudentVis;
 	})(Component);
 
-	exports['default'] = StudentVis;
-	module.exports = exports['default'];
+	exports["default"] = StudentVis;
+	module.exports = exports["default"];
 
 /***/ },
 /* 170 */
@@ -20441,18 +20458,66 @@
 
 	    _createClass(StudentChart, null, [{
 	        key: 'getFieldColor',
-	        value: function getFieldColor(value) {}
+	        value: function getFieldColor(value) {
+	            var colors = {
+	                'HSc/Sc': '#5B9CE5',
+	                'Com': '#FF6A00',
+	                'Com/BSc': '#FF2C00',
+	                'Com/Sc': '#B63300',
+	                'A': '#6CD681',
+	                'A/Sc': '#26C66F',
+	                'Mus': '#13B5B7',
+	                'Des': '#489400',
+	                'Des/A': '#1A6300',
+	                'Des/Com': '#94AB3E', // not obvious how to present overlap
+	                'IT': '#6B7C7D',
+	                'Tech': '#D4815D',
+	                'CompSc': '#B5A77F',
+	                'CompSc/Des': '#E0D3AB',
+	                'Eng': '#908CD1',
+	                'Eng/Com': '#774E94',
+	                'Eng/Sc': '#460078', // not obvious how to present overlap
+	                'Sc': '#9AEBFC',
+	                'Sc/Com': '#44B8E1',
+	                'Sc/Law': '#3178AE',
+	                'MathSc': '#163456'
+	            };
+	            return colors[value] || colors['default'];
+	        }
 	    }, {
 	        key: 'getLevelColor',
 	        value: function getLevelColor(value) {
 	            var colors = {
-	                'Dip': '#FF00CC',
-	                'GDip': '#FF00CC',
-	                'B': '#00FF00',
-	                'B(Hons)': '#00FF00',
-	                'PGDip': '#FFFF00',
-	                'M': '#FF0000',
-	                'PhD': '#FF0000',
+	                'Dip': '#C4DEFF',
+	                'GDip': '#5B9CE5',
+	                'B': '#EFAAF7',
+	                'B(Hons)': '#CC8A98',
+	                'PGDip': '#26B0F8',
+	                'M': '#189B7F',
+	                'PhD': '#CC4AE2',
+	                'default': '#4F4F4F'
+	            };
+	            return colors[value] || colors['default'];
+	        }
+	    }, {
+	        key: 'getYearColor',
+	        value: function getYearColor(value) {
+	            var colors = {
+	                '5': '#563A5E',
+	                '4': '#883F7F',
+	                '3': '#A6639E',
+	                '2': '#95C7BA',
+	                '1': '#536273',
+	                'default': '#4F4F4F'
+	            };
+	            return colors[value] || colors['default'];
+	        }
+	    }, {
+	        key: 'getFinalColor',
+	        value: function getFinalColor(value) {
+	            var colors = {
+	                'FALSE': '#B63300',
+	                'TRUE': '#6FACA2',
 	                'default': '#4F4F4F'
 	            };
 	            return colors[value] || colors['default'];
@@ -20476,8 +20541,10 @@
 	        key: 'getColorFn',
 	        value: function getColorFn(type, distinctValues) {
 	            var colorFns = {
-	                // "level": StudentChart.getLevelColor,
-	                // "field": StudentChart.getFieldColor,
+	                'level': StudentChart.getLevelColor,
+	                'field': StudentChart.getFieldColor,
+	                'study_year': StudentChart.getYearColor,
+	                'final_year': StudentChart.getFinalColor,
 	                'default': StudentChart.getDefaultColor(distinctValues)
 	            };
 	            return colorFns[type] || colorFns['default'];
@@ -20592,33 +20659,6 @@
 	StudentChart.circleStyle = { defaultStrokeColor: '#404040', selectedStrokeColor: '#DF1E21', fillColor: '#cfcfcf', radius: 7 };
 	module.exports = exports['default'];
 
-	/*
-	        var colors = {
-	          'HSc/Sc'    : 'SomeColorCloseToBlue',
-	          'Com'       : 'red1',
-	          'Com/BSc'   : 'red2',
-	          'Com/Sc'    : 'red3',
-	          'A'         : 'somewhatGreen1',
-	          'A/Sc'      : 'somewhatGreen2', 
-	          'Mus'       : 'greenishButDifferent' 
-	          'Des'       : 'typicallyGreen1'    
-	          'Des/A'     : 'typicallyGreen2'    
-	          'Des/Com'   : 'green/Red'  // not obvious how to present overlap
-	          'IT'        : 'darkGray1'
-	          'Tech'      : 'darkGray2'
-	          'CompSc'    : 'darkGray3'
-	          'CompSc/Des': 'darkGray4'
-	          'Eng'       : 'Blue1'
-	          'Eng/Com'   : 'Blue/Red'
-	          'Eng/Sc'    : 'Blue/Purple' // not obvious how to present overlap
-	          'Sc'        : 'Purple'
-	          'Sc/Com'    : 'Purple'
-	          'Sc/Law'    : 'Purple'
-	          'MathSc'    : 'SomeColorCloseToBlue'
-	        };
-	        return colors[value] || colors.default;
-	        */
-
 /***/ },
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
@@ -20674,8 +20714,8 @@
 	                'select-group',
 	                null,
 	                _react2['default'].createElement(
-	                    'span',
-	                    { className: 'title' },
+	                    'h1',
+	                    null,
 	                    title
 	                ),
 	                _react2['default'].createElement(

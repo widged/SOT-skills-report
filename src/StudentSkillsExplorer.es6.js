@@ -8,6 +8,19 @@ import SkillBubbles      from './components/skill-bubbles/SkillBubbles.es6.js';
 
 let {Component} = React;
 
+class SummaryData extends Component {
+  render() {
+    const {students, skills} = this.props;
+    const studentCount = students.length;
+    const skillCount   = skills.length;
+    return (
+      <summary-data>
+      <div><count>{studentCount}</count><h1>Students</h1></div> <div><count>{skillCount}</count><h1>Skills</h1></div>
+      </summary-data>
+    );
+  }
+} 
+
 export default class SummerOfTechApp extends Component {
 
   constructor(props) {
@@ -61,28 +74,44 @@ export default class SummerOfTechApp extends Component {
       <div>
         <header>
           <div>
-            <h1><img src="../dist/assets/sot_banner.png"/></h1>
+            <h1><div id="sot_banner"></div></h1>
             <h2>Interns with Paid Work Experience</h2>
           </div>
         </header>
-        <article>
+        <page>
+          <aside>
+            <article>
+            Your next employee is somewhere in here. Use the filters to find them!
+            </article>
+            <article>
+              <MultiSelectField names={complementarySkills} onChange={handleSkillsChange} placeholder="Type up to 3 skills"/>
+              <CheckboxGroup items={levels} onChange={handleExperienceChange}/>
+            </article>
+            <article>
+              <div id='group-by'></div>
+            </article>
+            <article>
+              <div id='color-by'></div>
+            </article>
+          </aside>
           <section>
-            <MultiSelectField names={complementarySkills} onChange={handleSkillsChange} placeholder="Please select one or more skills. The students with that skill will be highlighted."/>
-            <CheckboxGroup items={levels} onChange={handleExperienceChange}/>
-          </section>
-          <section>
-            <div id="students-vis">
-              <StudentVis list={students} filterStudents={filterStudents} />
+            <div id="big-numbers">
+              <SummaryData students={filterStudents} skills={complementarySkills} />
             </div>
+            <article>
+              <div id="students-vis">
+                <StudentVis list={students} filterStudents={filterStudents} />
+              </div>
+            </article>
+            <article>
+              <div className="explanation">The students matching your criteria also have these skills</div>    
+              <br/>
+              <div id="skills-secondary-vis">
+                <SkillBubbles list={bubbleSkills} />
+              </div>
+            </article>
           </section>
-          <section>
-            <div className="explanation">The students matching your criteria also have these skills</div>    
-            <br/>
-            <div id="skills-secondary-vis">
-              <SkillBubbles list={bubbleSkills} />
-            </div>
-          </section>
-        </article>
+        </page>
         <footer>
           Made in the context of data for goods challenges. Authors (alphabetical order).
         </footer>
@@ -92,10 +121,10 @@ export default class SummerOfTechApp extends Component {
   }
 
   /*
-  <section>
+  <article>
     <div className="explanation">List of skills. Click on a tag to select a value. Next to the selected tag is the number of students with <em>paid</em> experience for that skill. Next to other tags are the number of students that have <em>paid</em> experience with both that skill and the selected skill. </div>    
     <div id="skills-vis">
       <SkillTags complementarySkills={jsonp_skills} secondarySkills={jsonp_secondary} handlePrimaryChange={handleSkillsChange}/>
     </div>
-  </section>
+  </article>
 */

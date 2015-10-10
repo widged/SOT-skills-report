@@ -1,7 +1,6 @@
 skill-bubbles {
   display: block;
   position: relative;
-  height: 400px;
 }
 
 skill-bubbles > div {
@@ -11,20 +10,27 @@ skill-bubbles > div {
 
 
 skill-bubbles text {
+  font-size: 3pt;
   pointer-events: none;
 }
 
-skill-bubbles text.parent {
-  font-size: 6pt;
-  fill: #251FDE;
+skill-bubbles .depth-1 text {
+  font-size: 8pt;
+  fill: #333333;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
 
-skill-bubbles text.top_parent {
-  font-size: 8pt;
-  fill: #000000;
+skill-bubbles .depth-2 text {
+  opacity: 0;
+}
+
+skill-bubbles .zoomed .depth-2 text {
+  opacity: 1;
+  font-size: 2pt;
+  fill: #657D8B;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
 }
+
 
 
 skill-bubbles circle {
@@ -35,27 +41,27 @@ skill-bubbles circle {
   stroke-opacity: 0;
 }
 
-skill-bubbles circle.root {
+skill-bubbles .depth-0 circle {
   pointer-events: none;
   fill-opacity: 0.1;
   stroke-opacity: 0.1;
 }
 
-skill-bubbles circle.top_parent {
+skill-bubbles .depth-1 circle {
   fill-opacity: 0.1;
   stroke-opacity: 0.1;
   pointer-events: all;
 }
 
-skill-bubbles circle.parent {
+skill-bubbles .depth-2 circle {
   pointer-events: pointer;
   fill-opacity: 0.1;
   stroke-opacity: 0.1;
   stroke-opacity: 0.4;
 }
 
-skill-bubbles circle.parent:hover {
-  stroke-width: .5px;
+skill-bubbles .depth-1 circle:hover {
+  stroke-width: 2.5px;
 }
 
 /* yellow - BA*/
@@ -90,25 +96,25 @@ skill-bubbles .web circle  {
 
 
 /* Expertise levels */
-skill-bubbles circle.child_Interested {
+skill-bubbles .level-interested circle {
   pointer-events: none;
   fill-opacity: 0.2;
   stroke-opacity: 0.2;
 }
 
-skill-bubbles circle.child_Academic {
+skill-bubbles .level-academic circle {
   pointer-events: none;
   fill-opacity: 0.4;
   stroke-opacity: 0.4;
 }
 
-skill-bubbles circle.child_Practical {
+skill-bubbles .level-practical circle {
   pointer-events: none;
   fill-opacity: 0.6;
   stroke-opacity: 0.6;
 }
 
-skill-bubbles circle.child_Paid {
+skill-bubbles .level-paid circle {
   pointer-events: none;
   opacity: 1;
   fill-opacity: 1;

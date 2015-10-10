@@ -151,7 +151,6 @@ export default class SummerOfTech {
   }  
 
   listStudentsWithSkills(names) {
-    console.log(names)
     let user_ids = this.listSkills(names)
           .map(FN.pluck('user_ids'));
     
@@ -237,7 +236,7 @@ export default class SummerOfTech {
     }
     var tsv = _.split(/\n/);
     var first = tsv.shift();
-    var heads = 'user_id, school, level, field, degree, degree_details, study_year,final_year'.split(/\t/);
+    var heads = 'user_id, school, level, field, field_5, degree, degree_details, study_year,final_year'.split(/\t/);
     return tsv.map((line) => { 
         var [user_id, school, level, field, degree, degree_details, study_year,final_year] = line.split('\t');
         return {user_id, school, level, field, degree, degree_details, study_year,final_year};

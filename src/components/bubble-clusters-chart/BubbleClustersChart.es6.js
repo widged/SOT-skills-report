@@ -92,7 +92,7 @@ class Svg {
   }
 
   static getGroupData({distinctValues, width, height}) {
-      let margin =  {left: 200, right: 50};
+      let margin =  {left: 50, right: 50};
       width = width - margin.left - margin.right;
       if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
         return [{label: '', cx: width / 2, cy: height / 2 }];
@@ -158,7 +158,7 @@ export default class BubbleChart  {
 
   constructor() {
     this.state = {
-      width:      1000,
+      width:      1040,
       height:      610,
       forceGravity: -0.01,
       damper:        0.4
@@ -236,7 +236,7 @@ export default class BubbleChart  {
     labels.attr("transform",function({cx, actual}) {  
         let cxstats = actual.reduce(function(acc, {cx,cy}) { acc.sum += cx, acc.n +=1; return acc; } ,{sum: 0, n: 0});
         let avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
-        return `translate(${avg},100)rotate(-35)`;
+        return `translate(${avg},60)rotate(-35)`;
       });
     }
 

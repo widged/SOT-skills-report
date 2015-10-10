@@ -6,9 +6,6 @@ svg circle {
 /*  stroke: #f00; */
 }
 
-div.section {
-  margin-top: 6px;
-}
 /* ################
    Student vis
 ################ */
@@ -16,6 +13,7 @@ div.section {
 student-vis {
   display: block;
   position: relative;
+  width: 100%;
   height: 610px;
 }
 
@@ -47,31 +45,8 @@ student-vis .color-legend {
 student-vis svg g.top-labels {
   font-size: 14px;
   /* stroke: #aaa;  */ /* required for display in codepen */
-  fill: #aaa;
+  fill: #333333;
 }
 
 student-vis svg g.top-labels text {
-}
-
-/* ################
-   controls 
-################ */
-student-vis .vis-controls {
-  display:block;
-  background-color:rgba(255,255,255,0.75);
-}
-
-student-vis .vis-controls > * {
-  display: inline-block;
-  margin-right: 12px;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-
-student-vis .vis-controls select-group > * {
-  display: inline-block;
-}
-student-vis .vis-controls select {
-    width:150px;
-    margin-left: 6px;
 }

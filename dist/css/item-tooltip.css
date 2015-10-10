@@ -32,3 +32,15 @@ item-tooltip .name {
 item-tooltip.hidden {
   display: none;
 }
+
+skill-bubbles item-tooltip {
+  width: 120px;
+}
+
+item-tooltip user-id {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 0.5rem;
+  color: #A0B0B9;
+}
