@@ -73,8 +73,8 @@ export default class SummerOfTechApp extends Component {
       <div>
         <header>
           <div id="logo">
-            <img src="../dist/assets/sot_logo_small.png" height="100"/>
-            <img src="../dist/assets/sot_banner.png" height="88"/>
+            <img src="http://widged.github.io/SOT-skills-report/dist/assets/sot_logo_small.png" height="100"/>
+            <img src="http://widged.github.io/SOT-skills-report/dist/assets/sot_banner.png" height="88"/>
             <div id="subtitle"><div>find your intern</div></div>
           </div>
         </header>
