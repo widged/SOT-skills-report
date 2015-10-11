@@ -1,31 +1,47 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700);
+
 body, html, #app {
 	padding: 0;
 	margin: 0;
-	font-family: "Open Sans Condensed", Verdana, Helvetica, Arial, sans-serif;
+	font-size: 14pt;
 }
 
 #app {
 	width: 100%;
 	min-width: 1260px;
+	font-family: "Open Sans", Verdana, Helvetica, Arial, sans-serif;
 }
 header {
+	position: relative;
 	padding: 12px;
 	display: block;
 	background-color: #D51300;
 	color: white;
-	height: 160px;
+	font-family: "Open Sans Condensed", Verdana, Helvetica, Arial, sans-serif;
+
 }
 
-header h1 {
+header #logo > *  {
+	display: inline-block;
+	padding-right: 12px;
+}
+
+header #subtitle {
+	position: relative;
+	margin-left: 200px;
 	font-variant:small-caps;
+	font-family: "Open Sans Condensed", Verdana, Helvetica, Arial, sans-serif;
+	font-size: 42pt;
+	line-height: 1;
+	font-weight: normal;
+}
+header #subtitle > div {
+	position: absolute;
+	top: -80px;
+	width: 400px;
 }
 
-#sot_banner {
-	width: 654px;
-	height: 57px;
-	background: url('../assets/sot_banner.png') no-repeat;
-	/* data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcYAAAA5CAMAAACbD3tjAAAAM1BMVEUAAADv7+/39/f6+vr7+/v8/Pz8/Pz8/Pz9/f39/f39/f39/f3+/v79/f39/f3+/v7////mjvirAAAAEHRSTlMAECAwQFBgcICQoLDA0ODwVOCoyAAABwhJREFUeNrtnN3W9BoMgEsVVcr9X+0+aGdKJOjP13f2WnI2Hao8QhJph6FLly5dunTp0qVLly5dunTp0qVLly5dunTp0qVLly5d7orQWmstx/9tB5hOpd6VabYhhOAWyeA/mhSB3YgoO+ZPlf6bMbBrCCEEb+cp+Wfc65SvcuPDLquK+zTbTWRSe7+47CX5p/JMDtjn7p8GBbyQifqU+PR2DqRMwzAMOr+e84mp+6ik4cmfnm5rRe5FlbVRN9B/Y4kYbCjn6Jns52pSJb3K0hHyU/6ASZPfAROASaBGzX0KaHiLlRplDxo5njkXTWAMwWtqlkBSM2vgkg1kFaNuxMgMUsKwExhHl1W/ipEYtLzA0TtZUcZ7GENw2NrKlnLB1zFOuP572YyRI3cwFzF6XB1tASOhjutTGIPPOTJXKfg2RnrD2BWyjhHtkrqGEVdHHgoYcXWU4TGMwXN6WqUF2R9hNIXmHGvCqIs9OosRVUdTxLgWN9MHMIYF3FxXB/ZdjCWKe/9rGJkvjMx5jJg68lDEGERpM30CY0iX1ZEuqJ7FuDRhVEWKvkkbo3t4G+mAv4gRUce5gtGWNtMmjAqsw7TJBm/ktF48vQghMpM+t/5q1br9Vjw2yS0UBdy1rdiitZ4d3LBrGJfEKOILmMGnMeZbXaLvGMZcHcdQwiigcIhnGoaBTQu+bkeLw8I3DzJ7+pLqFSIoyGjpihGfziozfp3I1HyuYfSgAy79fR5jttXpUMNoC5spgpEajxEqlUJpzLmSHorsXscYGxbxfObua980YISjL9Nmz2PM1NFXMUJ15OESxuimM2haYNYTNth7AONFjAuwSePJ7Jrdf9jymO72FzCupOtAYrT0ZnoGI4POpsUwYpMHxozew8gL/u3YHozLWubbfjMOVzECdVwbMKamJDCe2zFGD+LStgWy9HpUJ9TLGFVmJZc30ArGwNHqVzCuaFC8iNEU3LoTGCM91knbrDzW2Wi/h9HWgsttGB21Ml/HmKijbcKYTCJ/HeOxrHrOjui3H34Wo29SxirGwyhclRDsEYwO9+NLGA21mVYdjjE5PlurYRyBTn9DYKweETZjBH6jgdY1b8OY3OQ7B+Ci55fkuPEaxmgrWhoxRr1YaxiJ/wvxEomGXEZMKUQtLHMVIx5ZEm1rain2seloXkCzuxgt7jqUMBpKGR/AuOI2l8UMDV4Lkj6FUaQN25sYBRLGEzcxfofWNGP8qqN9HqMgzCCVBw7c8C5GHWqJE40Y0YbkNYweFOehHaOpTYnLGCUZ6dsP86JMAPVXGPVdjOg5yXgJ4+yJh1xJjBYE0JZsStzFKEtDsmht1vbQ+L/DaG5jHGR+WOUuYdQ6KX/48ZLEqG3yFz8Sip7BaMfiKRixWPz/9sYtn8cTc/gkxgPcGD/jImiMItEEk8+IOxgdlo5IH9N+fecXMAJL1T+AcRiYnFOfy13CmC4SRyysgHGI1fFQRtaK0XF4S+cquUF4Kk4c1Qyom2atuI7Rph6oetZvTOO0cyAs71aMPKovj8oljLE6RoabPhvFiSrYiqPXnlL1XhRH34rikKlM8hLGY8EycWC6hDFSx2NN5rcwjsUMEYKjxxIc34upevYgRioq5VoxHuoYKWMZ46GO8ZJ8B2OcP8lqZ5Ofp0TTjV884dB3MO4G/iqHHEncH4450AhGxH6YKhiRXY/fxBidPFKjw5MHBbveX5w3hsymZtfPG8GAY0t3lpef1OFYKKyMUWChgFsY41uStgOTy7qlkmlOpbr9+9N/S54bm7COp88bGdA0jaQpQXudYegN4rqUMWbqON7GGMXk7XBe/igXR8FcnC/Z5pSq7fUoaOLoLIczev3BoRrMkbh0BaNAvLObGKMUAvnTGJNDIDuBJd+Pp/bGEMI6T2qBa1HMZJ3VpBck5gEgmTyOUMEI1FGUMWYJn1taoCbiI5kNqE9EcZ7DiJjG+xD79KRQa21O56nKyuFOKXzAcYw8v08No8hDJc1RnACzxgUsb5ojIvZNjJ/BkMUATVvWOJX8L/PzACjzgGNM1FE3YUTSxG9jJJ3HX8P4xDscxBsErv4ch0cGIfHsyKCKUWRN38ZIvnz3cxifeKMK7VVs+5paADKHZAJFicIYPYV8CiPlPP4exsL7jUvr+41IYMrL6oFADDqDxKF1UceYJaXcxxi/Pst/GyP5trFqD8Zlr52vwA9F2ljYUMD4nV1qaMX4NZmn5zASzuMvYoTfX0iyE1pjqiLumddZGJLpNF0NhK5E1TfKSqgsH6bsBl7DGNlv5zD6Sxh5MVmrlpfAwSB7c/JLHMMwjNsnYsJKfYNk/4ZMCOuisvCW2g/R6CA9LMH2C4qswtKDueMjMIgwtEJcB71If6pmQj9DUxWZp7MWvouT9328+l2c/wBlk1kRi2rEzwAAAABJRU5ErkJggg== */
-}
 
 page {
 	display: block;
@@ -80,6 +96,11 @@ aside checkbox-group {
 	margin-bottom: 18px;
 }
 
+aside checkbox-group item {
+	display: inline-block;
+	padding-right: 6px;
+}
+
 section {
 	position: relative;
 	box-sizing: border-box;
@@ -105,22 +126,27 @@ section article {
 summary-data {
 	display: inline-block;
 	text-align: right;
+	font-family: "Open Sans Condensed", Verdana, Helvetica, Arial, sans-serif;
 }
 
 summary-data > div {
 	display:    inline-block;
 	text-align: right;
+	margin: 0; padding: 0;
+	margin-top: 9px;
 	width:      80px;
 }
 
 summary-data count {
 	display: inline-block;
-	font-size: 1.5rem;
+	font-size: 1.8rem;
+	margin: 0; padding: 0;
 	font-weight: bold;
+	line-height: 0.8;
 }
 
 summary-data h1 {
-	font-size: 0.9rem;
+	font-size: 1rem;
 	margin: 0;
 	padding: 0;
 	font-weight: normal;

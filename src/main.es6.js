@@ -12,6 +12,7 @@ export default function main() {
 	const rawStudents = SummerOfTech.studentsFromTsv(tsvStudents);
 	const rawSkills = require('../dist/data-from-tools/skills.js');
 
+
 	let summerOfTech = new SummerOfTech();
 	summerOfTech
 		.rawSkills(rawSkills)

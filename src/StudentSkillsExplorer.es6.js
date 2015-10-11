@@ -11,8 +11,8 @@ let {Component} = React;
 class SummaryData extends Component {
   render() {
     const {students, skills} = this.props;
-    const studentCount = students.length;
-    const skillCount   = skills.length;
+    const studentCount = (students || []).length;
+    const skillCount   = (skills || []).length;
     return (
       <summary-data>
       <div><count>{studentCount}</count><h1>Students</h1></div> <div><count>{skillCount}</count><h1>Skills</h1></div>
@@ -56,7 +56,6 @@ export default class SummerOfTechApp extends Component {
 
   whenPrimaryChange(names) {
     const {store} = this.props;
-    console.log('[whenPrimaryChange]', names);
     const complementarySkills = store.listComplementarySkills(names);
     this.setState({
       primarySkills: names,
@@ -73,18 +72,19 @@ export default class SummerOfTechApp extends Component {
     return (
       <div>
         <header>
-          <div>
-            <h1><div id="sot_banner"></div></h1>
-            <h2>Interns with Paid Work Experience</h2>
+          <div id="logo">
+            <img src="../dist/assets/sot_logo_small.png" height="100"/>
+            <img src="../dist/assets/sot_banner.png" height="88"/>
+            <div id="subtitle"><div>find your intern</div></div>
           </div>
         </header>
         <page>
           <aside>
             <article>
-            Your next employee is somewhere in here. Use the filters to find them!
+            Discover students and their skills. 
             </article>
             <article>
-              <MultiSelectField names={complementarySkills} onChange={handleSkillsChange} placeholder="Type up to 3 skills"/>
+              <MultiSelectField names={complementarySkills} onChange={handleSkillsChange} placeholder="Search for skills"/>
               <CheckboxGroup items={levels} onChange={handleExperienceChange}/>
             </article>
             <article>
@@ -104,7 +104,7 @@ export default class SummerOfTechApp extends Component {
               </div>
             </article>
             <article>
-              <div className="explanation">The students matching your criteria also have these skills</div>    
+              <div className="explanation">The students matching your criteria also have these skills.</div>    
               <br/>
               <div id="skills-secondary-vis">
                 <SkillBubbles list={bubbleSkills} />
@@ -113,7 +113,8 @@ export default class SummerOfTechApp extends Component {
           </section>
         </page>
         <footer>
-          Made in the context of data for goods challenges. Authors (alphabetical order).
+          <p>Made in the context of the Data for Good Challenge. Enabled by HackMiramar.</p>
+          <p>Julia Ball (@JuliaBallNZ), Joseph Bennet (@shadrx_), Kate Henderson (@Mistyepd), Pauline Kelly (@Sebbenbear), Marielle Lange (@widged), Ruth McDavitt (@summeroftech)</p>
         </footer>
         </div>
       );

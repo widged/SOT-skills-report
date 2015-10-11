@@ -97,12 +97,12 @@ export default class StudentChart {
         }
 
         React.render(
-            React.createElement( SelectBy,  {lookups, title: 'Color by: ', onChange: function(d) { chart.color_by(d, whenColorValues); }}),
+            React.createElement( SelectBy,  {lookups, title: 'Color Students by: ', onChange: function(d) { chart.color_by(d, whenColorValues); }}),
             document.getElementById('color-by')
         );
 
         React.render(
-            React.createElement( SelectBy,  {lookups, title: 'Group by: ', onChange: function(d) { chart.group_by(d); }}),
+            React.createElement( SelectBy,  {lookups, title: 'Group Students by: ', onChange: function(d) { chart.group_by(d); }}),
             document.getElementById('group-by')
         );
 

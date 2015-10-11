@@ -7,27 +7,11 @@ export default class StudentChart {
 
     static getFieldColor(value) {
         var colors = {
-          'HSc/Sc'    : '#5B9CE5',
-          'Com'       : '#FF6A00',
-          'Com/BSc'   : '#FF2C00',
-          'Com/Sc'    : '#B63300',
-          'A'         : '#6CD681',
-          'A/Sc'      : '#26C66F', 
-          'Mus'       : '#13B5B7', 
-          'Des'       : '#489400',    
-          'Des/A'     : '#1A6300',    
-          'Des/Com'   : '#94AB3E',  // not obvious how to present overlap
-          'IT'        : '#6B7C7D',
-          'Tech'      : '#D4815D',
-          'CompSc'    : '#B5A77F',
-          'CompSc/Des': '#E0D3AB',
-          'Eng'       : '#908CD1',
-          'Eng/Com'   : '#774E94',
-          'Eng/Sc'    : '#460078', // not obvious how to present overlap
-          'Sc'        : '#9AEBFC',
-          'Sc/Com'    : '#44B8E1',
-          'Sc/Law'    : '#3178AE',
-          'MathSc'    : '#163456'
+          'Engineering' : '#1565c0',
+          'Science'     : '#CC8A98',
+          'Business'    : '#e65100',
+          'Design'      : '#1b5e20',
+          'WebDev'      : '#6a1b9a',
         };
         return colors[value] || colors.default;
     }
@@ -60,8 +44,8 @@ static getYearColor(value) {
 
     static getFinalColor(value) {
         var colors = {
-          'FALSE'  : '#B63300',
-          'TRUE'   : '#6FACA2',
+          'No'    : '#B63300',
+          'Yes'   : '#6FACA2',
           default  : '#4F4F4F'
         };
         return colors[value] || colors.default;
@@ -82,17 +66,17 @@ static getYearColor(value) {
 
     static getColorFn(type, distinctValues) {
         var colorFns = {
-            "level": StudentChart.getLevelColor,
-            "field": StudentChart.getFieldColor,
-            "study_year": StudentChart.getYearColor,
-            "final_year": StudentChart.getFinalColor,
+            "Qualification": StudentChart.getLevelColor,
+            "Field": StudentChart.getFieldColor,
+            "Year of Study": StudentChart.getYearColor,
+            "Is Final Year": StudentChart.getFinalColor,
             default: StudentChart.getDefaultColor(distinctValues)
         };
         return colorFns[type] || colorFns.default;
     }
 
     static keyFilterFn({key, type, title}) { 
-        return key.match(/^(level|field|study_year|final_year)$/); 
+        return key.match(/^(qualification|field|year of study|is final year)$/i); 
     }
 
     static keySortFn(keyName) { 
@@ -132,12 +116,12 @@ static getYearColor(value) {
         }
 
         React.render(
-            React.createElement( SelectBy,  {lookups, title: 'Color by: ', onChange: function(d) { chart.colorBy(d, whenColorValues); }}),
+            React.createElement( SelectBy,  {lookups, title: 'Color Students by: ', onChange: function(d) { chart.colorBy(d, whenColorValues); }}),
             document.getElementById('color-by')
         );
 
         React.render(
-            React.createElement( SelectBy,  {lookups, title: 'Group by: ', onChange: function(d) { chart.groupBy(d); }}),
+            React.createElement( SelectBy,  {lookups, title: 'Group Students by: ', onChange: function(d) { chart.groupBy(d); }}),
             document.getElementById('group-by')
         );
 

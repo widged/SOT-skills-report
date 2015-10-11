@@ -12,6 +12,7 @@ Inject.css({file: '../../dist/css/color-legend.css', parent: module});
 Inject.css({file: '../../dist/css/item-tooltip.css', parent: module});
 Inject.css({file: '../../dist/css/react-select.css', parent: module});
 
+
 injectJs([
 	'../dist/scripts/skill-bubbles.d3.js',
 	'../dist/vendor/d3/d3.v3.min.js',

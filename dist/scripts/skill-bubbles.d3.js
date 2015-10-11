@@ -24,21 +24,18 @@ function draw_skills_bubbles(data, node) {
       var pt = d3.mouse(this);
       zoom(pt[0],pt[1]);
     })
-/*
-    .call(d3.behavior.zoom().on("zoom", function () {
-      vis.attr("transform", "translate(" + d3.event.translate + ")") //  + " scale(" + scale + ")"
-    }))    
-*/
     .append("svg:g")
     .attr("transform", "translate(" + 0 + "," + 0 + ")");
 
 /*
 
-var zoom = d3.behavior.zoom()
+var zoomBeh = d3.behavior.zoom()
     .x(x)
     .y(y)
     .scaleExtent([1, 10])
-    .on("zoom", zoomed);
+    .on("zoom", function () {
+      vis.attr("transform", "translate(" + d3.event.translate + ")") //  + " scale(" + scale + ")"
+    }));
 
 .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -67,9 +64,6 @@ var zoom = d3.behavior.zoom()
       }
       d3.event.stopPropagation();
     }
-
-    d3.select(window).on("click", function() { zoom(0,0); });
-
 
 
     data.children.forEach(function(d, i) {

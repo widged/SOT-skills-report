@@ -151,13 +151,14 @@ export default class SummerOfTech {
   }  
 
   listStudentsWithSkills(names) {
+    if(names && !names.length) { names = undefined; }
     let user_ids = this.listSkills(names)
           .map(FN.pluck('user_ids'));
     
-    if(names !== undefined) {
-      return user_ids.reduce(FN.intersectLists, null);
-    } else {
+    if(names === undefined || names.length === 0) {
       return user_ids.reduce(FN.uniqueInLists, null);
+    } else {
+      return user_ids.reduce(FN.intersectLists, null);
     }
           
   }
@@ -236,10 +237,9 @@ export default class SummerOfTech {
     }
     var tsv = _.split(/\n/);
     var first = tsv.shift();
-    var heads = 'user_id, school, level, field_l, field, degree, degree_details, study_year,final_year'.split(/\t/);
     return tsv.map((line) => { 
         var [user_id, school, level, field_l, field, degree, degree_details, study_year,final_year] = line.split('\t');
-        return {user_id, school, level, field_l, field, degree, degree_details, study_year,final_year};
+        return {user_id, School: school, Qualification: level, Field: field, 'Degree': degree_details, 'Year of Study': study_year, 'Is Final Year': final_year};
     });
   }
 }
