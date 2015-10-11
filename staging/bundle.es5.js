@@ -18824,8 +18824,8 @@
 	          _react2['default'].createElement(
 	            'div',
 	            { id: 'logo' },
-	            _react2['default'].createElement('img', { src: '../dist/assets/sot_logo_small.png', height: '100' }),
-	            _react2['default'].createElement('img', { src: '../dist/assets/sot_banner.png', height: '88' }),
+	            _react2['default'].createElement('img', { src: 'http://widged.github.io/SOT-skills-report/dist/assets/sot_logo_small.png', height: '100' }),
+	            _react2['default'].createElement('img', { src: 'http://widged.github.io/SOT-skills-report/dist/assets/sot_banner.png', height: '88' }),
 	            _react2['default'].createElement(
 	              'div',
 	              { id: 'subtitle' },
