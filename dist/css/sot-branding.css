@@ -107,12 +107,17 @@ section {
 	left: 240px;
 	width: calc(100% - 240px);
 	display: inline-block;
-	padding: 6px 24px;
+	padding: 0px 24px;
 
 }
 
+
 section article {
-	margin: 24px 0px;
+	margin: 9px 0px;
+}
+
+section article:nth-child(2) {
+	margin-top: 6px;
 }
 
 #big-numbers {

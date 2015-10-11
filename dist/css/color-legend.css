@@ -1,8 +1,30 @@
 color-legend {
   display: block;
+  margin: 0; padding: 0;
 }
+
+color-legend span.square {
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+}
+
+color-legend > * {
+  display: inline-block;
+}
+
+color-legend > h3 {
+  margin: 0; padding: 0;
+  padding-right: 30px;
+}
+
 color-legend ul {
   list-style-type: none;
-  padding: 0;
-  margin: 0;
+  margin: 0; padding: 0;
+}
+
+color-legend ul > li {
+  display: inline-block;
+  margin: 0; padding: 0;
+  padding-right: 6px;
 }

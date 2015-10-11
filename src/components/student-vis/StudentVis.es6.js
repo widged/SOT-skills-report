@@ -81,7 +81,7 @@ export default class StudentVis extends Component {
         );
         
         // -- Mounting the visualisation
-        var BubbleChart = require('../bubble-clusters-chart/BubbleClustersChart.es6.js');
+        var BubbleChart = require('./BubbleClustersChart.es6.js');
         let chart = new BubbleChart();
         StudentChart.addControls({lookups, lookupMap, chart, colorLegend});
         chart.mountIn(document.querySelector('.vis'))

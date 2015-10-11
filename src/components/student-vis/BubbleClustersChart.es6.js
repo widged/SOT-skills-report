@@ -92,18 +92,21 @@ class Svg {
   }
 
   static getGroupData({distinctValues, width, height}) {
-      let margin =  {left: 50, right: 50};
+      let margin =  {left: 50, right: 50, top: 40};
       width = width - margin.left - margin.right;
       if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
-        return [{label: '', cx: width / 2, cy: height / 2 }];
+          var cx = margin.left +  (width / 2);
+          var cy = margin.top  +  (height / 2);
+        return [{label: '', cx, cy}];
       }
 
       let center = { cx: width / 2, cy: height / 2 };
       var numCenters     = distinctValues.length;
       var sp = 200;
       return distinctValues.map(function(d, i) {
-          var x_position = margin.left + (((width - (sp*2)) * (i + 0)) / (numCenters-1) + sp);
-          return {label: d, cx: x_position, cy: center.cy};
+          var cx = margin.left + (((width - (sp*2)) * (i + 0)) / (numCenters-1) + sp);
+          var cy = margin.top  + (height / 2);
+          return {label: d, cx, cy};
       });
   }
 
@@ -236,7 +239,7 @@ export default class BubbleChart  {
     labels.attr("transform",function({cx, actual}) {  
         let cxstats = actual.reduce(function(acc, {cx,cy}) { acc.sum += cx, acc.n +=1; return acc; } ,{sum: 0, n: 0});
         let avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
-        return `translate(${avg},60)rotate(-35)`;
+        return `translate(${avg},100)rotate(-35)`;
       });
     }
 

@@ -86,10 +86,11 @@ static getYearColor(value) {
           return order.indexOf(a) - order.indexOf(b); 
         }
         function sortField(a, b) {
-          var order = "Com,Com/BSc,Com/Sc,A,A/Sc,Mus,Des,Des/A,Des/Com,IT,Tech,CompSc,CompSc/Des,Eng,Eng/Com,Eng/Sc,Sc,Sc/HSc,Sc/Com,Sc/Law,MathSc".split(',');
+          var order = "Business,Design,WebDev,Engineering,Science".split(',');
           return order.indexOf(a) - order.indexOf(b); 
         }
-        var map = {level: sortLevel, field: sortField};
+        console.log(keyName)
+        var map = {Qualification: sortLevel, Field: sortField};
         return map[keyName]; 
     }
 
