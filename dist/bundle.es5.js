@@ -20626,10 +20626,11 @@
 	                return order.indexOf(a) - order.indexOf(b);
 	            }
 	            function sortField(a, b) {
-	                var order = 'Com,Com/BSc,Com/Sc,A,A/Sc,Mus,Des,Des/A,Des/Com,IT,Tech,CompSc,CompSc/Des,Eng,Eng/Com,Eng/Sc,Sc,Sc/HSc,Sc/Com,Sc/Law,MathSc'.split(',');
+	                var order = 'Business,Design,WebDev,Engineering,Science'.split(',');
 	                return order.indexOf(a) - order.indexOf(b);
 	            }
-	            var map = { level: sortLevel, field: sortField };
+	            console.log(keyName);
+	            var map = { Qualification: sortLevel, Field: sortField };
 	            return map[keyName];
 	        }
 	    }, {
@@ -21109,11 +21110,7 @@
 	                            return _react2['default'].createElement(
 	                                'li',
 	                                null,
-	                                _react2['default'].createElement(
-	                                    'span',
-	                                    { style: { width: '15px', height: '15px', background: color, color: color } },
-	                                    '__'
-	                                ),
+	                                _react2['default'].createElement('span', { className: 'square', style: { background: color } }),
 	                                ' ',
 	                                name
 	                            );
@@ -21266,18 +21263,21 @@
 	      var width = _ref3.width;
 	      var height = _ref3.height;
 
-	      var margin = { left: 50, right: 50 };
+	      var margin = { left: 50, right: 50, top: 40 };
 	      width = width - margin.left - margin.right;
 	      if (!distinctValues || !distinctValues.length || distinctValues[0] === "undefined") {
-	        return [{ label: "", cx: width / 2, cy: height / 2 }];
+	        var cx = margin.left + width / 2;
+	        var cy = margin.top + height / 2;
+	        return [{ label: "", cx: cx, cy: cy }];
 	      }
 
 	      var center = { cx: width / 2, cy: height / 2 };
 	      var numCenters = distinctValues.length;
 	      var sp = 200;
 	      return distinctValues.map(function (d, i) {
-	        var x_position = margin.left + ((width - sp * 2) * (i + 0) / (numCenters - 1) + sp);
-	        return { label: d, cx: x_position, cy: center.cy };
+	        var cx = margin.left + ((width - sp * 2) * (i + 0) / (numCenters - 1) + sp);
+	        var cy = margin.top + height / 2;
+	        return { label: d, cx: cx, cy: cy };
 	      });
 	    }
 	  }, {
@@ -21490,7 +21490,7 @@
 	              acc.sum += cx, acc.n += 1;return acc;
 	            }, { sum: 0, n: 0 });
 	            var avg = cxstats.n ? Math.round(cxstats.sum / cxstats.n) : 0;
-	            return "translate(" + avg + ",60)rotate(-35)";
+	            return "translate(" + avg + ",100)rotate(-35)";
 	          });
 	        }
 	      });
